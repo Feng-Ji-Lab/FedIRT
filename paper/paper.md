@@ -1,6 +1,6 @@
 
 ---
-title: '``FedIRT``: An R package with shiny app for Estimating Federated Response Model'
+title: '``FedIRT``: An R package with shiny app for estimating federated response model'
 authors:
 - name: Biying Zhou
   orcid: 0000-0002-3590-3408
@@ -8,6 +8,7 @@ authors:
 - name: Feng Ji
   orcid: 0000-0002-2051-5453
   affiliation: 1
+  corresponding: true
 affiliations:
 - name: Department of Applied Psychology & Human Development, University of Toronto, Toronto, Canada
   index: 1
@@ -76,11 +77,11 @@ With estimates of $\alpha_j$ and $\beta_j$ in 2PL or $\beta_{jh}$ in GPCM, empir
 
 We showcase that our package could generate the same result as traditional IRT estimation packages, for example, `mirt` [@chalmers2012mirt]. Take 2PL as an example, we use a synthesized dataset with 160 students and 10 items. %For traditional packages, the whole dataset is used. For our package, the dataset was separated into two parts, which contain 81 and 79 students. 
 
-Figure \ref{fig:acomparison} and \ref{fig:bcomparison} show the comparison of the discrimination and difficulty parameters between `mirt` and `FedIRT` based on `example_data_2PL` in our package.
+\autoref{acomparison} and \autoref{bcomparison} show the comparison of the discrimination and difficulty parameters between `mirt` and `FedIRT` based on `example_data_2PL` in our package.
 
-![\label{acomparison}](acomparison.png)
+![Discrimination comparison\label{acomparison}](acomparison.png)
 
-![\label{bcomparison}](bcomparison.png)
+![Difficulty comparison\label{bcomparison}](bcomparison.png)
 
 # Availability
 

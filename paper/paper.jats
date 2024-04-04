@@ -19,7 +19,7 @@
 <article-id pub-id-type="doi">N/A</article-id>
 <title-group>
 <article-title><monospace>FedIRT</monospace>: An R package with shiny
-app for Estimating Federated Response Model</article-title>
+app for estimating federated response model</article-title>
 </title-group>
 <contrib-group>
 <contrib contrib-type="author">
@@ -30,13 +30,14 @@ app for Estimating Federated Response Model</article-title>
 </name>
 <xref ref-type="aff" rid="aff-1"/>
 </contrib>
-<contrib contrib-type="author">
+<contrib contrib-type="author" corresp="yes">
 <contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-2051-5453</contrib-id>
 <name>
 <surname>Ji</surname>
 <given-names>Feng</given-names>
 </name>
 <xref ref-type="aff" rid="aff-1"/>
+<xref ref-type="corresp" rid="cor-1"><sup>*</sup></xref>
 </contrib>
 <aff id="aff-1">
 <institution-wrap>
@@ -45,6 +46,9 @@ University of Toronto, Toronto, Canada</institution>
 </institution-wrap>
 </aff>
 </contrib-group>
+<author-notes>
+<corresp id="cor-1">* E-mail: <email></email></corresp>
+</author-notes>
 <pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-04-04">
 <day>4</day>
 <month>4</month>
@@ -293,18 +297,19 @@ a Creative Commons Attribution 4.0 International License (CC BY
   dataset is used. For our package, the dataset was separated into two
   parts, which contain 81 and 79 students.</p>
   <p>Figure
-  <xref alt="[fig:acomparison]" rid="figU003Aacomparison">[fig:acomparison]</xref>
-  and
-  <xref alt="[fig:bcomparison]" rid="figU003Abcomparison">[fig:bcomparison]</xref>
-  show the comparison of the discrimination and difficulty parameters
-  between <monospace>mirt</monospace> and <monospace>FedIRT</monospace>
-  based on <monospace>example_data_2PL</monospace> in our package.</p>
+  <xref alt="[acomparison]" rid="acomparison">[acomparison]</xref> and
+  <xref alt="[bcomparison]" rid="bcomparison">[bcomparison]</xref> show
+  the comparison of the discrimination and difficulty parameters between
+  <monospace>mirt</monospace> and <monospace>FedIRT</monospace> based on
+  <monospace>example_data_2PL</monospace> in our package.</p>
   <fig>
-    <caption><p><styled-content id="acomparison"></styled-content></p></caption>
+    <caption><p>Discrimination
+    comparison<styled-content id="acomparison"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/acomparison.png" />
   </fig>
   <fig>
-    <caption><p><styled-content id="bcomparison"></styled-content></p></caption>
+    <caption><p>Difficulty
+    comparison<styled-content id="bcomparison"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/bcomparison.png" />
   </fig>
 </sec>
