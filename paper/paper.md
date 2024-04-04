@@ -79,6 +79,7 @@ We showcase that our package could generate the same result as traditional IRT e
 Figure \ref{fig:acomparison} and \ref{fig:bcomparison} show the comparison of the discrimination and difficulty parameters between `mirt` and `FedIRT` based on `example_data_2PL` in our package.
 
 ![\label{acomparison}](acomparison.png)
+
 ![\label{bcomparison}](bcomparison.png)
 
 # Availability
@@ -103,16 +104,19 @@ When the client first launches, it will automatically connect to the localhost p
 If the server is deployed on another computer, type the server's IP address and port (which will be displayed on the server's interface), then click "reconnect". The screenshots of the user interface are shown below. 
 
 ![\label{server2}](server2.png)
+
 ![\label{client2}](client2.png)
 
 Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a \texttt{.csv} file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
 
 ![\label{server3}](server3.png)
+
 ![\label{client3}](client3.png)
 
 After all the clients upload their data, the server should click "start" to begin the federated estimates process and after the model converges, the client should click "receive result". The server will display all item parameters and the client will display all item parameters and individual ability estimates. 
 
 ![\label{server4}](server4.png)
+
 ![\label{client4}](client4.png)
 
 The clients will also display bar plots of the ability estimates. 

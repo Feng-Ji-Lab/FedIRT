@@ -299,12 +299,14 @@ a Creative Commons Attribution 4.0 International License (CC BY
   show the comparison of the discrimination and difficulty parameters
   between <monospace>mirt</monospace> and <monospace>FedIRT</monospace>
   based on <monospace>example_data_2PL</monospace> in our package.</p>
-  <p><inline-graphic mimetype="image" mime-subtype="png" xlink:href="media/acomparison.png">
-    <alt-text></alt-text>
-  </inline-graphic>
-  <inline-graphic mimetype="image" mime-subtype="png" xlink:href="media/bcomparison.png">
-    <alt-text></alt-text>
-  </inline-graphic></p>
+  <fig>
+    <caption><p><styled-content id="acomparison"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="media/acomparison.png" />
+  </fig>
+  <fig>
+    <caption><p><styled-content id="bcomparison"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="media/bcomparison.png" />
+  </fig>
 </sec>
 <sec id="availability">
   <title>Availability</title>
@@ -334,12 +336,14 @@ library(FedIRT)</code>
   address and port (which will be displayed on the server’s interface),
   then click “reconnect”. The screenshots of the user interface are
   shown below.</p>
-  <p><inline-graphic mimetype="image" mime-subtype="png" xlink:href="media/server2.png">
-    <alt-text></alt-text>
-  </inline-graphic>
-  <inline-graphic mimetype="image" mime-subtype="png" xlink:href="media/client2.png">
-    <alt-text></alt-text>
-  </inline-graphic></p>
+  <fig>
+    <caption><p><styled-content id="server2"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="media/server2.png" />
+  </fig>
+  <fig>
+    <caption><p><styled-content id="client2"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="media/client2.png" />
+  </fig>
   <p>Then, the client should choose a file to upload to the local Shiny
   app to do local calculations, without sending it to the server. The
   file should be a <monospace>.csv</monospace> file, with either binary
@@ -347,23 +351,27 @@ library(FedIRT)</code>
   items, and the same maximum score in each item (if the answers are
   polytomous), otherwise, there will be an error message suggesting to
   check the datasets of all clients.</p>
-  <p><inline-graphic mimetype="image" mime-subtype="png" xlink:href="media/server3.png">
-    <alt-text></alt-text>
-  </inline-graphic>
-  <inline-graphic mimetype="image" mime-subtype="png" xlink:href="media/client3.png">
-    <alt-text></alt-text>
-  </inline-graphic></p>
+  <fig>
+    <caption><p><styled-content id="server3"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="media/server3.png" />
+  </fig>
+  <fig>
+    <caption><p><styled-content id="client3"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="media/client3.png" />
+  </fig>
   <p>After all the clients upload their data, the server should click
   “start” to begin the federated estimates process and after the model
   converges, the client should click “receive result”. The server will
   display all item parameters and the client will display all item
   parameters and individual ability estimates.</p>
-  <p><inline-graphic mimetype="image" mime-subtype="png" xlink:href="media/server4.png">
-    <alt-text></alt-text>
-  </inline-graphic>
-  <inline-graphic mimetype="image" mime-subtype="png" xlink:href="media/client4.png">
-    <alt-text></alt-text>
-  </inline-graphic></p>
+  <fig>
+    <caption><p><styled-content id="server4"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="media/server4.png" />
+  </fig>
+  <fig>
+    <caption><p><styled-content id="client4"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="media/client4.png" />
+  </fig>
   <p>The clients will also display bar plots of the ability
   estimates.</p>
   <fig>
