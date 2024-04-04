@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.2 20190208//EN"
+                  "JATS-publishing1.dtd">
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.2" article-type="other">
+<front>
+<journal-meta>
+<journal-id></journal-id>
+<journal-title-group>
+<journal-title>Journal of Open Source Software</journal-title>
+<abbrev-journal-title>JOSS</abbrev-journal-title>
+</journal-title-group>
+<issn publication-format="electronic">2475-9066</issn>
+<publisher>
+<publisher-name>Open Journals</publisher-name>
+</publisher>
+</journal-meta>
+<article-meta>
+<article-id pub-id-type="publisher-id">0</article-id>
+<article-id pub-id-type="doi">N/A</article-id>
+<title-group>
+<article-title><monospace>FedIRT</monospace>: An R package with shiny
+app for Estimating Federated Response Model</article-title>
+</title-group>
+<contrib-group>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-3590-3408</contrib-id>
+<name>
+<surname>Zhou</surname>
+<given-names>Biying</given-names>
+</name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-2051-5453</contrib-id>
+<name>
+<surname>Ji</surname>
+<given-names>Feng</given-names>
+</name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<aff id="aff-1">
+<institution-wrap>
+<institution>Department of Applied Psychology &amp; Human Development,
+University of Toronto, Toronto, Canada</institution>
+</institution-wrap>
+</aff>
+</contrib-group>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-02-24">
+<day>24</day>
+<month>2</month>
+<year>2024</year>
+</pub-date>
+<volume>¿VOL?</volume>
+<issue>¿ISSUE?</issue>
+<fpage>¿PAGE?</fpage>
+<permissions>
+<copyright-statement>Authors of papers retain copyright and release the
+work under a Creative Commons Attribution 4.0 International License (CC
+BY 4.0)</copyright-statement>
+<copyright-year>2022</copyright-year>
+<copyright-holder>The article authors</copyright-holder>
+<license license-type="open-access" xlink:href="https://creativecommons.org/licenses/by/4.0/">
+<license-p>Authors of papers retain copyright and release the work under
+a Creative Commons Attribution 4.0 International License (CC BY
+4.0)</license-p>
+</license>
+</permissions>
+<kwd-group kwd-group-type="author">
+<kwd>R</kwd>
+<kwd>shiny app</kwd>
+<kwd>Federated Learning</kwd>
+<kwd>Item Response Theory</kwd>
+<kwd>Maximum Likelihood Estimation</kwd>
+</kwd-group>
+</article-meta>
+</front>
+<body>
+<sec id="summary">
+  <title>Summary</title>
+  <p>We developed an <monospace>R</monospace> pckage
+  <monospace>FedIRT</monospace>, to enable estimating traditional IRT
+  models with additional privacy, allowing estimation in a distributed
+  manner without losing estimation accuracy. Numerical experiments
+  demonstrate that Federated IRT estimation achieves comparable
+  statistical performance compared to normal IRT, with the benefits of
+  privacy preservation and minimal communication costs. Our shiny app
+  built in this package allows schools and educational centers use our
+  algorithm in a distributed approach.</p>
+</sec>
+<sec id="statement-of-need">
+  <title>Statement of Need</title>
+  <p>Traditional IRT estimation requires all individual raw response
+  data to be centralized in one place, thus potentially causing privacy
+  issues. We developed an <monospace>R</monospace> pckage
+  <monospace>FedIRT</monospace> to address this problem, which could
+  estimate IRT model in a distributed way, without centering the dataset
+  in schools.</p>
+  <p>Our package include a function <monospace>fedirt</monospace> and a
+  shiny app, including a <monospace>server.R</monospace> and a
+  <monospace>client.R</monospace>, which could be used as the
+  educational center and distributed schools.</p>
+</sec>
+<sec id="method">
+  <title>Method</title>
+  <p>We use Maximum Likelihood Estimation (MLE) to estimate IRT
+  model.</p>
+  <p>In <monospace>server.R</monospace>, we implement the functions to
+  update the model parameters, and in <monospace>client.R</monospace>,
+  we implement the functions to calculate the likelihood values. Thus,
+  by iterations, we could estimate the model parameters.</p>
+</sec>
+<sec id="comparison-with-existing-packages">
+  <title>Comparison with existing packages</title>
+  <p>We compared our algorithm performance with two existing packages:
+  <monospace>ltm</monospace>
+  (<xref alt="Rizopoulos, 2007" rid="ref-rizopoulos2007ltm" ref-type="bibr">Rizopoulos,
+  2007</xref>) and <monospace>mirt</monospace>
+  (<xref alt="Chalmers, 2012" rid="ref-chalmers2012mirt" ref-type="bibr">Chalmers,
+  2012</xref>), which are used to estimate classical IRT models.
+  Simulation results show that our package perform as efficient and
+  accurate as these two packages.</p>
+  <p>We use the following formula to calculate the MSE.</p>
+  <p><disp-formula><alternatives>
+  <tex-math><![CDATA[ \widehat{MSE} = \frac{ \sum\limits_{t=1}^{T} \sum\limits_{j=1}^J (( \hat{\alpha}_{jt} - \alpha_{j} )^2 + (\hat{\beta}_{jt} - \beta_{j} )^2) }{2JT} ]]></tex-math>
+  <mml:math display="block" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mover><mml:mrow><mml:mi>M</mml:mi><mml:mi>S</mml:mi><mml:mi>E</mml:mi></mml:mrow><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mfrac><mml:mrow><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>t</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>T</mml:mi></mml:munderover><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>j</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>J</mml:mi></mml:munderover><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>α</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mrow><mml:mi>j</mml:mi><mml:mi>t</mml:mi></mml:mrow></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mn>2</mml:mn></mml:msup><mml:mo>+</mml:mo><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>β</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mrow><mml:mi>j</mml:mi><mml:mi>t</mml:mi></mml:mrow></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mn>2</mml:mn></mml:msup><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow><mml:mrow><mml:mn>2</mml:mn><mml:mi>J</mml:mi><mml:mi>T</mml:mi></mml:mrow></mml:mfrac></mml:mrow></mml:math></alternatives></disp-formula></p>
+  <p>The figure below shows the MSE comparison.</p>
+  <fig>
+    <caption><p>MSE comparison</p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="media/MSE.png" />
+  </fig>
+  <p>We also show the bias in the following figure, showing that our
+  package has low bias.</p>
+  <p><disp-formula><alternatives>
+  <tex-math><![CDATA[ \widehat{bias} = \frac{ \sum\limits_{t=1}^{T} \sum \limits_{j=1}^{J} ( ( \hat{\alpha}_{jt} - \alpha_{j} ) + (\hat{\beta}_{jt} - \beta_{j} )  ) }{2JT} ]]></tex-math>
+  <mml:math display="block" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mover><mml:mrow><mml:mi>b</mml:mi><mml:mi>i</mml:mi><mml:mi>a</mml:mi><mml:mi>s</mml:mi></mml:mrow><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mfrac><mml:mrow><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>t</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>T</mml:mi></mml:munderover><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>j</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>J</mml:mi></mml:munderover><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>α</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mrow><mml:mi>j</mml:mi><mml:mi>t</mml:mi></mml:mrow></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>β</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mrow><mml:mi>j</mml:mi><mml:mi>t</mml:mi></mml:mrow></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow><mml:mrow><mml:mn>2</mml:mn><mml:mi>J</mml:mi><mml:mi>T</mml:mi></mml:mrow></mml:mfrac></mml:mrow></mml:math></alternatives></disp-formula></p>
+  <fig>
+    <caption><p>Bias comparison</p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="media/bias.png" />
+  </fig>
+</sec>
+<sec id="availability">
+  <title>Availability</title>
+  <p>The R package <monospace>FedIRT</monospace> is publicly available
+  on
+  <ext-link ext-link-type="uri" xlink:href="https://github.com/zby0327/fedirt">Github</ext-link>.
+  It could be installed and run by using the following commands:</p>
+  <code language="r script">devtools::install_github(&quot;zby0327/fedirt&quot;)
+library(fedirt)</code>
+</sec>
+<sec id="acknowledgements">
+  <title>Acknowledgements</title>
+</sec>
+</body>
+<back>
+<ref-list>
+  <ref id="ref-chalmers2012mirt">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Chalmers</surname><given-names>R Philip</given-names></name>
+      </person-group>
+      <article-title>Mirt: A multidimensional item response theory package for the r environment</article-title>
+      <source>Journal of statistical Software</source>
+      <year iso-8601-date="2012">2012</year>
+      <volume>48</volume>
+      <fpage>1</fpage>
+      <lpage>29</lpage>
+    </element-citation>
+  </ref>
+  <ref id="ref-rizopoulos2007ltm">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Rizopoulos</surname><given-names>Dimitris</given-names></name>
+      </person-group>
+      <article-title>Ltm: An r package for latent variable modeling and item response analysis</article-title>
+      <source>Journal of statistical software</source>
+      <year iso-8601-date="2007">2007</year>
+      <volume>17</volume>
+      <fpage>1</fpage>
+      <lpage>25</lpage>
+    </element-citation>
+  </ref>
+</ref-list>
+</back>
+</article>
