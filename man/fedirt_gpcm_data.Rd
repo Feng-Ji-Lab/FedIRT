@@ -20,10 +20,11 @@ Note: This function can only calculate one combined dataset. To use federated gp
 Input is a List of responding matrices from each school, every responding matrix is one site's data.
 }
 \examples{
+\donttest{
 inputdata = list(as.matrix(example_data_graded))
 fedresult = fedirt_gpcm_data(inputdata)
 
 inputdata = list(as.matrix(example_data_graded_and_binary))
 fedresult = fedirt_gpcm_data(inputdata)
-
+}
 }

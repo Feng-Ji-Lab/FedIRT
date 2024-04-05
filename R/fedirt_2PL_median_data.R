@@ -6,12 +6,13 @@
 #' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik.
 #'
 #' @examples
+#' \donttest{
 #' inputdata = list(as.matrix(example_data_2PL))
 #' fedresult = fedirt_2PL_median_data(inputdata)
 #'
 #' inputdata = list(as.matrix(example_data_2PL_1), as.matrix(example_data_2PL_2))
 #' fedresult = fedirt_2PL_median_data(inputdata)
-#'
+#'}
 
 #' @importFrom purrr map
 #' @importFrom pracma quadl

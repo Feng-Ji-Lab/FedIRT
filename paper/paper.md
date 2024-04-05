@@ -42,7 +42,7 @@ We have therefore developed a specialized R package, `FedIRT`, to integrate fede
 
 # Method
 
-Here we briefly introduce the key idea behind integrating federated learning with IRT. For details, please refer to our methodological discussions on Federated IRT [@FedIRT2023; @FederatedIRT2024].
+Here we briefly introduce the key idea behind integrating federated learning with IRT. For details, please refer to our methodological discussions on Federated IRT [@FedIRT2023; @FederatedIRT2024_1; @FedIRT2024].
 
 ## Model formulation
 

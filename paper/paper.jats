@@ -133,9 +133,11 @@ a Creative Commons Attribution 4.0 International License (CC BY
   <p>Here we briefly introduce the key idea behind integrating federated
   learning with IRT. For details, please refer to our methodological
   discussions on Federated IRT
-  (<xref alt="Zhou &amp; Ji, 2024+" rid="ref-FederatedIRT2024" ref-type="bibr">Zhou
-  &amp; Ji, 2024+</xref>,
-  <xref alt="2023" rid="ref-FedIRT2023" ref-type="bibr">2023</xref>).</p>
+  (<xref alt="Zhou &amp; Ji, 2023" rid="ref-FedIRT2023" ref-type="bibr">Zhou
+  &amp; Ji, 2023</xref>,
+  <xref alt="2024" rid="ref-FedIRT2024" ref-type="bibr">2024</xref>,
+  <xref alt="In submission" rid="ref-FederatedIRT2024_1" ref-type="bibr">In
+  submission</xref>).</p>
   <sec id="model-formulation">
     <title>Model formulation</title>
     <p>The two-parameter logistic (2PL) IRT model is often considered
@@ -439,14 +441,26 @@ library(FedIRT)</code>
       <year iso-8601-date="2023">2023</year>
     </element-citation>
   </ref>
-  <ref id="ref-FederatedIRT2024">
+  <ref id="ref-FedIRT2024">
+    <element-citation publication-type="paper-conference">
+      <person-group person-group-type="author">
+        <name><surname>Zhou</surname><given-names>Biying</given-names></name>
+        <name><surname>Ji</surname><given-names>Feng</given-names></name>
+      </person-group>
+      <article-title>Federated item response theory: A distributed, privacy-preserving, and efficient IRT estimation algorithm</article-title>
+      <source>DPE day</source>
+      <publisher-name>University of Toronto</publisher-name>
+      <publisher-loc>Toronto, Canada</publisher-loc>
+      <year iso-8601-date="2024">2024</year>
+    </element-citation>
+  </ref>
+  <ref id="ref-FederatedIRT2024_1">
     <element-citation publication-type="manuscript">
       <person-group person-group-type="author">
         <name><surname>Zhou</surname><given-names>Biying</given-names></name>
         <name><surname>Ji</surname><given-names>Feng</given-names></name>
       </person-group>
       <article-title>Federated item response models</article-title>
-      <source>Psychometrika (In submission)</source>
     </element-citation>
   </ref>
   <ref id="ref-chalmers2012mirt">

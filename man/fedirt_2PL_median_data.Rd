@@ -20,10 +20,11 @@ Note: This function can only calculate one combined dataset. To use federated 2P
 Input is a List of responding matrices from each school, every responding matrix is one site's data. It uses Federated median instead of FedAvg and FedSGD. The results are not same as traditional 2PL method, but is robust if there are outliers.
 }
 \examples{
+\donttest{
 inputdata = list(as.matrix(example_data_2PL))
 fedresult = fedirt_2PL_median_data(inputdata)
 
 inputdata = list(as.matrix(example_data_2PL_1), as.matrix(example_data_2PL_2))
 fedresult = fedirt_2PL_median_data(inputdata)
-
+}
 }
