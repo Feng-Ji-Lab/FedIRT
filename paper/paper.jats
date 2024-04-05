@@ -18,8 +18,8 @@
 <article-id pub-id-type="publisher-id">0</article-id>
 <article-id pub-id-type="doi">N/A</article-id>
 <title-group>
-<article-title><monospace>FedIRT</monospace>: An R package with shiny
-app for estimating federated response model</article-title>
+<article-title><monospace>FedIRT</monospace>: An R package and shiny app
+for estimating federated item response theory models</article-title>
 </title-group>
 <contrib-group>
 <contrib contrib-type="author">
@@ -36,6 +36,7 @@ app for estimating federated response model</article-title>
 <surname>Ji</surname>
 <given-names>Feng</given-names>
 </name>
+<email>f.ji@utoronto.ca</email>
 <xref ref-type="aff" rid="aff-1"/>
 <xref ref-type="corresp" rid="cor-1"><sup>*</sup></xref>
 </contrib>
@@ -47,10 +48,10 @@ University of Toronto, Toronto, Canada</institution>
 </aff>
 </contrib-group>
 <author-notes>
-<corresp id="cor-1">* E-mail: <email></email></corresp>
+<corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
 </author-notes>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-04-04">
-<day>4</day>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-04-05">
+<day>5</day>
 <month>4</month>
 <year>2024</year>
 </pub-date>
@@ -91,16 +92,19 @@ a Creative Commons Attribution 4.0 International License (CC BY
   privacy preservation and minimal communication costs. The R package
   also includes a user-friendly Shiny app that allows clients (e.g.,
   individual schools) and servers (e.g., school boards) to apply our
-  method under real educational circumstances.</p>
+  proposed method in a user-friendly manner.</p>
 </sec>
 <sec id="statement-of-need">
   <title>Statement of Need</title>
-  <p>IRT is a statistical modeling framework grounded in modern test
-  theory, frequently used in the educational, social, and behavioral
-  sciences to measure latent constructs through multivariate human
-  responses. Traditional IRT estimation mandates the centralization of
-  all individual raw response data in one location, thereby potentially
-  compromising the privacy of the data and participants
+  <p>IRT
+  (<xref alt="Embretson &amp; Reise, 2013" rid="ref-embretson2013item" ref-type="bibr">Embretson
+  &amp; Reise, 2013</xref>) is a statistical modeling framework grounded
+  in modern test theory, frequently used in the educational, social, and
+  behavioral sciences to measure latent constructs through multivariate
+  human responses. Traditional IRT estimation mandates the
+  centralization of all individual raw response data in one location,
+  thereby potentially compromising the privacy of the data and
+  participants
   (<xref alt="Lemons, 2014" rid="ref-lemons2014predictive" ref-type="bibr">Lemons,
   2014</xref>).</p>
   <p>Federated learning has emerged as a field addressing data privacy
@@ -289,19 +293,17 @@ a Creative Commons Attribution 4.0 International License (CC BY
 <sec id="comparison-with-existing-packages">
   <title>Comparison with existing packages</title>
   <p>We showcase that our package could generate the same result as
-  traditional IRT estimation packages, for example,
-  <monospace>mirt</monospace>
+  traditional IRT packages, for example, <monospace>mirt</monospace>
   (<xref alt="Chalmers, 2012" rid="ref-chalmers2012mirt" ref-type="bibr">Chalmers,
   2012</xref>). Take 2PL as an example, we use a synthesized dataset
   with 160 students and 10 items. %For traditional packages, the whole
   dataset is used. For our package, the dataset was separated into two
   parts, which contain 81 and 79 students.</p>
-  <p>Figure
-  <xref alt="[acomparison]" rid="acomparison">[acomparison]</xref> and
-  <xref alt="[bcomparison]" rid="bcomparison">[bcomparison]</xref> show
-  the comparison of the discrimination and difficulty parameters between
-  <monospace>mirt</monospace> and <monospace>FedIRT</monospace> based on
-  <monospace>example_data_2PL</monospace> in our package.</p>
+  <p><xref alt="[acomparison]" rid="acomparison">[acomparison]</xref>
+  and <xref alt="[bcomparison]" rid="bcomparison">[bcomparison]</xref>
+  show the comparison of the discrimination and difficulty parameters
+  between <monospace>mirt</monospace> and <monospace>FedIRT</monospace>
+  based on <monospace>example_data_2PL</monospace> in our package.</p>
   <fig>
     <caption><p>Discrimination
     comparison<styled-content id="acomparison"></styled-content></p></caption>
@@ -330,7 +332,8 @@ library(FedIRT)</code>
   (<monospace>runserver()</monospace>) with the interface shown
   below:</p>
   <fig>
-    <caption><p><styled-content id="server1"></styled-content></p></caption>
+    <caption><p>The initial server interface.
+    <styled-content id="server1"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/server1.png" />
   </fig>
   <p>Then, the client-end Shiny app can be initialized
@@ -342,11 +345,13 @@ library(FedIRT)</code>
   then click “reconnect”. The screenshots of the user interface are
   shown below.</p>
   <fig>
-    <caption><p><styled-content id="server2"></styled-content></p></caption>
+    <caption><p>Server interface when 1 school is in connection.
+    <styled-content id="server2"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/server2.png" />
   </fig>
   <fig>
-    <caption><p><styled-content id="client2"></styled-content></p></caption>
+    <caption><p>Client interface when connected to server.
+    <styled-content id="client2"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/client2.png" />
   </fig>
   <p>Then, the client should choose a file to upload to the local Shiny
@@ -357,11 +362,13 @@ library(FedIRT)</code>
   polytomous), otherwise, there will be an error message suggesting to
   check the datasets of all clients.</p>
   <fig>
-    <caption><p><styled-content id="server3"></styled-content></p></caption>
+    <caption><p>Server iterface when 1 school uploaded dataset.
+    <styled-content id="server3"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/server3.png" />
   </fig>
   <fig>
-    <caption><p><styled-content id="client3"></styled-content></p></caption>
+    <caption><p>Client interface when a dataset is chosen without
+    errors. <styled-content id="client3"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/client3.png" />
   </fig>
   <p>After all the clients upload their data, the server should click
@@ -370,23 +377,38 @@ library(FedIRT)</code>
   display all item parameters and the client will display all item
   parameters and individual ability estimates.</p>
   <fig>
-    <caption><p><styled-content id="server4"></styled-content></p></caption>
+    <caption><p>Server interface when finished iteration.
+    <styled-content id="server4"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/server4.png" />
   </fig>
   <fig>
-    <caption><p><styled-content id="client4"></styled-content></p></caption>
+    <caption><p>Client interface when result received.
+    <styled-content id="client4"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/client4.png" />
   </fig>
   <p>The clients will also display bar plots of the ability
   estimates.</p>
   <fig>
-    <caption><p><styled-content id="client5"></styled-content></p></caption>
+    <caption><p>Client interface to display bar plots of discrimination,
+    difficlty and individual ability.
+    <styled-content id="client5"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/client5.png" />
   </fig>
 </sec>
 </body>
 <back>
 <ref-list>
+  <ref id="ref-embretson2013item">
+    <element-citation publication-type="book">
+      <person-group person-group-type="author">
+        <name><surname>Embretson</surname><given-names>Susan E</given-names></name>
+        <name><surname>Reise</surname><given-names>Steven P</given-names></name>
+      </person-group>
+      <source>Item response theory</source>
+      <publisher-name>Psychology Press</publisher-name>
+      <year iso-8601-date="2013">2013</year>
+    </element-citation>
+  </ref>
   <ref id="ref-mcmahan2017communication">
     <element-citation publication-type="paper-conference">
       <person-group person-group-type="author">
@@ -424,7 +446,7 @@ library(FedIRT)</code>
         <name><surname>Ji</surname><given-names>Feng</given-names></name>
       </person-group>
       <article-title>Federated item response models</article-title>
-      <source>Psychometrika</source>
+      <source>Psychometrika (In submission)</source>
     </element-citation>
   </ref>
   <ref id="ref-chalmers2012mirt">
