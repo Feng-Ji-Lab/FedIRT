@@ -96,8 +96,8 @@ a Creative Commons Attribution 4.0 International License (CC BY
 </sec>
 <sec id="statement-of-need">
   <title>Statement of Need</title>
-  <p>IRT
-  (<xref alt="Embretson &amp; Reise, 2013" rid="ref-embretson2013item" ref-type="bibr">Embretson
+  <p>IRT (e.g.,
+  <xref alt="Embretson &amp; Reise, 2013" rid="embretson2013item">Embretson
   &amp; Reise, 2013</xref>) is a statistical modeling framework grounded
   in modern test theory, frequently used in the educational, social, and
   behavioral sciences to measure latent constructs through multivariate
@@ -271,12 +271,12 @@ a Creative Commons Attribution 4.0 International License (CC BY
     and <inline-formula><alternatives>
     <tex-math><![CDATA[\frac{\partial l}{\partial \beta_j} = \sum\limits_{k=1}^{K}\frac{l_k }{\partial \beta_j }]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mfrac><mml:mrow><mml:mi>∂</mml:mi><mml:mi>l</mml:mi></mml:mrow><mml:mrow><mml:mi>∂</mml:mi><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:mfrac><mml:mo>=</mml:mo><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>k</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>K</mml:mi></mml:munderover><mml:mfrac><mml:msub><mml:mi>l</mml:mi><mml:mi>k</mml:mi></mml:msub><mml:mrow><mml:mi>∂</mml:mi><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:mfrac></mml:mrow></mml:math></alternatives></inline-formula>
-    by FedSGD, the server sum up all log-likelihood values and
+    by FedSGD, the server sums up all log-likelihood values and
     derivative values.</p>
-    <p>Also, we implemented a Federated Median method, which uses the
-    median of the likelihood values to replace the sum of likelihood
-    values in Fed-MLE. It is more robust when there are outliers in
-    input data.</p>
+    <p>Also, we provided an alternative solution, Federated Median,
+    which uses the median of the likelihood values to replace the sum of
+    likelihood values in Fed-MLE. It is more robust when there are
+    outliers in input data.</p>
     <p>With estimates of <inline-formula><alternatives>
     <tex-math><![CDATA[\alpha_j]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
@@ -307,12 +307,12 @@ a Creative Commons Attribution 4.0 International License (CC BY
   between <monospace>mirt</monospace> and <monospace>FedIRT</monospace>
   based on <monospace>example_data_2PL</monospace> in our package.</p>
   <fig>
-    <caption><p>Discrimination
+    <caption><p>Discrimination parameter estimates
     comparison<styled-content id="acomparison"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/acomparison.png" />
   </fig>
   <fig>
-    <caption><p>Difficulty
+    <caption><p>Difficulty parameter estimates
     comparison<styled-content id="bcomparison"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/bcomparison.png" />
   </fig>
@@ -347,7 +347,7 @@ library(FedIRT)</code>
   then click “reconnect”. The screenshots of the user interface are
   shown below.</p>
   <fig>
-    <caption><p>Server interface when 1 school is in connection.
+    <caption><p>Server interface when one school is in connection.
     <styled-content id="server2"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/server2.png" />
   </fig>
@@ -364,13 +364,14 @@ library(FedIRT)</code>
   polytomous), otherwise, there will be an error message suggesting to
   check the datasets of all clients.</p>
   <fig>
-    <caption><p>Server iterface when 1 school uploaded dataset.
+    <caption><p>Server iterface when one school uploaded dataset.
     <styled-content id="server3"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/server3.png" />
   </fig>
   <fig>
-    <caption><p>Client interface when a dataset is chosen without
-    errors. <styled-content id="client3"></styled-content></p></caption>
+    <caption><p>Client interface when a dataset is uploaded
+    successfully.
+    <styled-content id="client3"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/client3.png" />
   </fig>
   <p>After all the clients upload their data, the server should click
@@ -379,20 +380,19 @@ library(FedIRT)</code>
   display all item parameters and the client will display all item
   parameters and individual ability estimates.</p>
   <fig>
-    <caption><p>Server interface when finished iteration.
+    <caption><p>Server interface when estimation is completed.
     <styled-content id="server4"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/server4.png" />
   </fig>
   <fig>
-    <caption><p>Client interface when result received.
+    <caption><p>Client interface when the results received.
     <styled-content id="client4"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/client4.png" />
   </fig>
   <p>The clients will also display bar plots of the ability
   estimates.</p>
   <fig>
-    <caption><p>Client interface to display bar plots of discrimination,
-    difficlty and individual ability.
+    <caption><p>Client interface for displaying results.
     <styled-content id="client5"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/client5.png" />
   </fig>
@@ -400,17 +400,6 @@ library(FedIRT)</code>
 </body>
 <back>
 <ref-list>
-  <ref id="ref-embretson2013item">
-    <element-citation publication-type="book">
-      <person-group person-group-type="author">
-        <name><surname>Embretson</surname><given-names>Susan E</given-names></name>
-        <name><surname>Reise</surname><given-names>Steven P</given-names></name>
-      </person-group>
-      <source>Item response theory</source>
-      <publisher-name>Psychology Press</publisher-name>
-      <year iso-8601-date="2013">2013</year>
-    </element-citation>
-  </ref>
   <ref id="ref-mcmahan2017communication">
     <element-citation publication-type="paper-conference">
       <person-group person-group-type="author">

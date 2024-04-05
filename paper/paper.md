@@ -32,7 +32,7 @@ We developed an `R` package `FedIRT`, to estimate traditional IRT models, includ
 
 # Statement of Need
 
-IRT [@embretson2013item] is a statistical modeling framework grounded in modern test theory, frequently used in the educational, social, and behavioral sciences to measure latent constructs through multivariate human responses. Traditional IRT estimation mandates the centralization of all individual raw response data in one location, thereby potentially compromising the privacy of the data and participants [@lemons2014predictive]. 
+IRT (e.g., [Embretson & Reise, 2013](#embretson2013item)) is a statistical modeling framework grounded in modern test theory, frequently used in the educational, social, and behavioral sciences to measure latent constructs through multivariate human responses. Traditional IRT estimation mandates the centralization of all individual raw response data in one location, thereby potentially compromising the privacy of the data and participants [@lemons2014predictive]. 
 
 Federated learning has emerged as a field addressing data privacy issues and techniques for parameter estimation in a decentralized, distributed manner. However, there is currently no package available in psychometrics, especially in the context of IRT, that integrates federated learning with IRT model estimation.
 
@@ -68,9 +68,9 @@ $$ l_k \approx \sum \limits_{i=1}^{N_k} \sum \limits_{j=1}^{J} {X_{ijk}} \times 
 
 By applying FedAvg, the server collects the log-likelihood values from all $k$ schools and then sums up all the likelihood values to get the overall log-likelihood value: $l = \sum\limits_{k=1}^{K} l_k$.
 
-The server collects a log-likelihood value $l_k$ and all derivatives $\frac{ l_k }{\partial \alpha_j}$ and $\frac{ l_k }{\partial \beta_j }$ from all clients, then observe that $\frac{\partial l}{\partial \alpha_j} = \sum\limits_{k=1}^{K}\frac{ l_k }{ \partial \alpha_j }$ and $\frac{\partial l}{\partial \beta_j} = \sum\limits_{k=1}^{K}\frac{l_k }{\partial \beta_j }$ by FedSGD, the server sum up all log-likelihood values and derivative values. 
+The server collects a log-likelihood value $l_k$ and all derivatives $\frac{ l_k }{\partial \alpha_j}$ and $\frac{ l_k }{\partial \beta_j }$ from all clients, then observe that $\frac{\partial l}{\partial \alpha_j} = \sum\limits_{k=1}^{K}\frac{ l_k }{ \partial \alpha_j }$ and $\frac{\partial l}{\partial \beta_j} = \sum\limits_{k=1}^{K}\frac{l_k }{\partial \beta_j }$ by FedSGD, the server sums up all log-likelihood values and derivative values. 
 
-Also, we implemented a Federated Median method, which uses the median of the likelihood values to replace the sum of likelihood values in Fed-MLE. It is more robust when there are outliers in input data. 
+Also, we provided an alternative solution, Federated Median, which uses the median of the likelihood values to replace the sum of likelihood values in Fed-MLE. It is more robust when there are outliers in input data. 
 
 With estimates of $\alpha_j$ and $\beta_j$ in 2PL or $\beta_{jh}$ in GPCM, empirical Bayesian estimates of students' ability can be obtained [@bock1981marginal]. 
 
@@ -80,9 +80,9 @@ We showcase that our package could generate the same result as traditional IRT p
 
 \autoref{acomparison} and \autoref{bcomparison} show the comparison of the discrimination and difficulty parameters between `mirt` and `FedIRT` based on `example_data_2PL` in our package.
 
-![Discrimination comparison\label{acomparison}](acomparison.png)
+![Discrimination parameter estimates comparison\label{acomparison}](acomparison.png)
 
-![Difficulty comparison\label{bcomparison}](bcomparison.png)
+![Difficulty parameter estimates comparison\label{bcomparison}](bcomparison.png)
 
 # Availability
 
@@ -105,24 +105,24 @@ When the client first launches, it will automatically connect to the localhost p
 
 If the server is deployed on another computer, type the server's IP address and port (which will be displayed on the server's interface), then click "reconnect". The screenshots of the user interface are shown below. 
 
-![Server interface when 1 school is in connection. \label{server2}](server2.png)
+![Server interface when one school is connected. \label{server2}](server2.png)
 
 ![Client interface when connected to server. \label{client2}](client2.png)
 
 Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a \texttt{.csv} file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
 
-![Server iterface when 1 school uploaded dataset. \label{server3}](server3.png)
+![Server iterface when one school uploaded dataset. \label{server3}](server3.png)
 
-![Client interface when a dataset is chosen without errors. \label{client3}](client3.png)
+![Client interface when a dataset is uploaded successfully. \label{client3}](client3.png)
 
 After all the clients upload their data, the server should click "start" to begin the federated estimates process and after the model converges, the client should click "receive result". The server will display all item parameters and the client will display all item parameters and individual ability estimates. 
 
-![Server interface when finished iteration. \label{server4}](server4.png)
+![Server interface when estimation is completed. \label{server4}](server4.png)
 
-![Client interface when result received. \label{client4}](client4.png)
+![Client interface when the results received. \label{client4}](client4.png)
 
 The clients will also display bar plots of the ability estimates. 
 
-![Client interface to display bar plots of discrimination, difficlty and individual ability. \label{client5}](client5.png)
+![Client interface for displaying results. \label{client5}](client5.png)
 
 # References
