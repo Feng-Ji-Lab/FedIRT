@@ -347,7 +347,7 @@ library(FedIRT)</code>
   then click “reconnect”. The screenshots of the user interface are
   shown below.</p>
   <fig>
-    <caption><p>Server interface when one school is in connection.
+    <caption><p>Server interface when one school is connected.
     <styled-content id="server2"></styled-content></p></caption>
     <graphic mimetype="image" mime-subtype="png" xlink:href="media/server2.png" />
   </fig>
@@ -437,7 +437,7 @@ library(FedIRT)</code>
         <name><surname>Ji</surname><given-names>Feng</given-names></name>
       </person-group>
       <article-title>Federated item response theory: A distributed, privacy-preserving, and efficient IRT estimation algorithm</article-title>
-      <source>DPE day</source>
+      <source>DPE MED research practicum poster</source>
       <publisher-name>University of Toronto</publisher-name>
       <publisher-loc>Toronto, Canada</publisher-loc>
       <year iso-8601-date="2024">2024</year>
