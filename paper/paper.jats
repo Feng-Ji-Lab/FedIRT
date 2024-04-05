@@ -96,8 +96,8 @@ a Creative Commons Attribution 4.0 International License (CC BY
 </sec>
 <sec id="statement-of-need">
   <title>Statement of Need</title>
-  <p>IRT (e.g.,
-  <xref alt="Embretson &amp; Reise, 2013" rid="embretson2013item">Embretson
+  <p>IRT
+  (<xref alt="Embretson &amp; Reise, 2013" rid="ref-embretson2013item" ref-type="bibr">Embretson
   &amp; Reise, 2013</xref>) is a statistical modeling framework grounded
   in modern test theory, frequently used in the educational, social, and
   behavioral sciences to measure latent constructs through multivariate
@@ -400,6 +400,17 @@ library(FedIRT)</code>
 </body>
 <back>
 <ref-list>
+  <ref id="ref-embretson2013item">
+    <element-citation publication-type="book">
+      <person-group person-group-type="author">
+        <name><surname>Embretson</surname><given-names>Susan E</given-names></name>
+        <name><surname>Reise</surname><given-names>Steven P</given-names></name>
+      </person-group>
+      <source>Item response theory</source>
+      <publisher-name>Psychology Press</publisher-name>
+      <year iso-8601-date="2013">2013</year>
+    </element-citation>
+  </ref>
   <ref id="ref-mcmahan2017communication">
     <element-citation publication-type="paper-conference">
       <person-group person-group-type="author">
