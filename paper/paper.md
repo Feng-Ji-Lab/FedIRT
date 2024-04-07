@@ -109,7 +109,7 @@ If the server is deployed on another computer, type the server's IP address and 
 
 ![Client interface when connected to server. \label{client2}](client2.png)
 
-Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a \texttt{.csv} file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
+Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a `csv` file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
 
 ![Server iterface when one school uploaded dataset. \label{server3}](server3.png)
 
