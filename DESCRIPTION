@@ -4,7 +4,7 @@ Version: 1.0
 Authors@R: c(
     person("Biying", "Zhou", email = "zby.zhou@mail.utoronto.ca", role = "cre"),
     person("Feng", "Ji", email = "f.ji@utoronto.ca", role = "aut"))
-Description: This package can estimate traditional IRT models, including 2PL and the graded response models with additional privacy, allowing estimation in a distributed manner without compromising estimation accuracy. Numerical experiments demonstrate that Federated IRT estimation achieves comparable statistical performance to mainstream IRT estimation packages, with the benefits of privacy preservation and minimal communication costs. The R package also includes a user-friendly Shiny app that allows clients (e.g., individual schools) and servers (e.g., school boards) to apply our method in the real world. 
+Description: Federated item response theory can estimate traditional IRT models, including 2PL and the graded response models with additional privacy, allowing estimation in a distributed manner without compromising estimation accuracy. Numerical experiments demonstrate that Federated IRT estimation achieves comparable statistical performance to mainstream IRT estimation packages, with the benefits of privacy preservation and minimal communication costs. The R package also includes a user-friendly Shiny app that allows clients (e.g., individual schools) and servers (e.g., school boards) to apply our method in the real world. 
 License: MIT + file LICENSE
 Depends:
     R (>= 3.1.0),
