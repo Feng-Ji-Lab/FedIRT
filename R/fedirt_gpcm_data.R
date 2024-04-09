@@ -241,7 +241,7 @@ fedirt_gpcm_data = function(inputdata) {
       }
     }
 
-    print(result)
+    # print(result)
     result
   }
 #   g_logL_entry = function(ps) {

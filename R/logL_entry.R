@@ -24,6 +24,6 @@ logL_entry = function(ps) {
     }
   }
 
-  print(result)
+  # print(result)
   result
 }
