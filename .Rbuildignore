@@ -5,3 +5,5 @@
 ^develop/
 ^\.github/
 ^FedIRT_1.0\.pdf$
+^README\.md$
+^readme\.md$
