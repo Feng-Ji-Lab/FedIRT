@@ -70,7 +70,7 @@ By applying FedAvg, the server collects the log-likelihood values from all $k$ s
 
 The server collects a log-likelihood value $l_k$ and all derivatives $\frac{ l_k }{\partial \alpha_j}$ and $\frac{ l_k }{\partial \beta_j }$ from all clients, then observe that $\frac{\partial l}{\partial \alpha_j} = \sum\limits_{k=1}^{K}\frac{ l_k }{ \partial \alpha_j }$ and $\frac{\partial l}{\partial \beta_j} = \sum\limits_{k=1}^{K}\frac{l_k }{\partial \beta_j }$ by FedSGD, the server sums up all log-likelihood values and derivative values. 
 
-Also, we provided an alternative solution, Federated Median, which uses the median of the likelihood values to replace the sum of likelihood values in Fed-MLE. It is more robust when there are outliers in input data. 
+Also, we provided an alternative solution, Federated Median, which uses the median of the likelihood values to replace the sum of likelihood values in Fed-MLE [@liu2020systematic]. It is more robust when there are outliers in input data. 
 
 With estimates of $\alpha_j$ and $\beta_j$ in 2PL or $\beta_{jh}$ in GPCM, empirical Bayesian estimates of students' ability can be obtained [@bock1981marginal]. 
 
@@ -111,7 +111,7 @@ If the server is deployed on another computer, type the server's IP address and 
 
 Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a `csv` file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
 
-![Server iterface when one school uploaded dataset. \label{server3}](server3.png)
+![Server interface when one school uploaded dataset. \label{server3}](server3.png)
 
 ![Client interface when a dataset is uploaded successfully. \label{client3}](client3.png)
 
