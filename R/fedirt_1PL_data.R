@@ -193,7 +193,7 @@ fedirt_1PL_data = function(inputdata) {
     ps_next$loglik = logL_entry(ps_next$par)
 
     ps_next$b = ps_next$par[1:J]
-    ps_next$a = matrix(rep(1,J))
+    ps_next$a = rep(1,J)
 
     ps_next$person = my_personfit(ps_next[["a"]], ps_next[["b"]])
     ps_next
