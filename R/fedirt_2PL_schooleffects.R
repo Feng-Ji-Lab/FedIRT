@@ -1,27 +1,24 @@
-#' @title Federated 2PL model
+#' @title Federated 2PL model with school effects
 #' @description This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 2PL parameters.
-#' Note: This function can only calculate one combined dataset. To use federated 2PL in distributed datasets, please use fedirt_2PL().
-#' @details Input is a List of responding matrices from each school, every responding matrix is one site's data. It uses Federated median instead of FedAvg and FedSGD. The results are not same as traditional 2PL method, but is robust if there are outliers.
+#' Note: This function is used for one combined dataset, for testing the algorithm. To use federated 2PL in distributed datasets, please use fedirt_2PL().
+#' @details Input is a List of responding matrices from each school, every responding matrix is one site's data.
 #' @param inputdata A List of all responding matrix.
-#' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik.
+#' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik. It also displays the school ability sc, which is considered as a fixed effect.
 #'
 #' @examples
-#' \donttest{
 #' inputdata = list(as.matrix(example_data_2PL))
-#' fedresult = fedirt_2PL_median_data(inputdata)
+#' fedresult = fedirt_2PL_schooleffects(inputdata)
 #'
 #' inputdata = list(as.matrix(example_data_2PL_1), as.matrix(example_data_2PL_2))
-#' fedresult = fedirt_2PL_median_data(inputdata)
-#'}
+#' fedresult = fedirt_2PL_schooleffects(inputdata)
+#'
 
 #' @importFrom purrr map
 #' @importFrom pracma quadl
 #' @importFrom stats optim
-#' @importFrom stats median
-
 
 #' @export
-fedirt_2PL_median_data = function(inputdata) {
+fedirt_2PL_schooleffects = function(inputdata) {
   my_data <- inputdata
   N <- lapply(my_data, function(x) nrow(x))
   J <- dim(my_data[[1]])[2]
@@ -97,24 +94,24 @@ fedirt_2PL_median_data = function(inputdata) {
     quadrature = quadl(g, index - level_diff * 0.5, index + level_diff * 0.5)
     return(quadrature)
   })))
-  Pj = memoize(function(a, b) {
-    t = exp(-1 * broadcast.multiplication(a, broadcast.subtraction(b, t(X))))
+  Pj = memoize(function(a, b,sc, index) {
+    t = exp(-1 * broadcast.multiplication(a, broadcast.subtraction(b, t(X + sc[index]))))
     return (t / (1 + t))
   })
-  Qj = memoize(function(a, b) {
-    return (1 - Pj(a, b))
+  Qj = memoize(function(a, b,sc, index) {
+    return (1 - Pj(a, b, sc, index))
   })
 
-  log_Lik = memoize(function(a, b, index) {
-    my_data[[index]] %*% log(Pj(a, b))  + (1 - my_data[[index]]) %*% log(Qj(a, b))
+  log_Lik = memoize(function(a, b, sc, index) {
+    my_data[[index]] %*% log(Pj(a, b,sc, index))  + (1 - my_data[[index]]) %*% log(Qj(a, b,sc, index))
   })
 
-  Lik = memoize(function(a, b, index) {
-    exp(log_Lik(a, b, index))
+  Lik = memoize(function(a, b, sc, index) {
+    exp(log_Lik(a, b, sc, index))
   })
 
-  LA = memoize(function(a, b, index) {
-    broadcast.multiplication(Lik(a,b,index), t(A))
+  LA = memoize(function(a, b, sc, index) {
+    broadcast.multiplication(Lik(a,b,sc,index), t(A))
   })
 
   Pxy = memoize(function(a, b, index) {
@@ -145,13 +142,14 @@ fedirt_2PL_median_data = function(inputdata) {
     result_b = db(a, b, index)
     list(result_a, result_b)
   }
-  logL = function(a, b, index) {
-    sum(log(matrix(apply(broadcast.multiplication(Lik(a, b, index), t(A)), c(1), sum))))
+  logL = function(a, b, sc, index) {
+    sum(log(matrix(apply(broadcast.multiplication(Lik(a, b, sc, index), t(A)), c(1), sum))))
   }
   logL_entry = function(ps) {
     a = matrix(ps[1:J])
     b = matrix(ps[(J+1):(2*J)])
-    result = median(unlist(map(1:K, function(index) logL(a, b, index))))
+    sc = matrix(ps[(J+J+1):(J+J+K)])
+    result = sum(unlist(map(1:K, function(index) logL(a, b, sc, index))))
     result
   }
 
@@ -168,20 +166,12 @@ fedirt_2PL_median_data = function(inputdata) {
     rbind(ga, gb)
   }
 
-  my_personfit = function(a, b) {
+  my_personfit = function(a, b, sc) {
     result = list()
     result[["a"]] = a
     result[["b"]] = b
     for(index in 1:K) {
-      result[["ability"]][[index]] = matrix(apply(broadcast.multiplication(LA(a,b,index), t(X)), c(1), sum)) / matrix(apply(LA(a,b,index), c(1), sum))
-    }
-
-    for(index in 1:K) {
-      result[["site"]][[index]] = mean(result[["ability"]][[index]])
-    }
-
-    for(index in 1:K) {
-      result[["person"]][[index]] = result[["ability"]][[index]] - result[["site"]][[index]]
+      result[["ability"]][[index]] = matrix(apply(broadcast.multiplication(LA(a,b,sc, index), t(X + sc[index])), c(1), sum)) / matrix(apply(LA(a,b,sc, index), c(1), sum)) - sc[index]
     }
     return(result)
   }
@@ -191,14 +181,15 @@ fedirt_2PL_median_data = function(inputdata) {
       # "Nelder-Mead", "BFGS", "CG", "L-BFGS-B", "SANN", "Brent"
       optim(par = ps_old, fn = logL_entry, method = "BFGS", control = list(fnscale=-1, trace = 0,  maxit = 10000))
     }
-    ps_init = c(rep(1, J), rep(0, J))
+    ps_init = c(rep(1, J), rep(0, J), rep(0, K))
     ps_next = get_new_ps(ps_init)
     ps_next$loglik = logL_entry(ps_next$par)
 
     ps_next$b = ps_next$par[(J+1):(J+J)]
     ps_next$a = ps_next$par[1:J]
+    ps_next$sc = ps_next$par[(J+J+1):(J+J+K)]
 
-    ps_next$person = my_personfit(ps_next[["a"]], ps_next[["b"]])
+    ps_next$person = my_personfit(ps_next[["a"]], ps_next[["b"]], ps_next$sc)
     ps_next
   }
 

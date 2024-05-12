@@ -13,7 +13,7 @@ fedirt_2PL_median_data(inputdata)
 A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik.
 }
 \description{
-This function is only used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 2PL parameters.
+This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 2PL parameters.
 Note: This function can only calculate one combined dataset. To use federated 2PL in distributed datasets, please use fedirt_2PL().
 }
 \details{
