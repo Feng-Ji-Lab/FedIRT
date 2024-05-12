@@ -1,16 +1,16 @@
-#' @title Federated 2PL model
-#' @description This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 2PL parameters.
-#' Note: This function is used for one combined dataset, for testing the algorithm. To use federated 2PL in distributed datasets, please use fedirt_2PL().
+#' @title Federated 1PL model
+#' @description This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 1PL parameters.
+#' Note: This function is used for one combined dataset, for testing the algorithm.
 #' @details Input is a List of responding matrices from each school, every responding matrix is one site's data.
 #' @param inputdata A List of all responding matrix.
-#' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik.
+#' @return A list with the estimated global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik.
 #'
 #' @examples
 #' inputdata = list(as.matrix(example_data_2PL))
-#' fedresult = fedirt_2PL_data(inputdata)
+#' fedresult = fedirt_1PL_data(inputdata)
 #'
 #' inputdata = list(as.matrix(example_data_2PL_1), as.matrix(example_data_2PL_2))
-#' fedresult = fedirt_2PL_data(inputdata)
+#' fedresult = fedirt_1PL_data(inputdata)
 #'
 
 #' @importFrom purrr map
@@ -18,7 +18,7 @@
 #' @importFrom stats optim
 
 #' @export
-fedirt_2PL_data = function(inputdata) {
+fedirt_1PL_data = function(inputdata) {
   my_data <- inputdata
   N <- lapply(my_data, function(x) nrow(x))
   J <- dim(my_data[[1]])[2]
@@ -146,15 +146,15 @@ fedirt_2PL_data = function(inputdata) {
     sum(log(matrix(apply(broadcast.multiplication(Lik(a, b, index), t(A)), c(1), sum))))
   }
   logL_entry = function(ps) {
-    a = matrix(ps[1:J])
-    b = matrix(ps[(J+1):(2*J)])
+    a = matrix(rep(1,J))
+    b = matrix(ps[1:J])
     result = sum(unlist(map(1:K, function(index) logL(a, b, index))))
     result
   }
 
   g_logL_entry = function(ps) {
-    a = matrix(ps[1:J])
-    b = matrix(ps[(J+1):(2*J)])
+    a = matrix(rep(1,J))
+    b = matrix(ps[1:J])
     ga = matrix(0, nrow = J)
     gb = matrix(0, nrow = J)
     for(index in 1:K) {
@@ -162,7 +162,7 @@ fedirt_2PL_data = function(inputdata) {
       ga = ga + result[[1]]
       gb = gb + result[[2]]
     }
-    rbind(ga, gb)
+    gb
   }
 
   my_personfit = function(a, b) {
@@ -188,12 +188,12 @@ fedirt_2PL_data = function(inputdata) {
       # "Nelder-Mead", "BFGS", "CG", "L-BFGS-B", "SANN", "Brent"
       optim(par = ps_old, fn = logL_entry, gr = g_logL_entry, method = "BFGS", control = list(fnscale=-1, trace = 0,  maxit = 10000))
     }
-    ps_init = c(rep(1, J), rep(0, J))
+    ps_init = c(rep(0, J))
     ps_next = get_new_ps(ps_init)
     ps_next$loglik = logL_entry(ps_next$par)
 
-    ps_next$b = ps_next$par[(J+1):(J+J)]
-    ps_next$a = ps_next$par[1:J]
+    ps_next$b = ps_next$par[1:J]
+    ps_next$a = matrix(rep(1,J))
 
     ps_next$person = my_personfit(ps_next[["a"]], ps_next[["b"]])
     ps_next
