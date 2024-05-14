@@ -50,9 +50,9 @@ University of Toronto, Toronto, Canada</institution>
 <author-notes>
 <corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
 </author-notes>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-04-17">
-<day>17</day>
-<month>4</month>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-05-14">
+<day>14</day>
+<month>5</month>
 <year>2024</year>
 </pub-date>
 <volume>¿VOL?</volume>
@@ -327,77 +327,94 @@ a Creative Commons Attribution 4.0 International License (CC BY
   It could be installed and run by using the following commands:</p>
   <code language="r script">devtools::install_github(&quot;Feng-Ji-Lab/FedIRT&quot;)
 library(FedIRT)</code>
-  <p>To provide wider access for practitioners, we include the Shiny
-  user interface in our package. A detailed manual was provided in the
-  package. Taking the 2PL as an example, we illustrate how to use the
-  Shiny app below.</p>
-  <p>In the first step, the server end (e.g., test administer, school
-  board) can be launched by running the Shiny app
-  (<monospace>runserver()</monospace>) with the interface shown
-  below:</p>
-  <fig>
-    <caption><p>The initial server interface.
-    <styled-content id="server1"></styled-content></p></caption>
-    <graphic mimetype="image" mime-subtype="png" xlink:href="media/server1.png" />
-  </fig>
-  <p>Then, the client-end Shiny app can be initialized
-  (<monospace>runclient()</monospace>).</p>
-  <p>When the client first launches, it will automatically connect to
-  the localhost port <monospace>8000</monospace> as default.</p>
-  <p>If the server is deployed on another computer, type the server’s IP
-  address and port (which will be displayed on the server’s interface),
-  then click “reconnect”. The screenshots of the user interface are
-  shown below.</p>
-  <fig>
-    <caption><p>Server interface when one school is connected.
-    <styled-content id="server2"></styled-content></p></caption>
-    <graphic mimetype="image" mime-subtype="png" xlink:href="media/server2.png" />
-  </fig>
-  <fig>
-    <caption><p>Client interface when connected to server.
-    <styled-content id="client2"></styled-content></p></caption>
-    <graphic mimetype="image" mime-subtype="png" xlink:href="media/client2.png" />
-  </fig>
-  <p>Then, the client should choose a file to upload to the local Shiny
-  app to do local calculations, without sending it to the server. The
-  file should be a <monospace>csv</monospace> file, with either binary
-  or graded response, and all clients should share the same number of
-  items, and the same maximum score in each item (if the answers are
-  polytomous), otherwise, there will be an error message suggesting to
-  check the datasets of all clients.</p>
-  <fig>
-    <caption><p>Server interface when one school uploaded dataset.
-    <styled-content id="server3"></styled-content></p></caption>
-    <graphic mimetype="image" mime-subtype="png" xlink:href="media/server3.png" />
-  </fig>
-  <fig>
-    <caption><p>Client interface when a dataset is uploaded
-    successfully.
-    <styled-content id="client3"></styled-content></p></caption>
-    <graphic mimetype="image" mime-subtype="png" xlink:href="media/client3.png" />
-  </fig>
-  <p>After all the clients upload their data, the server should click
-  “start” to begin the federated estimates process and after the model
-  converges, the client should click “receive result”. The server will
-  display all item parameters and the client will display all item
-  parameters and individual ability estimates.</p>
-  <fig>
-    <caption><p>Server interface when estimation is completed.
-    <styled-content id="server4"></styled-content></p></caption>
-    <graphic mimetype="image" mime-subtype="png" xlink:href="media/server4.png" />
-  </fig>
-  <fig>
-    <caption><p>Client interface when the results received.
-    <styled-content id="client4"></styled-content></p></caption>
-    <graphic mimetype="image" mime-subtype="png" xlink:href="media/client4.png" />
-  </fig>
-  <p>The clients will also display bar plots of the ability
-  estimates.</p>
-  <fig>
-    <caption><p>Client interface for displaying results.
-    <styled-content id="client5"></styled-content></p></caption>
-    <graphic mimetype="image" mime-subtype="png" xlink:href="media/client5.png" />
-  </fig>
+  <sec id="sample-of-the-integrated-function">
+    <title>Sample of the integrated function</title>
+    <p>We provide a function <monospace>fedirt</monospace> in the
+    package, and the detailed usage of the function is shown in the user
+    manual. We demonstrate a sample here.</p>
+    <code language="r script">data &lt;- read.csv(&quot;dataset.csv&quot;, header = TRUE)
+data_list &lt;- split(data[, -1], data$site)
+inputdata &lt;- lapply(data_list, as.matrix)
+fedirt(inputdata, model_name = &quot;2PL&quot;)</code>
+    <p>Here, we read a dataset and split it into different sites. Note
+    that the dataset should indicate different sites. Then call the
+    function <monospace>fedirt</monospace> with corresponding
+    arguments.</p>
+  </sec>
+  <sec id="sample-of-the-shiny-app">
+    <title>Sample of the Shiny App</title>
+    <p>To provide wider access for practitioners, we include the Shiny
+    user interface in our package. A detailed manual was provided in the
+    package. Taking the 2PL as an example, we illustrate how to use the
+    Shiny app below.</p>
+    <p>In the first step, the server end (e.g., test administer, school
+    board) can be launched by running the Shiny app
+    (<monospace>runserver()</monospace>) with the interface shown
+    below:</p>
+    <fig>
+      <caption><p>The initial server interface.
+      <styled-content id="server1"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="media/server1.png" />
+    </fig>
+    <p>Then, the client-end Shiny app can be initialized
+    (<monospace>runclient()</monospace>).</p>
+    <p>When the client first launches, it will automatically connect to
+    the localhost port <monospace>8000</monospace> as default.</p>
+    <p>If the server is deployed on another computer, type the server’s
+    IP address and port (which will be displayed on the server’s
+    interface), then click “reconnect”. The screenshots of the user
+    interface are shown below.</p>
+    <fig>
+      <caption><p>Server interface when one school is connected.
+      <styled-content id="server2"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="media/server2.png" />
+    </fig>
+    <fig>
+      <caption><p>Client interface when connected to server.
+      <styled-content id="client2"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="media/client2.png" />
+    </fig>
+    <p>Then, the client should choose a file to upload to the local
+    Shiny app to do local calculations, without sending it to the
+    server. The file should be a <monospace>csv</monospace> file, with
+    either binary or graded response, and all clients should share the
+    same number of items, and the same maximum score in each item (if
+    the answers are polytomous), otherwise, there will be an error
+    message suggesting to check the datasets of all clients.</p>
+    <fig>
+      <caption><p>Server interface when one school uploaded dataset.
+      <styled-content id="server3"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="media/server3.png" />
+    </fig>
+    <fig>
+      <caption><p>Client interface when a dataset is uploaded
+      successfully.
+      <styled-content id="client3"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="media/client3.png" />
+    </fig>
+    <p>After all the clients upload their data, the server should click
+    “start” to begin the federated estimates process and after the model
+    converges, the client should click “receive result”. The server will
+    display all item parameters and the client will display all item
+    parameters and individual ability estimates.</p>
+    <fig>
+      <caption><p>Server interface when estimation is completed.
+      <styled-content id="server4"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="media/server4.png" />
+    </fig>
+    <fig>
+      <caption><p>Client interface when the results received.
+      <styled-content id="client4"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="media/client4.png" />
+    </fig>
+    <p>The clients will also display bar plots of the ability
+    estimates.</p>
+    <fig>
+      <caption><p>Client interface for displaying results.
+      <styled-content id="client5"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="media/client5.png" />
+    </fig>
+  </sec>
 </sec>
 </body>
 <back>

@@ -93,6 +93,21 @@ devtools::install_github("Feng-Ji-Lab/FedIRT")
 library(FedIRT)
 ```
 
+## Sample of the integrated function
+
+We provide a function `fedirt` in the package, and the detailed usage of the function is shown in the user manual. We demonstrate a sample here. 
+
+``` r
+data <- read.csv("dataset.csv", header = TRUE)
+data_list <- split(data[, -1], data$site)
+inputdata <- lapply(data_list, as.matrix)
+fedirt(inputdata, model_name = "2PL")
+```
+
+Here, we read a dataset and split it into different sites. Note that the dataset should indicate different sites. Then call the function `fedirt` with corresponding arguments. 
+
+## Sample of the Shiny App
+
 To provide wider access for practitioners, we include the Shiny user interface in our package. A detailed manual was provided in the package. Taking the 2PL as an example, we illustrate how to use the Shiny app below.
 
 In the first step, the server end (e.g., test administer, school board) can be launched by running the Shiny app (`runserver()`) with the interface shown below:
