@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.2 20190208//EN"
+                  "JATS-publishing1.dtd">
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.2" article-type="other">
+<front>
+<journal-meta>
+<journal-id></journal-id>
+<journal-title-group>
+<journal-title>Journal of Open Source Software</journal-title>
+<abbrev-journal-title>JOSS</abbrev-journal-title>
+</journal-title-group>
+<issn publication-format="electronic">2475-9066</issn>
+<publisher>
+<publisher-name>Open Journals</publisher-name>
+</publisher>
+</journal-meta>
+<article-meta>
+<article-id pub-id-type="publisher-id">0</article-id>
+<article-id pub-id-type="doi">N/A</article-id>
+<title-group>
+<article-title><monospace>FedIRT</monospace>: An R package and shiny app
+for estimating federated item response theory models</article-title>
+</title-group>
+<contrib-group>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-3590-3408</contrib-id>
+<name>
+<surname>Zhou</surname>
+<given-names>Biying</given-names>
+</name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author" corresp="yes">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-2051-5453</contrib-id>
+<name>
+<surname>Ji</surname>
+<given-names>Feng</given-names>
+</name>
+<email>f.ji@utoronto.ca</email>
+<xref ref-type="aff" rid="aff-1"/>
+<xref ref-type="corresp" rid="cor-1"><sup>*</sup></xref>
+</contrib>
+<aff id="aff-1">
+<institution-wrap>
+<institution>Department of Applied Psychology &amp; Human Development,
+University of Toronto, Toronto, Canada</institution>
+</institution-wrap>
+</aff>
+</contrib-group>
+<author-notes>
+<corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
+</author-notes>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-05-16">
+<day>16</day>
+<month>5</month>
+<year>2024</year>
+</pub-date>
+<volume>¿VOL?</volume>
+<issue>¿ISSUE?</issue>
+<fpage>¿PAGE?</fpage>
+<permissions>
+<copyright-statement>Authors of papers retain copyright and release the
+work under a Creative Commons Attribution 4.0 International License (CC
+BY 4.0)</copyright-statement>
+<copyright-year>2022</copyright-year>
+<copyright-holder>The article authors</copyright-holder>
+<license license-type="open-access" xlink:href="https://creativecommons.org/licenses/by/4.0/">
+<license-p>Authors of papers retain copyright and release the work under
+a Creative Commons Attribution 4.0 International License (CC BY
+4.0)</license-p>
+</license>
+</permissions>
+<kwd-group kwd-group-type="author">
+<kwd>R</kwd>
+<kwd>shiny app</kwd>
+<kwd>Federated Learning</kwd>
+<kwd>Item Response Theory</kwd>
+<kwd>Maximum Likelihood Estimation</kwd>
+</kwd-group>
+</article-meta>
+</front>
+<body>
+<sec id="summary">
+  <title>Summary</title>
+  <p>We developed an <monospace>R</monospace> package
+  <monospace>FedIRT</monospace>, to estimate traditional IRT models,
+  including 2PL and the graded response models with additional privacy,
+  allowing parameter estimation in a distributed manner without
+  compromising estimation accuracy. Numerical experiments demonstrate
+  that Federated IRT estimation achieves comparable statistical
+  performance to mainstream IRT packages in R, with the benefits of
+  privacy preservation and minimal communication costs. The R package
+  also includes a user-friendly Shiny app that allows clients (e.g.,
+  individual schools) and servers (e.g., school boards) to apply our
+  proposed method in a user-friendly manner.</p>
+</sec>
+<sec id="statement-of-need">
+  <title>Statement of Need</title>
+  <p>IRT
+  (<xref alt="Embretson &amp; Reise, 2013" rid="ref-embretson2013item" ref-type="bibr">Embretson
+  &amp; Reise, 2013</xref>) is a statistical modeling framework grounded
+  in modern test theory, frequently used in the educational, social, and
+  behavioral sciences to measure latent constructs through multivariate
+  human responses. Traditional IRT estimation mandates the
+  centralization of all individual raw response data in one location,
+  thereby potentially compromising the privacy of the data and
+  participants
+  (<xref alt="Lemons, 2014" rid="ref-lemons2014predictive" ref-type="bibr">Lemons,
+  2014</xref>).</p>
+  <p>Federated learning has emerged as a field addressing data privacy
+  issues and techniques for parameter estimation in a decentralized,
+  distributed manner. However, there is currently no package available
+  in psychometrics, especially in the context of IRT, that integrates
+  federated learning with IRT model estimation.</p>
+  <p>Mainstream IRT packages in <monospace>R</monospace>, such as
+  <monospace>mirt</monospace>
+  (<xref alt="Chalmers, 2012" rid="ref-chalmers2012mirt" ref-type="bibr">Chalmers,
+  2012</xref>) and <monospace>ltm</monospace>
+  (<xref alt="Rizopoulos, 2007" rid="ref-rizopoulos2007ltm" ref-type="bibr">Rizopoulos,
+  2007</xref>) require storing and computing all data in a single
+  location, which can potentially lead to violations of privacy policies
+  when dealing with highly sensitive data (e.g., high-stakes student
+  assessments).</p>
+  <p>We have therefore developed a specialized R package,
+  <monospace>FedIRT</monospace>, to integrate federated learning with
+  IRT. We have also developed an accompanying Shiny app to recognize
+  real-world challenges and aim to reduce the burden of learning R
+  programming for applying this package. This app implements the method
+  in a user-friendly and accessible manner.</p>
+</sec>
+<sec id="method">
+  <title>Method</title>
+  <p>Here we briefly introduce the key idea behind integrating federated
+  learning with IRT. For details, please refer to our methodological
+  discussions on Federated IRT
+  (<xref alt="Zhou &amp; Ji, 2023" rid="ref-FedIRT2023" ref-type="bibr">Zhou
+  &amp; Ji, 2023</xref>,
+  <xref alt="2024" rid="ref-FedIRT2024" ref-type="bibr">2024</xref>,
+  <xref alt="In submission" rid="ref-FederatedIRT2024_1" ref-type="bibr">In
+  submission</xref>).</p>
+  <sec id="model-formulation">
+    <title>Model formulation</title>
+    <p>The two-parameter logistic (2PL) IRT model is often considered
+    the most popular IRT model. In 2PL, the response by person
+    <inline-formula><alternatives>
+    <tex-math><![CDATA[i]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>i</mml:mi></mml:math></alternatives></inline-formula>
+    for item <inline-formula><alternatives>
+    <tex-math><![CDATA[j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>
+    is often binary: <inline-formula><alternatives>
+    <tex-math><![CDATA[X_{ij} \in \{0,1\}]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:msub><mml:mi>X</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>∈</mml:mo><mml:mo stretchy="false" form="prefix">{</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="false" form="postfix">}</mml:mo></mml:mrow></mml:math></alternatives></inline-formula>,
+    and the probability of person <inline-formula><alternatives>
+    <tex-math><![CDATA[i]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>i</mml:mi></mml:math></alternatives></inline-formula>
+    answering item <inline-formula><alternatives>
+    <tex-math><![CDATA[j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>
+    with discrimination <inline-formula><alternatives>
+    <tex-math><![CDATA[\alpha_j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    and difficulty <inline-formula><alternatives>
+    <tex-math><![CDATA[\beta_j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    correctly:</p>
+    <p><disp-formula><alternatives>
+    <tex-math><![CDATA[P(X_{ij} = 1|\theta_i) = \frac{e^{\alpha_{j}(\theta_i-\beta_{j})}}{1+e^{\alpha_{j}(\theta_i-\beta_{j})}}]]></tex-math>
+    <mml:math display="block" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mi>P</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="false" form="prefix">|</mml:mo><mml:msub><mml:mi>θ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mfrac><mml:msup><mml:mi>e</mml:mi><mml:mrow><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>θ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:msup><mml:mrow><mml:mn>1</mml:mn><mml:mo>+</mml:mo><mml:msup><mml:mi>e</mml:mi><mml:mrow><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>θ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:msup></mml:mrow></mml:mfrac></mml:mrow></mml:math></alternatives></disp-formula></p>
+    <p>To make our package available for polytomous response, we also
+    developed a federated learning estimation algorithm for the
+    Generalized Partial Credit Model (GPCM) in which the probability of
+    a person with the ability <inline-formula><alternatives>
+    <tex-math><![CDATA[\theta_i]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>θ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    obtaining <inline-formula><alternatives>
+    <tex-math><![CDATA[x]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>x</mml:mi></mml:math></alternatives></inline-formula>
+    scores in item <inline-formula><alternatives>
+    <tex-math><![CDATA[j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>
+    is:</p>
+    <p><disp-formula><alternatives>
+    <tex-math><![CDATA[P^{\text{GPCM}}(X_{ij} = x|\theta_i) = \frac{e^{\sum \limits_{h=1}^{x} \alpha_{j}(\theta_i-\beta_{jh})}}{\sum \limits_{c=0}^{m_j}e^{\sum \limits_{h=1}^{c} \alpha_{j}(\theta_i-\beta_{jh})}}]]></tex-math>
+    <mml:math display="block" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:msup><mml:mi>P</mml:mi><mml:mtext mathvariant="normal">GPCM</mml:mtext></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mi>x</mml:mi><mml:mo stretchy="false" form="prefix">|</mml:mo><mml:msub><mml:mi>θ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mfrac><mml:msup><mml:mi>e</mml:mi><mml:mrow><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>h</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>x</mml:mi></mml:munderover><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>θ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mi>β</mml:mi><mml:mrow><mml:mi>j</mml:mi><mml:mi>h</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:msup><mml:mrow><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>c</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow><mml:msub><mml:mi>m</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:munderover><mml:msup><mml:mi>e</mml:mi><mml:mrow><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>h</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>c</mml:mi></mml:munderover><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>θ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mi>β</mml:mi><mml:mrow><mml:mi>j</mml:mi><mml:mi>h</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:msup></mml:mrow></mml:mfrac></mml:mrow></mml:math></alternatives></disp-formula></p>
+    <p>In this function, <inline-formula><alternatives>
+    <tex-math><![CDATA[\beta_{jh}]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>β</mml:mi><mml:mrow><mml:mi>j</mml:mi><mml:mi>h</mml:mi></mml:mrow></mml:msub></mml:math></alternatives></inline-formula>
+    is the difficulty of scoring level <inline-formula><alternatives>
+    <tex-math><![CDATA[h]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>h</mml:mi></mml:math></alternatives></inline-formula>
+    for item <inline-formula><alternatives>
+    <tex-math><![CDATA[j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>,
+    and for each item <inline-formula><alternatives>
+    <tex-math><![CDATA[j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>,
+    all difficulty levels have the same discrimination
+    <inline-formula><alternatives>
+    <tex-math><![CDATA[\alpha_j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>.
+    <inline-formula><alternatives>
+    <tex-math><![CDATA[m_j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>m</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    is the maximum score of item <inline-formula><alternatives>
+    <tex-math><![CDATA[j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>.</p>
+  </sec>
+  <sec id="model-estimation">
+    <title>Model estimation</title>
+    <p>In both 2PL and GPCM, often we assume the ability follows a
+    standard normal distribution, thus we can apply MMLE.</p>
+    <p>We use a combination of traditional MMLE with federated average
+    (FedAvg) and federated stochastic gradient descent (FedSGD)
+    (<xref alt="McMahan et al., 2017" rid="ref-mcmahan2017communication" ref-type="bibr">McMahan
+    et al., 2017</xref>). In our case, the log-likelihood and partial
+    gradients are sent from the clients to the server. Then, the server
+    uses FedSGD to update the item parameters and send them back to
+    clients. By iterations, the model converges and displays the
+    estimates on the interface.</p>
+    <p>Taking the 2PL model as an example, which has a marginal
+    log-likelihood function <inline-formula><alternatives>
+    <tex-math><![CDATA[l]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>l</mml:mi></mml:math></alternatives></inline-formula>
+    for each school <inline-formula><alternatives>
+    <tex-math><![CDATA[k]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>k</mml:mi></mml:math></alternatives></inline-formula>
+    that can be approximated using Gaussian-Hermite quadrature with
+    <inline-formula><alternatives>
+    <tex-math><![CDATA[q]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>q</mml:mi></mml:math></alternatives></inline-formula>
+    (by default, <inline-formula><alternatives>
+    <tex-math><![CDATA[q = 21]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mi>q</mml:mi><mml:mo>=</mml:mo><mml:mn>21</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>)
+    equally-spaced levels, and let <inline-formula><alternatives>
+    <tex-math><![CDATA[V(n)]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mi>V</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>n</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
+    to be the ability value of level <inline-formula><alternatives>
+    <tex-math><![CDATA[n]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>n</mml:mi></mml:math></alternatives></inline-formula>,
+    and <inline-formula><alternatives>
+    <tex-math><![CDATA[A(n)]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mi>A</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>n</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
+    is the weight of level <inline-formula><alternatives>
+    <tex-math><![CDATA[n]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>n</mml:mi></mml:math></alternatives></inline-formula>.</p>
+    <p><disp-formula><alternatives>
+    <tex-math><![CDATA[ l_k \approx \sum \limits_{i=1}^{N_k} \sum \limits_{j=1}^{J} {X_{ijk}} \times \log [\sum\limits_{n=1}^{q} P_j ( V(n) ) A(n)] + (1-X_{ijk}) \times \log [\sum\limits_{n=1}^{q} Q_j ( V(n) ) A(n)] ]]></tex-math>
+    <mml:math display="block" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:msub><mml:mi>l</mml:mi><mml:mi>k</mml:mi></mml:msub><mml:mo>≈</mml:mo><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:msub><mml:mi>N</mml:mi><mml:mi>k</mml:mi></mml:msub></mml:munderover><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>j</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>J</mml:mi></mml:munderover><mml:msub><mml:mi>X</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi><mml:mi>k</mml:mi></mml:mrow></mml:msub><mml:mo>×</mml:mo><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">[</mml:mo><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>n</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>q</mml:mi></mml:munderover><mml:msub><mml:mi>P</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>V</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>n</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>A</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>n</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">]</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>1</mml:mn><mml:mo>−</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi><mml:mi>k</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>×</mml:mo><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">[</mml:mo><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>n</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>q</mml:mi></mml:munderover><mml:msub><mml:mi>Q</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>V</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>n</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>A</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>n</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">]</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></disp-formula></p>
+    <p>By applying FedAvg, the server collects the log-likelihood values
+    from all <inline-formula><alternatives>
+    <tex-math><![CDATA[k]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>k</mml:mi></mml:math></alternatives></inline-formula>
+    schools and then sums up all the likelihood values to get the
+    overall log-likelihood value: <inline-formula><alternatives>
+    <tex-math><![CDATA[l = \sum\limits_{k=1}^{K} l_k]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mi>l</mml:mi><mml:mo>=</mml:mo><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>k</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>K</mml:mi></mml:munderover><mml:msub><mml:mi>l</mml:mi><mml:mi>k</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+    <p>The server collects a log-likelihood value
+    <inline-formula><alternatives>
+    <tex-math><![CDATA[l_k]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>l</mml:mi><mml:mi>k</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    and all derivatives <inline-formula><alternatives>
+    <tex-math><![CDATA[\frac{ l_k }{\partial \alpha_j}]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mfrac><mml:msub><mml:mi>l</mml:mi><mml:mi>k</mml:mi></mml:msub><mml:mrow><mml:mi>∂</mml:mi><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:mfrac></mml:math></alternatives></inline-formula>
+    and <inline-formula><alternatives>
+    <tex-math><![CDATA[\frac{ l_k }{\partial \beta_j }]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mfrac><mml:msub><mml:mi>l</mml:mi><mml:mi>k</mml:mi></mml:msub><mml:mrow><mml:mi>∂</mml:mi><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:mfrac></mml:math></alternatives></inline-formula>
+    from all clients, then observe that <inline-formula><alternatives>
+    <tex-math><![CDATA[\frac{\partial l}{\partial \alpha_j} = \sum\limits_{k=1}^{K}\frac{ l_k }{ \partial \alpha_j }]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mfrac><mml:mrow><mml:mi>∂</mml:mi><mml:mi>l</mml:mi></mml:mrow><mml:mrow><mml:mi>∂</mml:mi><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:mfrac><mml:mo>=</mml:mo><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>k</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>K</mml:mi></mml:munderover><mml:mfrac><mml:msub><mml:mi>l</mml:mi><mml:mi>k</mml:mi></mml:msub><mml:mrow><mml:mi>∂</mml:mi><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:mfrac></mml:mrow></mml:math></alternatives></inline-formula>
+    and <inline-formula><alternatives>
+    <tex-math><![CDATA[\frac{\partial l}{\partial \beta_j} = \sum\limits_{k=1}^{K}\frac{l_k }{\partial \beta_j }]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mfrac><mml:mrow><mml:mi>∂</mml:mi><mml:mi>l</mml:mi></mml:mrow><mml:mrow><mml:mi>∂</mml:mi><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:mfrac><mml:mo>=</mml:mo><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>k</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>K</mml:mi></mml:munderover><mml:mfrac><mml:msub><mml:mi>l</mml:mi><mml:mi>k</mml:mi></mml:msub><mml:mrow><mml:mi>∂</mml:mi><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:mfrac></mml:mrow></mml:math></alternatives></inline-formula>
+    by FedSGD, the server sums up all log-likelihood values and
+    derivative values.</p>
+    <p>Also, we provided an alternative solution, Federated Median,
+    which uses the median of the likelihood values to replace the sum of
+    likelihood values in Fed-MLE
+    (<xref alt="Liu et al., 2020" rid="ref-liu2020systematic" ref-type="bibr">Liu
+    et al., 2020</xref>). It is more robust when there are outliers in
+    input data.</p>
+    <p>With estimates of <inline-formula><alternatives>
+    <tex-math><![CDATA[\alpha_j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    and <inline-formula><alternatives>
+    <tex-math><![CDATA[\beta_j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    in 2PL or <inline-formula><alternatives>
+    <tex-math><![CDATA[\beta_{jh}]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>β</mml:mi><mml:mrow><mml:mi>j</mml:mi><mml:mi>h</mml:mi></mml:mrow></mml:msub></mml:math></alternatives></inline-formula>
+    in GPCM, empirical Bayesian estimates of students’ ability can be
+    obtained
+    (<xref alt="Bock &amp; Aitkin, 1981" rid="ref-bock1981marginal" ref-type="bibr">Bock
+    &amp; Aitkin, 1981</xref>).</p>
+  </sec>
+</sec>
+<sec id="comparison-with-existing-packages">
+  <title>Comparison with existing packages</title>
+  <p>We showcase that our package could generate the same result as
+  traditional IRT packages, for example, <monospace>mirt</monospace>
+  (<xref alt="Chalmers, 2012" rid="ref-chalmers2012mirt" ref-type="bibr">Chalmers,
+  2012</xref>). Take 2PL as an example, we use a synthesized dataset
+  with 160 students and 10 items. %For traditional packages, the whole
+  dataset is used. For our package, the dataset was separated into two
+  parts, which contain 81 and 79 students.</p>
+  <p><xref alt="[acomparison]" rid="acomparison">[acomparison]</xref>
+  and <xref alt="[bcomparison]" rid="bcomparison">[bcomparison]</xref>
+  show the comparison of the discrimination and difficulty parameters
+  between <monospace>mirt</monospace> and <monospace>FedIRT</monospace>
+  based on <monospace>example_data_2PL</monospace> in our package.</p>
+  <fig>
+    <caption><p>Discrimination parameter estimates
+    comparison<styled-content id="acomparison"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="acomparison.png" />
+  </fig>
+  <fig>
+    <caption><p>Difficulty parameter estimates
+    comparison<styled-content id="bcomparison"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="bcomparison.png" />
+  </fig>
+</sec>
+<sec id="availability">
+  <title>Availability</title>
+  <p>The R package <monospace>FedIRT</monospace> is publicly available
+  on
+  <ext-link ext-link-type="uri" xlink:href="https://github.com/Feng-Ji-Lab/FedIRT">Github</ext-link>.
+  It could be installed and run by using the following commands:</p>
+  <code language="r script">devtools::install_github(&quot;Feng-Ji-Lab/FedIRT&quot;)
+library(FedIRT)</code>
+  <sec id="sample-of-the-integrated-function">
+    <title>Sample of the integrated function</title>
+    <p>We provide a function <monospace>fedirt</monospace> in the
+    package, and the detailed usage of the function is shown in the user
+    manual. We demonstrate a sample here.</p>
+    <code language="r script">data &lt;- read.csv(&quot;dataset.csv&quot;, header = TRUE)
+data_list &lt;- split(data[, -1], data$site)
+inputdata &lt;- lapply(data_list, as.matrix)
+fedirt(inputdata, model_name = &quot;2PL&quot;)</code>
+    <p>Here, we read a dataset and split it into different sites. Note
+    that the dataset should indicate different sites. Then call the
+    function <monospace>fedirt</monospace> with corresponding
+    arguments.</p>
+  </sec>
+  <sec id="sample-of-the-shiny-app">
+    <title>Sample of the Shiny App</title>
+    <p>To provide wider access for practitioners, we include the Shiny
+    user interface in our package. A detailed manual was provided in the
+    package. Taking the 2PL as an example, we illustrate how to use the
+    Shiny app below.</p>
+    <p>In the first step, the server end (e.g., test administer, school
+    board) can be launched by running the Shiny app
+    (<monospace>runserver()</monospace>) with the interface shown
+    below:</p>
+    <fig>
+      <caption><p>The initial server interface.
+      <styled-content id="server1"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="server1.png" />
+    </fig>
+    <p>Then, the client-end Shiny app can be initialized
+    (<monospace>runclient()</monospace>).</p>
+    <p>When the client first launches, it will automatically connect to
+    the localhost port <monospace>8000</monospace> as default.</p>
+    <p>If the server is deployed on another computer, type the server’s
+    IP address and port (which will be displayed on the server’s
+    interface), then click “reconnect”. The screenshots of the user
+    interface are shown below.</p>
+    <fig>
+      <caption><p>Server interface when one school is connected.
+      <styled-content id="server2"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="server2.png" />
+    </fig>
+    <fig>
+      <caption><p>Client interface when connected to server.
+      <styled-content id="client2"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="client2.png" />
+    </fig>
+    <p>Then, the client should choose a file to upload to the local
+    Shiny app to do local calculations, without sending it to the
+    server. The file should be a <monospace>csv</monospace> file, with
+    either binary or graded response, and all clients should share the
+    same number of items, and the same maximum score in each item (if
+    the answers are polytomous), otherwise, there will be an error
+    message suggesting to check the datasets of all clients.</p>
+    <fig>
+      <caption><p>Server interface when one school uploaded dataset.
+      <styled-content id="server3"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="server3.png" />
+    </fig>
+    <fig>
+      <caption><p>Client interface when a dataset is uploaded
+      successfully.
+      <styled-content id="client3"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="client3.png" />
+    </fig>
+    <p>After all the clients upload their data, the server should click
+    “start” to begin the federated estimates process and after the model
+    converges, the client should click “receive result”. The server will
+    display all item parameters and the client will display all item
+    parameters and individual ability estimates.</p>
+    <fig>
+      <caption><p>Server interface when estimation is completed.
+      <styled-content id="server4"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="server4.png" />
+    </fig>
+    <fig>
+      <caption><p>Client interface when the results received.
+      <styled-content id="client4"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="client4.png" />
+    </fig>
+    <p>The clients will also display bar plots of the ability
+    estimates.</p>
+    <fig>
+      <caption><p>Client interface for displaying results.
+      <styled-content id="client5"></styled-content></p></caption>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="client5.png" />
+    </fig>
+  </sec>
+</sec>
+</body>
+<back>
+<ref-list>
+  <ref id="ref-embretson2013item">
+    <element-citation publication-type="book">
+      <person-group person-group-type="author">
+        <name><surname>Embretson</surname><given-names>Susan E</given-names></name>
+        <name><surname>Reise</surname><given-names>Steven P</given-names></name>
+      </person-group>
+      <source>Item response theory</source>
+      <publisher-name>Psychology Press</publisher-name>
+      <year iso-8601-date="2013">2013</year>
+      <pub-id pub-id-type="doi">10.4324/9781410605269</pub-id>
+    </element-citation>
+  </ref>
+  <ref id="ref-liu2020systematic">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Liu</surname><given-names>Yi</given-names></name>
+        <name><surname>Zhang</surname><given-names>Li</given-names></name>
+        <name><surname>Ge</surname><given-names>Ning</given-names></name>
+        <name><surname>Li</surname><given-names>Guanghao</given-names></name>
+      </person-group>
+      <article-title>A systematic literature review on federated learning: From a model quality perspective</article-title>
+      <source>arXiv preprint arXiv:2012.01973</source>
+      <year iso-8601-date="2020">2020</year>
+      <pub-id pub-id-type="doi">10.48550/arXiv.2012.01973</pub-id>
+    </element-citation>
+  </ref>
+  <ref id="ref-mcmahan2017communication">
+    <element-citation publication-type="paper-conference">
+      <person-group person-group-type="author">
+        <name><surname>McMahan</surname><given-names>Brendan</given-names></name>
+        <name><surname>Moore</surname><given-names>Eider</given-names></name>
+        <name><surname>Ramage</surname><given-names>Daniel</given-names></name>
+        <name><surname>Hampson</surname><given-names>Seth</given-names></name>
+        <name><surname>Arcas</surname><given-names>Blaise Aguera y</given-names></name>
+      </person-group>
+      <article-title>Communication-efficient learning of deep networks from decentralized data</article-title>
+      <source>Artificial intelligence and statistics</source>
+      <publisher-name>PMLR</publisher-name>
+      <year iso-8601-date="2017">2017</year>
+      <fpage>1273</fpage>
+      <lpage>1282</lpage>
+    </element-citation>
+  </ref>
+  <ref id="ref-FedIRT2023">
+    <element-citation publication-type="paper-conference">
+      <person-group person-group-type="author">
+        <name><surname>Zhou</surname><given-names>Biying</given-names></name>
+        <name><surname>Ji</surname><given-names>Feng</given-names></name>
+      </person-group>
+      <article-title>Federated psychometrics: A distributed, privacy-preserving, and efficient IRT estimation algorithm</article-title>
+      <source>APHD research gala</source>
+      <publisher-name>University of Toronto</publisher-name>
+      <publisher-loc>Toronto, Canada</publisher-loc>
+      <year iso-8601-date="2023">2023</year>
+    </element-citation>
+  </ref>
+  <ref id="ref-FedIRT2024">
+    <element-citation publication-type="paper-conference">
+      <person-group person-group-type="author">
+        <name><surname>Zhou</surname><given-names>Biying</given-names></name>
+        <name><surname>Ji</surname><given-names>Feng</given-names></name>
+      </person-group>
+      <article-title>Federated item response theory: A distributed, privacy-preserving, and efficient IRT estimation algorithm</article-title>
+      <source>DPE MED research practicum poster</source>
+      <publisher-name>University of Toronto</publisher-name>
+      <publisher-loc>Toronto, Canada</publisher-loc>
+      <year iso-8601-date="2024">2024</year>
+    </element-citation>
+  </ref>
+  <ref id="ref-FederatedIRT2024_1">
+    <element-citation publication-type="manuscript">
+      <person-group person-group-type="author">
+        <name><surname>Zhou</surname><given-names>Biying</given-names></name>
+        <name><surname>Ji</surname><given-names>Feng</given-names></name>
+      </person-group>
+      <article-title>Federated item response models</article-title>
+    </element-citation>
+  </ref>
+  <ref id="ref-chalmers2012mirt">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Chalmers</surname><given-names>R Philip</given-names></name>
+      </person-group>
+      <article-title>Mirt: A multidimensional item response theory package for the r environment</article-title>
+      <source>Journal of Statistical Software</source>
+      <year iso-8601-date="2012">2012</year>
+      <volume>48</volume>
+      <pub-id pub-id-type="doi">10.18637/jss.v048.i06</pub-id>
+      <fpage>1</fpage>
+      <lpage>29</lpage>
+    </element-citation>
+  </ref>
+  <ref id="ref-rizopoulos2007ltm">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Rizopoulos</surname><given-names>Dimitris</given-names></name>
+      </person-group>
+      <article-title>Ltm: An r package for latent variable modeling and item response analysis</article-title>
+      <source>Journal of Statistical Software</source>
+      <year iso-8601-date="2007">2007</year>
+      <volume>17</volume>
+      <pub-id pub-id-type="doi">10.18637/jss.v017.i05</pub-id>
+      <fpage>1</fpage>
+      <lpage>25</lpage>
+    </element-citation>
+  </ref>
+  <ref id="ref-lemons2014predictive">
+    <element-citation publication-type="thesis">
+      <person-group person-group-type="author">
+        <name><surname>Lemons</surname><given-names>Marlow Q</given-names></name>
+      </person-group>
+      <article-title>Predictive modeling of uniform differential item functioning preservation likelihoods after applying disclosure avoidance techniques to protect privacy</article-title>
+      <publisher-name>Virginia Polytechnic Institute; State University</publisher-name>
+      <year iso-8601-date="2014">2014</year>
+    </element-citation>
+  </ref>
+  <ref id="ref-bock1981marginal">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Bock</surname><given-names>R Darrell</given-names></name>
+        <name><surname>Aitkin</surname><given-names>Murray</given-names></name>
+      </person-group>
+      <article-title>Marginal maximum likelihood estimation of item parameters: Application of an EM algorithm</article-title>
+      <source>Psychometrika</source>
+      <publisher-name>Springer</publisher-name>
+      <year iso-8601-date="1981">1981</year>
+      <volume>46</volume>
+      <issue>4</issue>
+      <pub-id pub-id-type="doi">10.1007/BF02293801</pub-id>
+      <fpage>443</fpage>
+      <lpage>459</lpage>
+    </element-citation>
+  </ref>
+</ref-list>
+</back>
+</article>

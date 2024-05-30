@@ -97,14 +97,46 @@ library(FedIRT)
 
 We provide a function `fedirt` in the package, and the detailed usage of the function is shown in the user manual. We demonstrate a sample here. 
 
+Suppose we have a dataset called `dataset.csv`, and the head of this dataset is shown below: 
+
+| site | X1 | X2 | X3 | X4 | X5 |
+|------|----|----|----|----|----|
+| 10   | 1  | 0  | 0  | 0  | 0  |
+| 7    | 0  | 0  | 1  | 0  | 0  |
+| 9    | 0  | 0  | 1  | 1  | 1  |
+| 1    | 1  | 0  | 1  | 1  | 1  |
+| 2    | 1  | 0  | 0  | 0  | 0  |
+
+First, we need to split the dataset by different sites. The index of each site is indicated in the column `site`. 
+
 ``` r
+# split the dataset by sites
 data <- read.csv("dataset.csv", header = TRUE)
 data_list <- split(data[, -1], data$site)
-inputdata <- lapply(data_list, as.matrix)
-fedirt(inputdata, model_name = "2PL")
 ```
 
-Here, we read a dataset and split it into different sites. Note that the dataset should indicate different sites. Then call the function `fedirt` with corresponding arguments. 
+Then, we change every sites' data into a list of matrices in `R`. 
+
+``` r
+# change the list into matrices
+inputdata <- lapply(data_list, as.matrix)
+```
+
+Then, we call the function `FedIRT::fedirt()` to get the result. It returns a list of item discriminations, item difficulties, and each sites' effect and each students' abilities. Call `summary()` to see the returned list. 
+
+``` r
+# call the fedirt function 
+result <- fedirt(inputdata, model_name = "2PL")
+```
+
+At last, print the results or use the parameters for further analysis. 
+
+``` r
+print(result$a)
+print(result$b)
+```
+
+In summary, we read a dataset and split it into different sites. Note that the dataset should indicate different sites. Then call the function `fedirt` with corresponding arguments. At last, print the results in need or use the part of results needed. 
 
 ## Sample of the Shiny App
 
