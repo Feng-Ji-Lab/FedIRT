@@ -21,10 +21,8 @@
 #' \item \code{b}: Numeric vector of estimated item difficulty parameters.
 #' }
 #'
-#' #' @references
-#' Muraki, E. (1992). "A generalized partial credit model: Application of an EM algorithm."
-#' \emph{Applied Psychological Measurement}, \bold{16}(2), 159--176.
-#' \doi{10.1177/014662169201600206}
+#' @references
+#' Muraki, E. (1992). A generalized partial credit model: Application of an EM algorithm. \emph{Applied Psychological Measurement}, 16(2), 159--176. \doi{10.1177/014662169201600206}
 #'
 #' @importFrom purrr map
 #' @importFrom pracma quadl

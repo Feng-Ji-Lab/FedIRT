@@ -8,7 +8,7 @@
 #' @examples
 #' data(example_data_graded)
 #'
-#' @source The data have been created for demonstration purposes and do not correspond to any actual student's grades.
+#' @source The data have been created for demonstration purposes.
 #'
 
 "example_data_graded"

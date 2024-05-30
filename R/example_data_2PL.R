@@ -10,7 +10,7 @@
 #' @examples
 #' data(example_data_2PL)
 #'
-#' @source The data are synthetically generated and are not reflective of any real student data.
+#' @source The data are synthetically generated.
 #'
 
 "example_data_2PL"

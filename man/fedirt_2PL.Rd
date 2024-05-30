@@ -2,7 +2,7 @@
 % Please edit documentation in R/fedirt_2PL.R
 \name{fedirt_2PL}
 \alias{fedirt_2PL}
-\title{Federated 2PL estimate function}
+\title{Federated 2PL model}
 \usage{
 fedirt_2PL(J, logL_entry, g_logL_entry)
 }

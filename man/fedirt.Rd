@@ -7,9 +7,9 @@
 fedirt(inputdata, model_name = "2PL", school_effect = FALSE, federated = "Avg")
 }
 \arguments{
-\item{inputdata}{A List of all responding matrices.}
+\item{inputdata}{A list of all responding matrices.}
 
-\item{model_name}{The name of the model you want to use. Can be "1PL" "2PL" or "graded".}
+\item{model_name}{The name of the model you want to use. Can be "1PL" "2PL" or "graded". "1PL" refers to Rasch Model, "2PL" refers to two-parameter logistic model, "graded" refers to graded model.}
 
 \item{school_effect}{A bool parameter, TRUE refers to considering the school effect as a fixed effect. Default is FALSE.}
 
@@ -19,17 +19,20 @@ fedirt(inputdata, model_name = "2PL", school_effect = FALSE, federated = "Avg")
 Corresponding model result as a list.
 }
 \description{
-This function combines all types of algorithm of federated IRT models. It inputs a dataset and return the federated IRT parameters.
-Note: This function is used for one combined dataset.
+This function combines all types of algorithm of federated IRT models. It inputs a dataset and return the estimated IRT parameters.
 }
 \details{
-Input is a List of responding matrices from each school, every responding matrix is one site's data.
+Input is a list of responding matrices from each school, every responding matrix is one site's data.
 }
 \examples{
+# turn input data to a list
 inputdata = list(as.matrix(example_data_2PL))
+# Call fedirt() function, and use 2PL model with school effect as a fixed effect
 fedresult = fedirt(inputdata, model_name = "2PL",school_effect = TRUE)
 
+# turn input data to a list
 inputdata = list(as.matrix(example_data_2PL_1), as.matrix(example_data_2PL_2))
+# Call fedirt() function, and use graded model
 fedresult = fedirt(inputdata, model_name = "graded")
 
 }

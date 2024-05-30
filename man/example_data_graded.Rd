@@ -8,7 +8,7 @@
 A data frame with 100 rows and 10 columns. Each row represents the responses of a single student, and each column represents one of the 10 graded response items.
 }
 \source{
-The data have been created for demonstration purposes and do not correspond to any actual student's grades.
+The data have been created for demonstration purposes.
 }
 \usage{
 example_data_graded

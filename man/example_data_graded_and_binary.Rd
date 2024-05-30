@@ -8,7 +8,7 @@
 A dataframe with 160 rows and 8 columns. Each row denotes a student's responding status, and each column denotes the responding status for all students in one item.
 }
 \source{
-The data were generated synthetically for illustrative purposes and not representing any real answering status.
+The data were generated synthetically for illustrative purposes.
 }
 \usage{
 example_data_graded_and_binary

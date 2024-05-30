@@ -7,7 +7,7 @@
 #' @examples
 #' data(example_data_graded_and_binary)
 #'
-#' @source The data were generated synthetically for illustrative purposes and not representing any real answering status.
+#' @source The data were generated synthetically for illustrative purposes.
 
 "example_data_graded_and_binary"
 

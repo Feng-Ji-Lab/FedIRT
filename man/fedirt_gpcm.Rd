@@ -29,15 +29,13 @@ A list containing the following components from the federated graded model estim
 \item \code{a}: Numeric vector of estimated item discrimination parameters.
 \item \code{b}: Numeric vector of estimated item difficulty parameters.
 }
-
-#' @references
-Muraki, E. (1992). "A generalized partial credit model: Application of an EM algorithm."
-\emph{Applied Psychological Measurement}, \bold{16}(2), 159--176.
-\doi{10.1177/014662169201600206}
 }
 \description{
 Implements a federated learning approach for the estimation of the graded response model parameters, enabling collaborative parameter estimation across distributed datasets while ensuring individual data source privacy.
 }
 \details{
 The function adopts a federated learning framework to perform estimation of item step difficulties and individual ability levels in an IRT graded response model without needing to pool the data into one centralized dataset. The estimator follows an iterative optimization procedure consisisting of local computations, information sharing with a central aggregator, and updating of the global parameters.
+}
+\references{
+Muraki, E. (1992). A generalized partial credit model: Application of an EM algorithm. \emph{Applied Psychological Measurement}, 16(2), 159--176. \doi{10.1177/014662169201600206}
 }

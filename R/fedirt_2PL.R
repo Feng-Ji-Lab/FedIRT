@@ -1,4 +1,4 @@
-#' @title Federated 2PL estimate function
+#' @title Federated 2PL model
 #' @description This function implements a federated learning approach to estimate the parameters of the 2PL IRT model. It allows for collaborative estimation across multiple datasets, while maintaining the privacy of each individual data source. The federated 2PL model is particularly useful in contexts where data sharing might be limited due to privacy concerns or logistical constraints.
 #' @details The algorithm leverages federated learning techniques to estimate shared item parameters and individual ability levels without requiring the raw data to be combined into a single dataset.
 #' The estimation procedure is composed of several steps, including initialization, local computations at each data source, communication of summary statistics to a central server, and global parameter updates.

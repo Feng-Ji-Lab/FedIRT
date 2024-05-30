@@ -14,7 +14,7 @@ A list with the estimated global discrimination a, global difficulty b, person's
 }
 \description{
 This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 2PL parameters.
-Note: This function is used for one combined dataset, for testing the algorithm. To use federated 2PL in distributed datasets, please use fedirt_2PL().
+Note: To use federated 2PL in distributed datasets, please use fedirt_2PL().
 }
 \details{
 Input is a List of responding matrices from each school, every responding matrix is one site's data.

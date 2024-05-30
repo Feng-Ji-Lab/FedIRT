@@ -7,14 +7,13 @@
 fedirt_1PL_data(inputdata)
 }
 \arguments{
-\item{inputdata}{A List of all responding matrix.}
+\item{inputdata}{A List of all responding matrices.}
 }
 \value{
 A list with the estimated global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik.
 }
 \description{
 This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 1PL parameters.
-Note: This function is used for one combined dataset, for testing the algorithm.
 }
 \details{
 Input is a List of responding matrices from each school, every responding matrix is one site's data.

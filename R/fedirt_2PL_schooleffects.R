@@ -1,8 +1,8 @@
 #' @title Federated 2PL model with school effects
 #' @description This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 2PL parameters.
-#' Note: This function is used for one combined dataset, for testing the algorithm. To use federated 2PL in distributed datasets, please use fedirt_2PL().
+#' Note: To use federated 2PL in distributed datasets, please use fedirt_2PL().
 #' @details Input is a List of responding matrices from each school, every responding matrix is one site's data.
-#' @param inputdata A List of all responding matrix.
+#' @param inputdata A List of all responding matrices.
 #' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik. It also displays the school ability sc, which is considered as a fixed effect.
 #'
 #' @examples
