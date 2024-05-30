@@ -50,8 +50,8 @@ University of Toronto, Toronto, Canada</institution>
 <author-notes>
 <corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
 </author-notes>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-05-16">
-<day>16</day>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-05-30">
+<day>30</day>
 <month>5</month>
 <year>2024</year>
 </pub-date>
@@ -332,14 +332,91 @@ library(FedIRT)</code>
     <p>We provide a function <monospace>fedirt</monospace> in the
     package, and the detailed usage of the function is shown in the user
     manual. We demonstrate a sample here.</p>
-    <code language="r script">data &lt;- read.csv(&quot;dataset.csv&quot;, header = TRUE)
-data_list &lt;- split(data[, -1], data$site)
-inputdata &lt;- lapply(data_list, as.matrix)
-fedirt(inputdata, model_name = &quot;2PL&quot;)</code>
-    <p>Here, we read a dataset and split it into different sites. Note
-    that the dataset should indicate different sites. Then call the
-    function <monospace>fedirt</monospace> with corresponding
-    arguments.</p>
+    <p>Suppose we have a dataset called
+    <monospace>dataset.csv</monospace>, and the head of this dataset is
+    shown below:</p>
+    <table-wrap>
+      <table>
+        <thead>
+          <tr>
+            <th>site</th>
+            <th>X1</th>
+            <th>X2</th>
+            <th>X3</th>
+            <th>X4</th>
+            <th>X5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>10</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+        </tbody>
+      </table>
+    </table-wrap>
+    <p>First, we need to split the dataset by different sites. The index
+    of each site is indicated in the column
+    <monospace>site</monospace>.</p>
+    <code language="r script"># split the dataset by sites
+data &lt;- read.csv(&quot;dataset.csv&quot;, header = TRUE)
+data_list &lt;- split(data[, -1], data$site)</code>
+    <p>Then, we change every sites’ data into a list of matrices in
+    <monospace>R</monospace>.</p>
+    <code language="r script"># change the list into matrices
+inputdata &lt;- lapply(data_list, as.matrix)</code>
+    <p>Then, we call the function
+    <monospace>FedIRT::fedirt()</monospace> to get the result. It
+    returns a list of item discriminations, item difficulties, and each
+    sites’ effect and each students’ abilities. Call
+    <monospace>summary()</monospace> to see the returned list.</p>
+    <code language="r script"># call the fedirt function 
+result &lt;- fedirt(inputdata, model_name = &quot;2PL&quot;)</code>
+    <p>At last, print the results or use the parameters for further
+    analysis.</p>
+    <code language="r script">print(result$a)
+print(result$b)</code>
+    <p>In summary, we read a dataset and split it into different sites.
+    Note that the dataset should indicate different sites. Then call the
+    function <monospace>fedirt</monospace> with corresponding arguments.
+    At last, print the results in need or use the part of results
+    needed.</p>
   </sec>
   <sec id="sample-of-the-shiny-app">
     <title>Sample of the Shiny App</title>
