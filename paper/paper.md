@@ -136,6 +136,44 @@ print(result$a)
 print(result$b)
 ```
 
+Apart from using the results for further analysis, we can also use `summary()` to generate a snapshot of the result. Here is a sample below. 
+
+``` r
+summary(result)
+```
+
+Then, the result will be printed in the console as follows:
+
+```
+Summary of FedIRT Results:
+
+
+Counts:
+function gradient 
+     150       68 
+
+Convergence Status (convergence):
+Converged
+
+Log Likelihood (loglik):
+[1] -957.1493
+
+Difficulty Parameters (b):
+ [1]  0.1699265 -2.8088090  1.1167600  0.9893799 -2.5409030 -1.1789985 -0.5258475  0.4560620  1.3792979
+[10]  1.4247369
+
+Discrimination Parameters (a):
+ [1] 0.6627037 0.2495989 2.1162137 0.8155786 0.4177167 0.4228183 0.5176585 0.6663483 0.8053621 0.9137402
+
+School effect:
+[1] 1.517844
+
+Ability Estimates:
+School 1:
+  [1] -1.187698446 -0.552434825 -0.899668043 -0.206272962  0.387992333  0.678869288 -0.146111320
+  [8]  0.318665280  0.408994368 -0.139117072  0.496885125  0.562515435  0.392422237  0.519555447
+```
+
 In summary, we read a dataset and split it into different sites. Note that the dataset should indicate different sites. Then call the function `fedirt` with corresponding arguments. At last, print the results in need or use the part of results needed. 
 
 ## Sample of the Shiny App

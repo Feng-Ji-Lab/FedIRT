@@ -31,19 +31,71 @@ fedirt = function(inputdata, model_name = "2PL", school_effect = FALSE, federate
     stop("Invalid model_name. Please use one of the following: ", paste(valid_models, collapse = ", "), ".")
   }
 
+  result = list()
+
   if(model_name == "1PL"){
-    return(fedirt_1PL_data(inputdata))
+    result = fedirt_1PL_data(inputdata)
   }
   else if (model_name == "graded"){
-    return(fedirt_gpcm_data(inputdata))
+    result = fedirt_gpcm_data(inputdata)
   }
   else if(school_effect == TRUE){
-    return(fedirt_2PL_schooleffects(inputdata))
+    result = fedirt_2PL_schooleffects(inputdata)
   }
   else if(federated == "Med"){
-    return(fedirt_2PL_median_data(inputdata))
+    result = fedirt_2PL_median_data(inputdata)
   }
   else {
-    return(fedirt_2PL_data(inputdata))
+    result = fedirt_2PL_data(inputdata)
   }
+  class(result) <- "fedirt"
+  return(result)
 }
+
+
+#' @title Summary Method for FedIRT Objects
+#' @description Provides a summary for objects of class \code{fedirt}.
+#' @param object An object of class \code{fedirt}.
+#' @param ... Additional arguments passed to the summary method.
+#' @method summary fedirt
+#' @export
+summary.fedirt <- function(object, ...) {
+  cat("Summary of FedIRT Results:\n\n")
+
+  cat("\nCounts:\n")
+  print(object$counts)
+
+  cat("\nConvergence Status (convergence):\n")
+  if (object$convergence == 0) {
+    cat("Converged\n")
+  } else {
+    cat("Not converged\n")
+  }
+
+
+  cat("\nLog Likelihood (loglik):\n")
+  print(object$loglik)
+
+  cat("\nDifficulty Parameters (b):\n")
+  print(object$b)
+
+  cat("\nDiscrimination Parameters (a):\n")
+  print(object$a)
+
+  if (!is.null(object$sc)) {
+    cat("\nSchool effect:\n")
+    print(object$sc)
+  }
+
+  cat("\nAbility Estimates:\n")
+  for (i in seq_along(object$person$ability)) {
+    cat(paste0("School ", i, ":\n"))
+    ability_matrix <- t(object$person$ability[[i]])
+    print(as.vector(ability_matrix))
+  }
+
+  cat("\nEnd of Summary\n")
+}
+summary <- function(object, ...) UseMethod("summary")
+
+
