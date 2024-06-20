@@ -52,7 +52,7 @@ fedirt = function(inputdata, model_name = "2PL", school_effect = FALSE, federate
   return(result)
 }
 
-
+#' @noRd
 #' @title Summary Method for FedIRT Objects
 #' @description Provides a summary for objects of class \code{fedirt}.
 #' @param object An object of class \code{fedirt}.

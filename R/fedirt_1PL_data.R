@@ -1,3 +1,4 @@
+#' @noRd
 #' @title Federated 1PL model
 #' @description This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 1PL parameters.
 #' @details Input is a List of responding matrices from each school, every responding matrix is one site's data.
@@ -16,7 +17,6 @@
 #' @importFrom pracma quadl
 #' @importFrom stats optim
 
-#' @export
 fedirt_1PL_data = function(inputdata) {
   my_data <- inputdata
   N <- lapply(my_data, function(x) nrow(x))

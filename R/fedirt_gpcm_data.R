@@ -1,3 +1,4 @@
+#' @noRd
 #' @title Federated gpcm model
 #' @description This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated gpcm parameters.
 #' Note: This function can only calculate one combined dataset. To use federated gpcm in distributed datasets, please use fedirt_gpcm().
@@ -18,7 +19,6 @@
 #' @importFrom pracma quadl
 #' @importFrom stats optim
 
-#' @export
 fedirt_gpcm_data = function(inputdata) {
 
   my_data <- inputdata

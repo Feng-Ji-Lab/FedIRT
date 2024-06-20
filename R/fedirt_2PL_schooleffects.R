@@ -1,3 +1,4 @@
+#' @noRd
 #' @title Federated 2PL model with school effects
 #' @description This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 2PL parameters.
 #' Note: To use federated 2PL in distributed datasets, please use fedirt_2PL().
@@ -17,7 +18,6 @@
 #' @importFrom pracma quadl
 #' @importFrom stats optim
 
-#' @export
 fedirt_2PL_schooleffects = function(inputdata) {
   my_data <- inputdata
   N <- lapply(my_data, function(x) nrow(x))

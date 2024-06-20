@@ -3,10 +3,10 @@ library(testthat)
 test_that('test 1PL', {
 
   inputdata1 = list(as.matrix(example_data_2PL))
-  fedresult1 = fedirt_1PL_data(inputdata1)
+  fedresult1 = fedirt(inputdata1, model_name = "1PL")
 
   inputdata2 = list(as.matrix(example_data_2PL_1), as.matrix(example_data_2PL_2))
-  fedresult2 = fedirt_1PL_data(inputdata2)
+  fedresult2 = fedirt(inputdata2, model_name = "1PL")
 
   expect_equal(fedresult1[['a']],fedresult2[['a']])
   expect_equal(fedresult1[['b']],fedresult2[['b']])
