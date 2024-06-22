@@ -96,6 +96,5 @@ summary.fedirt <- function(object, ...) {
 
   cat("\nEnd of Summary\n")
 }
-summary <- function(object, ...) UseMethod("summary")
 
 

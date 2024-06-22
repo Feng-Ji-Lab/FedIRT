@@ -165,7 +165,7 @@ fedirt_2PL_data = function(inputdata) {
     rbind(ga, gb)
   }
 
-  my_personfit = function(a, b) {
+  my_person = function(a, b) {
     result = list()
     result[["a"]] = a
     result[["b"]] = b
@@ -179,6 +179,31 @@ fedirt_2PL_data = function(inputdata) {
 
     for(index in 1:K) {
       result[["person"]][[index]] = result[["ability"]][[index]] - result[["site"]][[index]]
+    }
+
+    P = function(a, b, ability) {
+      t = exp(-1 * broadcast.multiplication(a, broadcast.subtraction(b, ability)))
+      return (t / (1 + t))
+    }
+    for(index in 1:K) {
+      Xi = apply(my_data[[index]], c(1), sum)
+      EXi = apply(t(P(matrix(a),matrix(b), t(result[["ability"]][[index]]))), c(1), sum)
+      chaXi = Xi-EXi
+      Lz = chaXi / sd(Xi)
+      Zh = (Lz-mean(Lz)) / sd(Lz)
+      Pij = t(P(matrix(a),matrix(b), t(result[["ability"]][[index]])))
+      Xij = my_data[[index]]
+      Wij = 1 / Pij / (1-Pij)
+      Infit_fz = Wij * (Xij - Pij) * (Xij - Pij)
+      Infit = apply(Infit_fz, c(1), sum) / apply(Wij, c(1), sum)
+      Outfit = apply((Xij - Pij) * (Xij - Pij), c(1), sum) / J
+
+      fit_result = list()
+      fit_result[["Lz"]] = Lz
+      fit_result[["Zh"]] = Zh
+      fit_result[["Infit"]] = Infit
+      fit_result[["Outfit"]] = Outfit
+      result[["fit"]][[index]] = fit_result
     }
     return(result)
   }
@@ -195,10 +220,11 @@ fedirt_2PL_data = function(inputdata) {
     ps_next$b = ps_next$par[(J+1):(J+J)]
     ps_next$a = ps_next$par[1:J]
 
-    ps_next$person = my_personfit(ps_next[["a"]], ps_next[["b"]])
+    ps_next$person = my_person(ps_next[["a"]], ps_next[["b"]])
     ps_next
   }
 
 
   fed_irt_entry(inputdata)
 }
+
