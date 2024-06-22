@@ -48,7 +48,8 @@ fedirt_gpcm = function(J, M,logL_entry, g_logL_entry) {
 
   ps_next
 }
-#' Log-Likelihood of the federated graded Model
+
+#' @title Log-Likelihood of the federated graded Model
 #'
 #' @description Computes the log-likelihood of the graded IRT model given item parameters and response data. The computation utilizes numerical integration and is optimized through memoization for repeated evaluations.
 #'
@@ -124,7 +125,8 @@ logL_gpcm = function(a, b, data, q = 21, lower_bound = -3, upper_bound = 3) {
   }
   sum(log(matrix(apply(broadcast.multiplication(exp(finalLogL), t(A)), c(1), sum))))
 }
-#' Gradient of Log-Likelihood for the federated graded Model
+
+#' @title Gradient of Log-Likelihood for the federated graded Model
 #'
 #' @description Calculates the gradients of the log-likelihood function with respect to the item discrimination (a) and difficulty (b) parameters for the graded IRT model. This computation is vital for optimizing the item parameters via gradient-based optimization algorithms.
 #'

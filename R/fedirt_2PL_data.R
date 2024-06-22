@@ -17,6 +17,7 @@
 #' @importFrom purrr map
 #' @importFrom pracma quadl
 #' @importFrom stats optim
+#' @importFrom stats sd
 
 fedirt_2PL_data = function(inputdata) {
   my_data <- inputdata

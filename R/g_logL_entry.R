@@ -1,4 +1,5 @@
-#' Aggregated Gradient of Log-Likelihood for Federated Learning
+
+#' @title Aggregated Gradient of Log-Likelihood for Federated Learning
 #'
 #' @description Calculates the sum of the gradients of the log-likelihood with respect to item discrimination (a) and difficulty (b) parameters across all schools participating in a federated learning process. The function `g_logL_entry` is a critical component in the gradient-based optimization process within `fedirt`.
 #'

@@ -1,4 +1,5 @@
-#' Aggregate Log-Likelihood Function for Federated Learning
+
+#' @title Aggregate Log-Likelihood Function for Federated Learning
 #'
 #' @description Computes the sum of log-likelihoods across multiple schools in a federated learning setting. The function `logL_entry` aggregates contribution of each school's log-likelihood to the overall model. It is designed to be used within the optimization process of `fedirt`.
 #'

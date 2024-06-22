@@ -131,8 +131,7 @@ memoize <- function(f) {
 g = function(x) {
   return (exp(-0.5 * x * x) / sqrt(2 * pi))
 }
-
-#' Log-Likelihood of the federated 2PL Model
+#' @title Log-Likelihood of the federated 2PL Model
 #'
 #' @description Computes the log-likelihood of the Two-Parameter Logistic (2PL) IRT model given item parameters and response data. The computation utilizes numerical integration and is optimized through memoization for repeated evaluations.
 #'
@@ -183,7 +182,9 @@ logL = function(a, b, data, q = 21, lower_bound = -3, upper_bound = 3) {
 
   sum(log(matrix(apply(broadcast.multiplication(Lik(a, b), t(A)), c(1), sum))))
 }
-#' Gradient of Log-Likelihood for the federated 2PL Model
+
+
+#' @title Gradient of Log-Likelihood for the federated 2PL Model
 #'
 #' @description Calculates the gradients of the log-likelihood function with respect to the item discrimination (a) and difficulty (b) parameters for the Two-Parameter Logistic (2PL) Item Response Theory (IRT) model. This computation is vital for optimizing the item parameters via gradient-based optimization algorithms.
 #'
