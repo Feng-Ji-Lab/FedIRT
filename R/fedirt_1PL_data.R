@@ -78,32 +78,26 @@ fedirt_1PL_data = function(inputdata) {
   #   }
   # }
 
-  g = function(x) {
-    return (exp(-0.5 * x * x) / sqrt(2 * pi))
-  }
+  # g = function(x) {
+  #   return (exp(-0.5 * x * x) / sqrt(2 * pi))
+  # }
   q = 21
   lower_bound = -3
   upper_bound = 3
-  level_diff = (upper_bound - lower_bound) / (q - 1)
-  X = as.matrix(as.numeric(map(1:q, function(k) {
-    index = (lower_bound + (k - 1) * level_diff)
-    return(index)
-  })))
-  A = as.matrix(as.numeric(map(1:q, function(k) {
-    index = (lower_bound + (k - 1) * level_diff)
-    quadrature = quadl(g, index - level_diff * 0.5, index + level_diff * 0.5)
-    return(quadrature)
-  })))
-  Pj = memoize(function(a, b) {
-    t = exp(-1 * broadcast.multiplication(a, broadcast.subtraction(b, t(X))))
-    return (t / (1 + t))
-  })
-  Qj = memoize(function(a, b) {
-    return (1 - Pj(a, b))
-  })
+  .fedirtClusterEnv$X = GH.X(q,lower_bound,upper_bound)
+  .fedirtClusterEnv$A = GH.A(q,lower_bound,upper_bound)
+  # Pj = memoize(function(a, b) {
+  #   t = exp(-1 * broadcast.multiplication(a, broadcast.subtraction(b, t(X))))
+  #   return (t / (1 + t))
+  # })
+  # Qj = memoize(function(a, b) {
+  #   return (1 - Pj(a, b))
+  # })
+  .fedirtClusterEnv$Pj = memoize(Pj_1PL)
+  .fedirtClusterEnv$Qj = memoize(Qj_1PL)
 
   log_Lik = memoize(function(a, b, index) {
-    my_data[[index]] %*% log(Pj(a, b))  + (1 - my_data[[index]]) %*% log(Qj(a, b))
+    my_data[[index]] %*% log(.fedirtClusterEnv$Pj(a, b))  + (1 - my_data[[index]]) %*% log(.fedirtClusterEnv$Qj(a, b))
   })
 
   Lik = memoize(function(a, b, index) {
@@ -111,7 +105,7 @@ fedirt_1PL_data = function(inputdata) {
   })
 
   LA = memoize(function(a, b, index) {
-    broadcast.multiplication(Lik(a,b,index), t(A))
+    broadcast.multiplication(Lik(a,b,index), t(.fedirtClusterEnv$A))
   })
 
   Pxy = memoize(function(a, b, index) {
@@ -132,10 +126,10 @@ fedirt_1PL_data = function(inputdata) {
     apply(pxyr, c(2, 3), sum)
   })
   da = memoize(function(a, b, index) {
-    matrix(apply(-1 * broadcast.subtraction(b, t(X)) * (rjk(a, b, index) - broadcast.multiplication(Pj(a, b), t(njk(a, b, index)))), c(1), sum))
+    matrix(apply(-1 * broadcast.subtraction(b, t(.fedirtClusterEnv$X)) * (rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
   })
   db = memoize(function(a, b, index) {
-    -1 * a * matrix(apply((rjk(a, b, index) - broadcast.multiplication(Pj(a, b), t(njk(a, b, index)))), c(1), sum))
+    -1 * a * matrix(apply((rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
   })
   g_logL = function(a, b, index) {
     result_a = da(a, b, index)
@@ -143,7 +137,7 @@ fedirt_1PL_data = function(inputdata) {
     list(result_a, result_b)
   }
   logL = function(a, b, index) {
-    sum(log(matrix(apply(broadcast.multiplication(Lik(a, b, index), t(A)), c(1), sum))))
+    sum(log(matrix(apply(broadcast.multiplication(Lik(a, b, index), t(.fedirtClusterEnv$A)), c(1), sum))))
   }
   logL_entry = function(ps) {
     a = matrix(rep(1,J))
@@ -170,7 +164,7 @@ fedirt_1PL_data = function(inputdata) {
     result[["a"]] = a
     result[["b"]] = b
     for(index in 1:K) {
-      result[["ability"]][[index]] = matrix(apply(broadcast.multiplication(LA(a,b,index), t(X)), c(1), sum)) / matrix(apply(LA(a,b,index), c(1), sum))
+      result[["ability"]][[index]] = matrix(apply(broadcast.multiplication(LA(a,b,index), t(.fedirtClusterEnv$X)), c(1), sum)) / matrix(apply(LA(a,b,index), c(1), sum))
     }
 
     for(index in 1:K) {
