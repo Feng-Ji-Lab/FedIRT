@@ -37,12 +37,10 @@ fedirt_2PL_data = function(inputdata) {
 
   .fedirtClusterEnv$Lik = mem(Lik)
 
-  LA = mem(function(a, b, index) {
-    broadcast.multiplication(.fedirtClusterEnv$Lik(a,b,index), t(.fedirtClusterEnv$A))
-  })
+  .fedirtClusterEnv$LA = mem(LA)
 
   Pxy = mem(function(a, b, index) {
-    la = LA(a,b,index)
+    la = .fedirtClusterEnv$LA(a,b,index)
     sum_la = replicate(.fedirtClusterEnv$q, apply(la, c(1), sum))
     la / sum_la
   })
@@ -97,7 +95,7 @@ fedirt_2PL_data = function(inputdata) {
     result[["a"]] = a
     result[["b"]] = b
     for(index in 1:K) {
-      result[["ability"]][[index]] = matrix(apply(broadcast.multiplication(LA(a,b,index), t(.fedirtClusterEnv$X)), c(1), sum)) / matrix(apply(LA(a,b,index), c(1), sum))
+      result[["ability"]][[index]] = matrix(apply(broadcast.multiplication(.fedirtClusterEnv$LA(a,b,index), t(.fedirtClusterEnv$X)), c(1), sum)) / matrix(apply(.fedirtClusterEnv$LA(a,b,index), c(1), sum))
     }
 
     for(index in 1:K) {
