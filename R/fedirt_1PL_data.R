@@ -21,7 +21,7 @@
 fedirt_1PL_data = function(inputdata) {
   .fedirtClusterEnv$my_data <- inputdata
   N <- lapply(.fedirtClusterEnv$my_data, function(x) nrow(x))
-  J <- dim(.fedirtClusterEnv$my_data[[1]])[2]
+  .fedirtClusterEnv$J <- dim(.fedirtClusterEnv$my_data[[1]])[2]
   K <- length(.fedirtClusterEnv$my_data)
 
   .fedirtClusterEnv$q = 21
@@ -39,17 +39,14 @@ fedirt_1PL_data = function(inputdata) {
 
   .fedirtClusterEnv$LA = mem(LA)
   .fedirtClusterEnv$Pxy = mem(Pxy)
-
-  Pxyr = mem(function(a, b, index) {
-    aperm(replicate(J, .fedirtClusterEnv$Pxy(a,b,index)), c(1, 3, 2)) * replicate(.fedirtClusterEnv$q, .fedirtClusterEnv$my_data[[index]])
-  })
+  .fedirtClusterEnv$Pxyr = mem(Pxyr)
 
   njk = mem(function(a, b, index) {
     pxy = .fedirtClusterEnv$Pxy(a, b, index)
     matrix(apply(pxy, c(2), sum))
   })
   rjk = mem(function(a, b, index) {
-    pxyr = Pxyr(a, b, index)
+    pxyr = .fedirtClusterEnv$Pxyr(a, b, index)
     apply(pxyr, c(2, 3), sum)
   })
   da = mem(function(a, b, index) {
@@ -67,17 +64,17 @@ fedirt_1PL_data = function(inputdata) {
     sum(log(matrix(apply(broadcast.multiplication(.fedirtClusterEnv$Lik(a, b, index), t(.fedirtClusterEnv$A)), c(1), sum))))
   }
   logL_entry = function(ps) {
-    a = matrix(rep(1,J))
-    b = matrix(ps[1:J])
+    a = matrix(rep(1,.fedirtClusterEnv$J))
+    b = matrix(ps[1:.fedirtClusterEnv$J])
     result = sum(unlist(map(1:K, function(index) logL(a, b, index))))
     result
   }
 
   g_logL_entry = function(ps) {
-    a = matrix(rep(1,J))
-    b = matrix(ps[1:J])
-    ga = matrix(0, nrow = J)
-    gb = matrix(0, nrow = J)
+    a = matrix(rep(1,.fedirtClusterEnv$J))
+    b = matrix(ps[1:.fedirtClusterEnv$J])
+    ga = matrix(0, nrow = .fedirtClusterEnv$J)
+    gb = matrix(0, nrow = .fedirtClusterEnv$J)
     for(index in 1:K) {
       result = g_logL(a, b, index)
       ga = ga + result[[1]]
@@ -117,7 +114,7 @@ fedirt_1PL_data = function(inputdata) {
       Wij = 1 / Pij / (1-Pij)
       Infit_fz = Wij * (Xij - Pij) * (Xij - Pij)
       Infit = apply(Infit_fz, c(1), sum) / apply(Wij, c(1), sum)
-      Outfit = apply((Xij - Pij) * (Xij - Pij), c(1), sum) / J
+      Outfit = apply((Xij - Pij) * (Xij - Pij), c(1), sum) / .fedirtClusterEnv$J
 
       fit_result = list()
       fit_result[["Lz"]] = Lz
@@ -134,12 +131,12 @@ fedirt_1PL_data = function(inputdata) {
       # "Nelder-Mead", "BFGS", "CG", "L-BFGS-B", "SANN", "Brent"
       optim(par = ps_old, fn = logL_entry, gr = g_logL_entry, method = "BFGS", control = list(fnscale=-1, trace = 0,  maxit = 10000))
     }
-    ps_init = c(rep(0, J))
+    ps_init = c(rep(0, .fedirtClusterEnv$J))
     ps_next = get_new_ps(ps_init)
     ps_next$loglik = logL_entry(ps_next$par)
 
-    ps_next$b = ps_next$par[1:J]
-    ps_next$a = rep(1,J)
+    ps_next$b = ps_next$par[1:.fedirtClusterEnv$J]
+    ps_next$a = rep(1,.fedirtClusterEnv$J)
 
     ps_next$person = my_person(ps_next[["a"]], ps_next[["b"]])
     ps_next
