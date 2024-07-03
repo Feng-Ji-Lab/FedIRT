@@ -39,36 +39,17 @@ fedirt_2PL_data = function(inputdata) {
 
   .fedirtClusterEnv$LA = mem(LA)
 
-  Pxy = mem(function(a, b, index) {
-    la = .fedirtClusterEnv$LA(a,b,index)
-    sum_la = replicate(.fedirtClusterEnv$q, apply(la, c(1), sum))
-    la / sum_la
-  })
-  Pxyr = mem(function(a, b, index) {
-    aperm(replicate(J, Pxy(a,b,index)), c(1, 3, 2)) * replicate(.fedirtClusterEnv$q, .fedirtClusterEnv$my_data[[index]])
-  })
+  .fedirtClusterEnv$Pxy = mem(Pxy)
+  .fedirtClusterEnv$Pxyr = mem(Pxyr)
 
-  njk = mem(function(a, b, index) {
-    pxy = Pxy(a, b, index)
-    matrix(apply(pxy, c(2), sum))
-  })
-  rjk = mem(function(a, b, index) {
-    pxyr = Pxyr(a, b, index)
-    apply(pxyr, c(2, 3), sum)
-  })
-  da = mem(function(a, b, index) {
-    matrix(apply(-1 * broadcast.subtraction(b, t(.fedirtClusterEnv$X)) * (rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
-  })
-  db = mem(function(a, b, index) {
-    -1 * a * matrix(apply((rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
-  })
+  .fedirtClusterEnv$njk = mem(njk)
+  .fedirtClusterEnv$rjk = mem(rjk)
+  .fedirtClusterEnv$da = mem(da)
+  .fedirtClusterEnv$db = mem(db)
   g_logL = function(a, b, index) {
-    result_a = da(a, b, index)
-    result_b = db(a, b, index)
+    result_a = .fedirtClusterEnv$da(a, b, index)
+    result_b = .fedirtClusterEnv$db(a, b, index)
     list(result_a, result_b)
-  }
-  logL = function(a, b, index) {
-    sum(log(matrix(apply(broadcast.multiplication(.fedirtClusterEnv$Lik(a, b, index), t(.fedirtClusterEnv$A)), c(1), sum))))
   }
   logL_entry = function(ps) {
     a = matrix(ps[1:J])
