@@ -40,15 +40,9 @@ fedirt_1PL_data = function(inputdata) {
   .fedirtClusterEnv$LA = mem(LA)
   .fedirtClusterEnv$Pxy = mem(Pxy)
   .fedirtClusterEnv$Pxyr = mem(Pxyr)
+  .fedirtClusterEnv$njk = mem(njk)
+  .fedirtClusterEnv$rjk = mem(rjk)
 
-  njk = mem(function(a, b, index) {
-    pxy = .fedirtClusterEnv$Pxy(a, b, index)
-    matrix(apply(pxy, c(2), sum))
-  })
-  rjk = mem(function(a, b, index) {
-    pxyr = .fedirtClusterEnv$Pxyr(a, b, index)
-    apply(pxyr, c(2, 3), sum)
-  })
   da = mem(function(a, b, index) {
     matrix(apply(-1 * broadcast.subtraction(b, t(.fedirtClusterEnv$X)) * (rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
   })
