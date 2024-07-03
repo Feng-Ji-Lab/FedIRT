@@ -20,10 +20,10 @@
 #' @importFrom stats sd
 
 fedirt_2PL_data = function(inputdata) {
-  my_data <- inputdata
-  N <- lapply(my_data, function(x) nrow(x))
-  J <- dim(my_data[[1]])[2]
-  K <- length(my_data)
+  .fedirtClusterEnv$my_data <- inputdata
+  N <- lapply(.fedirtClusterEnv$my_data, function(x) nrow(x))
+  J <- dim(.fedirtClusterEnv$my_data[[1]])[2]
+  K <- length(.fedirtClusterEnv$my_data)
 
   .fedirtClusterEnv$q = 21
   lower_bound = -3
@@ -33,16 +33,12 @@ fedirt_2PL_data = function(inputdata) {
   .fedirtClusterEnv$Pj = mem(Pj)
   .fedirtClusterEnv$Qj = mem(Qj)
 
-  log_Lik = mem(function(a, b, index) {
-    my_data[[index]] %*% log(Pj(a, b))  + (1 - my_data[[index]]) %*% log(.fedirtClusterEnv$Qj(a, b))
-  })
+  .fedirtClusterEnv$log_Lik = mem(log_Lik)
 
-  Lik = mem(function(a, b, index) {
-    exp(log_Lik(a, b, index))
-  })
+  .fedirtClusterEnv$Lik = mem(Lik)
 
   LA = mem(function(a, b, index) {
-    broadcast.multiplication(Lik(a,b,index), t(.fedirtClusterEnv$A))
+    broadcast.multiplication(.fedirtClusterEnv$Lik(a,b,index), t(.fedirtClusterEnv$A))
   })
 
   Pxy = mem(function(a, b, index) {
@@ -51,7 +47,7 @@ fedirt_2PL_data = function(inputdata) {
     la / sum_la
   })
   Pxyr = mem(function(a, b, index) {
-    aperm(replicate(J, Pxy(a,b,index)), c(1, 3, 2)) * replicate(.fedirtClusterEnv$q, my_data[[index]])
+    aperm(replicate(J, Pxy(a,b,index)), c(1, 3, 2)) * replicate(.fedirtClusterEnv$q, .fedirtClusterEnv$my_data[[index]])
   })
 
   njk = mem(function(a, b, index) {
@@ -74,7 +70,7 @@ fedirt_2PL_data = function(inputdata) {
     list(result_a, result_b)
   }
   logL = function(a, b, index) {
-    sum(log(matrix(apply(broadcast.multiplication(Lik(a, b, index), t(.fedirtClusterEnv$A)), c(1), sum))))
+    sum(log(matrix(apply(broadcast.multiplication(.fedirtClusterEnv$Lik(a, b, index), t(.fedirtClusterEnv$A)), c(1), sum))))
   }
   logL_entry = function(ps) {
     a = matrix(ps[1:J])
@@ -117,13 +113,13 @@ fedirt_2PL_data = function(inputdata) {
       return (t / (1 + t))
     }
     for(index in 1:K) {
-      Xi = apply(my_data[[index]], c(1), sum)
+      Xi = apply(.fedirtClusterEnv$my_data[[index]], c(1), sum)
       EXi = apply(t(P(matrix(a),matrix(b), t(result[["ability"]][[index]]))), c(1), sum)
       chaXi = Xi-EXi
       Lz = chaXi / sd(Xi)
       Zh = (Lz-mean(Lz)) / sd(Lz)
       Pij = t(P(matrix(a),matrix(b), t(result[["ability"]][[index]])))
-      Xij = my_data[[index]]
+      Xij = .fedirtClusterEnv$my_data[[index]]
       Wij = 1 / Pij / (1-Pij)
       Infit_fz = Wij * (Xij - Pij) * (Xij - Pij)
       Infit = apply(Infit_fz, c(1), sum) / apply(Wij, c(1), sum)
