@@ -1,4 +1,4 @@
-memoize <- function(f) {
+mem <- function(f) {
   memo <- new.env(parent = emptyenv())
   function(...) {
     key <- paste(list(...), collapse = " ,")

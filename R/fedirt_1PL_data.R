@@ -24,42 +24,38 @@ fedirt_1PL_data = function(inputdata) {
   J <- dim(.fedirtClusterEnv$my_data[[1]])[2]
   K <- length(.fedirtClusterEnv$my_data)
 
-  q = 21
+  .fedirtClusterEnv$q = 21
   lower_bound = -3
   upper_bound = 3
-  .fedirtClusterEnv$X = GH.X(q,lower_bound,upper_bound)
-  .fedirtClusterEnv$A = GH.A(q,lower_bound,upper_bound)
+  .fedirtClusterEnv$X = GH.X(.fedirtClusterEnv$q,lower_bound,upper_bound)
+  .fedirtClusterEnv$A = GH.A(.fedirtClusterEnv$q,lower_bound,upper_bound)
 
-  .fedirtClusterEnv$Pj = memoize(Pj_1PL)
-  .fedirtClusterEnv$Qj = memoize(Qj_1PL)
+  .fedirtClusterEnv$Pj = mem(Pj)
+  .fedirtClusterEnv$Qj = mem(Qj)
 
-  .fedirtClusterEnv$log_Lik = memoize(log_Lik_1PL)
+  .fedirtClusterEnv$log_Lik = mem(log_Lik)
 
-  .fedirtClusterEnv$Lik = memoize(Lik_1PL)
+  .fedirtClusterEnv$Lik = mem(Lik)
 
-  .fedirtClusterEnv$LA = memoize(LA_1PL)
+  .fedirtClusterEnv$LA = mem(LA)
+  .fedirtClusterEnv$Pxy = mem(Pxy)
 
-  Pxy = memoize(function(a, b, index) {
-    la = .fedirtClusterEnv$LA(a,b,index)
-    sum_la = replicate(q, apply(la, c(1), sum))
-    la / sum_la
-  })
-  Pxyr = memoize(function(a, b, index) {
-    aperm(replicate(J, Pxy(a,b,index)), c(1, 3, 2)) * replicate(q, .fedirtClusterEnv$my_data[[index]])
+  Pxyr = mem(function(a, b, index) {
+    aperm(replicate(J, .fedirtClusterEnv$Pxy(a,b,index)), c(1, 3, 2)) * replicate(.fedirtClusterEnv$q, .fedirtClusterEnv$my_data[[index]])
   })
 
-  njk = memoize(function(a, b, index) {
-    pxy = Pxy(a, b, index)
+  njk = mem(function(a, b, index) {
+    pxy = .fedirtClusterEnv$Pxy(a, b, index)
     matrix(apply(pxy, c(2), sum))
   })
-  rjk = memoize(function(a, b, index) {
+  rjk = mem(function(a, b, index) {
     pxyr = Pxyr(a, b, index)
     apply(pxyr, c(2, 3), sum)
   })
-  da = memoize(function(a, b, index) {
+  da = mem(function(a, b, index) {
     matrix(apply(-1 * broadcast.subtraction(b, t(.fedirtClusterEnv$X)) * (rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
   })
-  db = memoize(function(a, b, index) {
+  db = mem(function(a, b, index) {
     -1 * a * matrix(apply((rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
   })
   g_logL = function(a, b, index) {

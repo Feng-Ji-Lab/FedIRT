@@ -68,7 +68,7 @@ fedirt_2PL_data = function(inputdata) {
     return(mat1_new ^ mat2_new)
   }
 
-  memoize <- function(f) {
+  mem <- function(f) {
     memo <- new.env(parent = emptyenv())
     function(...) {
       key <- paste(list(...), collapse = " ,")
@@ -95,47 +95,47 @@ fedirt_2PL_data = function(inputdata) {
     quadrature = quadl(g, index - level_diff * 0.5, index + level_diff * 0.5)
     return(quadrature)
   })))
-  Pj = memoize(function(a, b) {
+  Pj = mem(function(a, b) {
     t = exp(-1 * broadcast.multiplication(a, broadcast.subtraction(b, t(X))))
     return (t / (1 + t))
   })
-  Qj = memoize(function(a, b) {
+  Qj = mem(function(a, b) {
     return (1 - Pj(a, b))
   })
 
-  log_Lik = memoize(function(a, b, index) {
+  log_Lik = mem(function(a, b, index) {
     my_data[[index]] %*% log(Pj(a, b))  + (1 - my_data[[index]]) %*% log(Qj(a, b))
   })
 
-  Lik = memoize(function(a, b, index) {
+  Lik = mem(function(a, b, index) {
     exp(log_Lik(a, b, index))
   })
 
-  LA = memoize(function(a, b, index) {
+  LA = mem(function(a, b, index) {
     broadcast.multiplication(Lik(a,b,index), t(A))
   })
 
-  Pxy = memoize(function(a, b, index) {
+  Pxy = mem(function(a, b, index) {
     la = LA(a,b,index)
     sum_la = replicate(q, apply(la, c(1), sum))
     la / sum_la
   })
-  Pxyr = memoize(function(a, b, index) {
+  Pxyr = mem(function(a, b, index) {
     aperm(replicate(J, Pxy(a,b,index)), c(1, 3, 2)) * replicate(q, my_data[[index]])
   })
 
-  njk = memoize(function(a, b, index) {
+  njk = mem(function(a, b, index) {
     pxy = Pxy(a, b, index)
     matrix(apply(pxy, c(2), sum))
   })
-  rjk = memoize(function(a, b, index) {
+  rjk = mem(function(a, b, index) {
     pxyr = Pxyr(a, b, index)
     apply(pxyr, c(2, 3), sum)
   })
-  da = memoize(function(a, b, index) {
+  da = mem(function(a, b, index) {
     matrix(apply(-1 * broadcast.subtraction(b, t(X)) * (rjk(a, b, index) - broadcast.multiplication(Pj(a, b), t(njk(a, b, index)))), c(1), sum))
   })
-  db = memoize(function(a, b, index) {
+  db = mem(function(a, b, index) {
     -1 * a * matrix(apply((rjk(a, b, index) - broadcast.multiplication(Pj(a, b), t(njk(a, b, index)))), c(1), sum))
   })
   g_logL = function(a, b, index) {
