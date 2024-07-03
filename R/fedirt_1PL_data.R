@@ -42,21 +42,9 @@ fedirt_1PL_data = function(inputdata) {
   .fedirtClusterEnv$Pxyr = mem(Pxyr)
   .fedirtClusterEnv$njk = mem(njk)
   .fedirtClusterEnv$rjk = mem(rjk)
+  .fedirtClusterEnv$da = mem(da)
+  .fedirtClusterEnv$db = mem(db)
 
-  da = mem(function(a, b, index) {
-    matrix(apply(-1 * broadcast.subtraction(b, t(.fedirtClusterEnv$X)) * (rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
-  })
-  db = mem(function(a, b, index) {
-    -1 * a * matrix(apply((rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
-  })
-  g_logL = function(a, b, index) {
-    result_a = da(a, b, index)
-    result_b = db(a, b, index)
-    list(result_a, result_b)
-  }
-  logL = function(a, b, index) {
-    sum(log(matrix(apply(broadcast.multiplication(.fedirtClusterEnv$Lik(a, b, index), t(.fedirtClusterEnv$A)), c(1), sum))))
-  }
   logL_entry = function(ps) {
     a = matrix(rep(1,.fedirtClusterEnv$J))
     b = matrix(ps[1:.fedirtClusterEnv$J])
