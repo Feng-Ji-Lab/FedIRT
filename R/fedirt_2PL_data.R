@@ -24,87 +24,17 @@ fedirt_2PL_data = function(inputdata) {
   N <- lapply(my_data, function(x) nrow(x))
   J <- dim(my_data[[1]])[2]
   K <- length(my_data)
-  broadcast.fortmat <- function(mat1, mat2) {
-    row1 <- nrow(mat1)
-    col1 <- ncol(mat1)
-    row2 <- nrow(mat2)
-    col2 <- ncol(mat2)
-    if(col1 != 1 && row2 != 1) {
-      stop("illegal operation: not 1")
-    }
-    if(col1 == 1) {
-      mat1_new <- mat1[, rep(1:col1, col2)]
-    } else if(col1 != col2) {
-      stop("illegal operation: col1")
-    } else {
-      mat1_new <- mat1
-    }
-    if(row2 == 1) {
-      mat2_new <- mat2[rep(1:row2, each=row1), ]
-    } else if(row2 != row1) {
-      stop("illegal operation: row2")
-    } else {
-      mat2_new <- mat2
-    }
 
-    list(mat1_new, mat2_new)
-  }
-  broadcast.multiplication <- function(mat1, mat2) {
-    format_result = broadcast.fortmat(mat1, mat2)
-    mat1_new = format_result[[1]]
-    mat2_new = format_result[[2]]
-    return(mat1_new * mat2_new)
-  }
-  broadcast.subtraction <- function(mat1, mat2) {
-    format_result = broadcast.fortmat(mat1, mat2)
-    mat1_new = format_result[[1]]
-    mat2_new = format_result[[2]]
-    return(mat1_new - mat2_new)
-  }
-  broadcast.exponentiation <- function(mat1, mat2) {
-    format_result = broadcast.fortmat(mat1, mat2)
-    mat1_new = format_result[[1]]
-    mat2_new = format_result[[2]]
-    return(mat1_new ^ mat2_new)
-  }
-
-  mem <- function(f) {
-    memo <- new.env(parent = emptyenv())
-    function(...) {
-      key <- paste(list(...), collapse = " ,")
-      if(!exists(as.character(key), envir = memo)) {
-        memo[[as.character(key)]] <- f(...)
-      }
-      memo[[as.character(key)]]
-    }
-  }
-
-  g = function(x) {
-    return (exp(-0.5 * x * x) / sqrt(2 * pi))
-  }
-  q = 21
+  .fedirtClusterEnv$q = 21
   lower_bound = -3
   upper_bound = 3
-  level_diff = (upper_bound - lower_bound) / (q - 1)
-  X = as.matrix(as.numeric(map(1:q, function(k) {
-    index = (lower_bound + (k - 1) * level_diff)
-    return(index)
-  })))
-  A = as.matrix(as.numeric(map(1:q, function(k) {
-    index = (lower_bound + (k - 1) * level_diff)
-    quadrature = quadl(g, index - level_diff * 0.5, index + level_diff * 0.5)
-    return(quadrature)
-  })))
-  Pj = mem(function(a, b) {
-    t = exp(-1 * broadcast.multiplication(a, broadcast.subtraction(b, t(X))))
-    return (t / (1 + t))
-  })
-  Qj = mem(function(a, b) {
-    return (1 - Pj(a, b))
-  })
+  .fedirtClusterEnv$X = GH.X(.fedirtClusterEnv$q,lower_bound,upper_bound)
+  .fedirtClusterEnv$A = GH.A(.fedirtClusterEnv$q,lower_bound,upper_bound)
+  .fedirtClusterEnv$Pj = mem(Pj)
+  .fedirtClusterEnv$Qj = mem(Qj)
 
   log_Lik = mem(function(a, b, index) {
-    my_data[[index]] %*% log(Pj(a, b))  + (1 - my_data[[index]]) %*% log(Qj(a, b))
+    my_data[[index]] %*% log(Pj(a, b))  + (1 - my_data[[index]]) %*% log(.fedirtClusterEnv$Qj(a, b))
   })
 
   Lik = mem(function(a, b, index) {
@@ -112,16 +42,16 @@ fedirt_2PL_data = function(inputdata) {
   })
 
   LA = mem(function(a, b, index) {
-    broadcast.multiplication(Lik(a,b,index), t(A))
+    broadcast.multiplication(Lik(a,b,index), t(.fedirtClusterEnv$A))
   })
 
   Pxy = mem(function(a, b, index) {
     la = LA(a,b,index)
-    sum_la = replicate(q, apply(la, c(1), sum))
+    sum_la = replicate(.fedirtClusterEnv$q, apply(la, c(1), sum))
     la / sum_la
   })
   Pxyr = mem(function(a, b, index) {
-    aperm(replicate(J, Pxy(a,b,index)), c(1, 3, 2)) * replicate(q, my_data[[index]])
+    aperm(replicate(J, Pxy(a,b,index)), c(1, 3, 2)) * replicate(.fedirtClusterEnv$q, my_data[[index]])
   })
 
   njk = mem(function(a, b, index) {
@@ -133,10 +63,10 @@ fedirt_2PL_data = function(inputdata) {
     apply(pxyr, c(2, 3), sum)
   })
   da = mem(function(a, b, index) {
-    matrix(apply(-1 * broadcast.subtraction(b, t(X)) * (rjk(a, b, index) - broadcast.multiplication(Pj(a, b), t(njk(a, b, index)))), c(1), sum))
+    matrix(apply(-1 * broadcast.subtraction(b, t(.fedirtClusterEnv$X)) * (rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
   })
   db = mem(function(a, b, index) {
-    -1 * a * matrix(apply((rjk(a, b, index) - broadcast.multiplication(Pj(a, b), t(njk(a, b, index)))), c(1), sum))
+    -1 * a * matrix(apply((rjk(a, b, index) - broadcast.multiplication(.fedirtClusterEnv$Pj(a, b), t(njk(a, b, index)))), c(1), sum))
   })
   g_logL = function(a, b, index) {
     result_a = da(a, b, index)
@@ -144,7 +74,7 @@ fedirt_2PL_data = function(inputdata) {
     list(result_a, result_b)
   }
   logL = function(a, b, index) {
-    sum(log(matrix(apply(broadcast.multiplication(Lik(a, b, index), t(A)), c(1), sum))))
+    sum(log(matrix(apply(broadcast.multiplication(Lik(a, b, index), t(.fedirtClusterEnv$A)), c(1), sum))))
   }
   logL_entry = function(ps) {
     a = matrix(ps[1:J])
@@ -171,7 +101,7 @@ fedirt_2PL_data = function(inputdata) {
     result[["a"]] = a
     result[["b"]] = b
     for(index in 1:K) {
-      result[["ability"]][[index]] = matrix(apply(broadcast.multiplication(LA(a,b,index), t(X)), c(1), sum)) / matrix(apply(LA(a,b,index), c(1), sum))
+      result[["ability"]][[index]] = matrix(apply(broadcast.multiplication(LA(a,b,index), t(.fedirtClusterEnv$X)), c(1), sum)) / matrix(apply(LA(a,b,index), c(1), sum))
     }
 
     for(index in 1:K) {
