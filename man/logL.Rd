@@ -4,7 +4,7 @@
 \alias{logL}
 \title{Log-Likelihood of the federated 2PL Model}
 \usage{
-logL(a, b, data, q = 21, lower_bound = -3, upper_bound = 3)
+logL(a, b, index)
 }
 \arguments{
 \item{a}{The vector of item discrimination parameters in the 2PL model.}

@@ -1,4 +1,4 @@
-
+#' @noRd
 logL = function(a, b, index) {
   sum(log(matrix(apply(broadcast.multiplication(.fedirtClusterEnv$Lik(a, b, index), t(.fedirtClusterEnv$A)), c(1), sum))))
 }

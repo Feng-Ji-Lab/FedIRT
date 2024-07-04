@@ -8,3 +8,4 @@
 ^README\.md$
 ^readme\.md$
 ^FedIRT_0\.1\.0\.pdf$
+^tests/test72.R$
