@@ -4,7 +4,7 @@
 \alias{g_logL}
 \title{Gradient of Log-Likelihood for the federated 2PL Model}
 \usage{
-g_logL(a, b, index)
+g_logL(a, b, data, q = 21, lower_bound = -3, upper_bound = 3)
 }
 \arguments{
 \item{a}{Numeric vector of item discrimination parameters in the 2PL model.}

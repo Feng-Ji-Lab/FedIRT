@@ -48,7 +48,7 @@ fedirt_1PL_data = function(inputdata) {
   logL_entry = function(ps) {
     a = matrix(rep(1,.fedirtClusterEnv$J))
     b = matrix(ps[1:.fedirtClusterEnv$J])
-    result = sum(unlist(map(1:K, function(index) logL(a, b, index))))
+    result = sum(unlist(map(1:K, function(index) logL_internal(a, b, index))))
     result
   }
 
@@ -58,7 +58,7 @@ fedirt_1PL_data = function(inputdata) {
     ga = matrix(0, nrow = .fedirtClusterEnv$J)
     gb = matrix(0, nrow = .fedirtClusterEnv$J)
     for(index in 1:K) {
-      result = g_logL(a, b, index)
+      result = g_logL_internal(a, b, index)
       ga = ga + result[[1]]
       gb = gb + result[[2]]
     }

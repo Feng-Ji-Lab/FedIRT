@@ -47,15 +47,11 @@ fedirt_2PL_median_data = function(inputdata) {
   .fedirtClusterEnv$rjk = mem(rjk)
   .fedirtClusterEnv$da = mem(da)
   .fedirtClusterEnv$db = mem(db)
-  g_logL = function(a, b, index) {
-    result_a = .fedirtClusterEnv$da(a, b, index)
-    result_b = .fedirtClusterEnv$db(a, b, index)
-    list(result_a, result_b)
-  }
+
   logL_entry = function(ps) {
     a = matrix(ps[1:J])
     b = matrix(ps[(J+1):(2*J)])
-    result = median(unlist(map(1:K, function(index) logL(a, b, index))))
+    result = median(unlist(map(1:K, function(index) logL_internal(a, b, index))))
     result
   }
 
@@ -65,7 +61,7 @@ fedirt_2PL_median_data = function(inputdata) {
     ga = matrix(0, nrow = J)
     gb = matrix(0, nrow = J)
     for(index in 1:K) {
-      result = g_logL(a, b, index)
+      result = g_logL_internal(a, b, index)
       ga = ga + result[[1]]
       gb = gb + result[[2]]
     }
