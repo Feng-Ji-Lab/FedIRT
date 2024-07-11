@@ -19,5 +19,28 @@
 #'
 
 personscore = function(fedresult) {
-  return(fedresult$person$ability)
+  result = fedresult$person$ability
+  class(result) <- "personscore"
+  return(result)
 }
+
+#' @noRd
+#' @title Summary Method for personscore Objects
+#' @description Provides a summary for objects of class \code{personscore}.
+#' @param object An object of class \code{personscore}.
+#' @param ... Additional arguments passed to the summary method.
+#' @method summary personscore
+#' @export
+summary.personscore <- function(object, ...) {
+  cat("Summary of FedIRT Person Score Results:\n")
+
+  cat("\nAbility Estimates:\n")
+  for (i in seq_along(object)) {
+    cat(paste0("School ", i, ":\n"))
+    ability_matrix <- t(object[[i]])
+    print(as.vector(ability_matrix))
+  }
+
+  cat("\nEnd of Summary\n")
+}
+summary <- function(object, ...) UseMethod("summary")

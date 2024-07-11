@@ -176,6 +176,47 @@ School 1:
 
 In summary, we read a dataset and split it into different sites. Note that the dataset should indicate different sites. Then call the function `fedirt` with corresponding arguments. At last, print the results in need or use the part of results needed. 
 
+## Sample of the personscore function
+
+We provide a function `personscore` in the package. The detailed usage of the function is shown in the user manual. We demonstrate a sample here.
+
+``` R
+personscoreResult = personscore(result)
+summary(personscoreResult)
+```
+
+We called the function `FedIRT::fedirt()` to get the `result`. Then use `personscore` function to get the person score result from `result` by `personscore(result)`
+
+```
+Summary of FedIRT Person Score Results:
+
+Ability Estimates:
+School 1:
+  [1] -1.184622030 -0.549302071 -0.902091156 -0.206457442  0.386666115  0.679138950
+  [7] -0.147088887  0.318980882  0.411915776 -0.140957745  0.496036332  0.562691489
+```
+
+## Sample of the personfit function
+
+We provide a function `personfit` in the package. The detailed usage of the function is shown in the user manual. We demonstrate a sample here.
+
+``` R
+personfitResult = personfit(result)
+summary(personfitResult)
+```
+
+We called the function `FedIRT::fedirt()` to get the `result`. Then use `personfit` function to get the person score result from `result` by `personfit(result)`
+
+```
+Summary of FedIRT Person Fit Results:
+
+Fit Estimates:
+School 1:
+                 Lz            Zh      Infit     Outfit
+  [1,] -0.925209243 -1.6737819927 0.23991579 0.24675914
+  [2,] -0.443958144 -0.7745951619 0.29205337 0.29671611
+```
+
 ## Sample of the Shiny App
 
 To provide wider access for practitioners, we include the Shiny user interface in our package. A detailed manual was provided in the package. Taking the 2PL as an example, we illustrate how to use the Shiny app below.

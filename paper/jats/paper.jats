@@ -50,9 +50,9 @@ University of Toronto, Toronto, Canada</institution>
 <author-notes>
 <corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
 </author-notes>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-06-07">
-<day>7</day>
-<month>6</month>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-07-11">
+<day>11</day>
+<month>7</month>
 <year>2024</year>
 </pub-date>
 <volume>¿VOL?</volume>
@@ -449,6 +449,45 @@ School 1:
     function <monospace>fedirt</monospace> with corresponding arguments.
     At last, print the results in need or use the part of results
     needed.</p>
+  </sec>
+  <sec id="sample-of-the-personscore-function">
+    <title>Sample of the personscore function</title>
+    <p>We provide a function <monospace>personscore</monospace> in the
+    package. The detailed usage of the function is shown in the user
+    manual. We demonstrate a sample here.</p>
+    <code language="r script">personscoreResult = personscore(result)
+summary(personscoreResult)</code>
+    <p>We called the function <monospace>FedIRT::fedirt()</monospace> to
+    get the <monospace>result</monospace>. Then use
+    <monospace>personscore</monospace> function to get the person score
+    result from <monospace>result</monospace> by
+    <monospace>personscore(result)</monospace></p>
+    <preformat>Summary of FedIRT Person Score Results:
+
+Ability Estimates:
+School 1:
+  [1] -1.184622030 -0.549302071 -0.902091156 -0.206457442  0.386666115  0.679138950
+  [7] -0.147088887  0.318980882  0.411915776 -0.140957745  0.496036332  0.562691489</preformat>
+  </sec>
+  <sec id="sample-of-the-personfit-function">
+    <title>Sample of the personfit function</title>
+    <p>We provide a function <monospace>personfit</monospace> in the
+    package. The detailed usage of the function is shown in the user
+    manual. We demonstrate a sample here.</p>
+    <code language="r script">personfitResult = personfit(result)
+summary(personfitResult)</code>
+    <p>We called the function <monospace>FedIRT::fedirt()</monospace> to
+    get the <monospace>result</monospace>. Then use
+    <monospace>personfit</monospace> function to get the person score
+    result from <monospace>result</monospace> by
+    <monospace>personfit(result)</monospace></p>
+    <preformat>Summary of FedIRT Person Fit Results:
+
+Fit Estimates:
+School 1:
+                 Lz            Zh      Infit     Outfit
+  [1,] -0.925209243 -1.6737819927 0.23991579 0.24675914
+  [2,] -0.443958144 -0.7745951619 0.29205337 0.29671611</preformat>
   </sec>
   <sec id="sample-of-the-shiny-app">
     <title>Sample of the Shiny App</title>

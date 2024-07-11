@@ -22,7 +22,7 @@ Input is the object of fedirt class.
 \examples{
 # turn input data to a list
 inputdata = list(as.matrix(example_data_2PL))
-# Call fedirt() function, and use 2PL model with school effect as a fixed effect
-fedresult = fedirt(inputdata, model_name = "2PL",school_effect = TRUE)
+# Call fedirt() function, and use 2PL model
+fedresult = fedirt(inputdata, model_name = "2PL")
 personfitResult = personfit(fedresult)
 }
