@@ -31,6 +31,7 @@ fedirt = function(inputdata, model_name = "2PL", school_effect = FALSE, federate
     stop("Invalid model_name. Please use one of the following: ", paste(valid_models, collapse = ", "), ".")
   }
 
+
   result = list()
 
   if(model_name == "1PL"){

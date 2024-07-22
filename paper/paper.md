@@ -84,6 +84,7 @@ We showcase that our package could generate the same result as traditional IRT p
 
 ![Difficulty parameter estimates comparison\label{bcomparison}](bcomparison.png)
 
+
 # Availability
 
 The R package ``FedIRT`` is publicly available on [Github](https://github.com/Feng-Ji-Lab/FedIRT). It could be installed and run by using the following commands:
@@ -93,11 +94,11 @@ devtools::install_github("Feng-Ji-Lab/FedIRT")
 library(FedIRT)
 ```
 
-## Sample of the integrated function
+## Example of the integrated function
 
-We provide a function `fedirt` in the package, and the detailed usage of the function is shown in the user manual. We demonstrate a sample here. 
+We provide a function `fedirt_file()` in the package, and the detailed usage of the function is shown in the user manual. We demonstrate an example here. 
 
-Suppose we have a dataset called `dataset.csv`, and the head of this dataset is shown below: 
+Suppose we have a dataset called `dataset.csv`, and the head of this dataset is shown below. There should be one column indicating the school, for example, "site" here. Each other column indicates an item, and each row represents an answering status. 
 
 | site | X1 | X2 | X3 | X4 | X5 |
 |------|----|----|----|----|----|
@@ -107,36 +108,28 @@ Suppose we have a dataset called `dataset.csv`, and the head of this dataset is 
 | 1    | 1  | 0  | 1  | 1  | 1  |
 | 2    | 1  | 0  | 0  | 0  | 0  |
 
-First, we need to split the dataset by different sites. The index of each site is indicated in the column `site`. 
+First, we need to read the dataset.
 
 ``` r
-# split the dataset by sites
+# read dataset
 data <- read.csv("dataset.csv", header = TRUE)
-data_list <- split(data[, -1], data$site)
 ```
 
-Then, we change every sites' data into a list of matrices in `R`. 
+Then, we call the function `FedIRT::fedirt_file()` to get the result. It returns a list of item discriminations, item difficulties, and each sites' effect and each students' abilities. 
 
 ``` r
-# change the list into matrices
-inputdata <- lapply(data_list, as.matrix)
+# call the fedirt_file function 
+result <- fedirt_file(data, model_name = "2PL")
 ```
 
-Then, we call the function `FedIRT::fedirt()` to get the result. It returns a list of item discriminations, item difficulties, and each sites' effect and each students' abilities. Call `summary()` to see the returned list. 
+At last, extract the results or use the parameters for further analysis. 
 
 ``` r
-# call the fedirt function 
-result <- fedirt(inputdata, model_name = "2PL")
+result$a
+result$b
 ```
 
-At last, print the results or use the parameters for further analysis. 
-
-``` r
-print(result$a)
-print(result$b)
-```
-
-Apart from using the results for further analysis, we can also use `summary()` to generate a snapshot of the result. Here is a sample below. 
+Apart from using the results for further analysis, we can also use `summary()` to generate a snapshot of the result. Here is an example below. 
 
 ``` r
 summary(result)
@@ -150,102 +143,106 @@ Summary of FedIRT Results:
 
 Counts:
 function gradient 
-     150       68 
+     735      249 
 
 Convergence Status (convergence):
 Converged
 
 Log Likelihood (loglik):
-[1] -957.1493
+[1] -7068.258
 
 Difficulty Parameters (b):
- [1]  0.1699265 -2.8088090  1.1167600  0.9893799 -2.5409030 -1.1789985 -0.5258475  0.4560620  1.3792979
-[10]  1.4247369
+ [1] -185.88151839    0.99524035    0.92927254   ...
 
 Discrimination Parameters (a):
- [1] 0.6627037 0.2495989 2.1162137 0.8155786 0.4177167 0.4228183 0.5176585 0.6663483 0.8053621 0.9137402
-
-School effect:
-[1] 1.517844
+ [1]  0.0028497700  0.8440140746 -0.1190176844 ...
 
 Ability Estimates:
 School 1:
-  [1] -1.187698446 -0.552434825 -0.899668043 -0.206272962  0.387992333  0.678869288 -0.146111320
-  [8]  0.318665280  0.408994368 -0.139117072  0.496885125  0.562515435  0.392422237  0.519555447
+ [1] -1.127097195 -0.922572829 -0.993953038  ...
+School 2:
+ [1] -1.41454573  1.78068772  1.87469389 ...
+...
+
+End of Summary
 ```
 
-In summary, we read a dataset and split it into different sites. Note that the dataset should indicate different sites. Then call the function `fedirt` with corresponding arguments. At last, print the results in need or use the part of results needed. 
+## Example of the personscore function
 
-## Sample of the personscore function
-
-We provide a function `personscore` in the package. The detailed usage of the function is shown in the user manual. We demonstrate a sample here.
+We provide a function `personscore` in the package. The detailed usage of the function is shown in the user manual. We demonstrate an example here.
 
 ``` R
 personscoreResult = personscore(result)
 summary(personscoreResult)
 ```
 
-We called the function `FedIRT::fedirt()` to get the `result`. Then use `personscore` function to get the person score result from `result` by `personscore(result)`
+Summary of the person score is shown below.
 
 ```
 Summary of FedIRT Person Score Results:
 
 Ability Estimates:
 School 1:
-  [1] -1.184622030 -0.549302071 -0.902091156 -0.206457442  0.386666115  0.679138950
-  [7] -0.147088887  0.318980882  0.411915776 -0.140957745  0.496036332  0.562691489
+ [1] -1.127097195 -0.922572829 -0.993953038  ...
+School 2:
+ [1] -1.41454573  1.78068772  1.87469389 ...
+...
+
+End of Summary
 ```
 
-## Sample of the personfit function
+## Example of the personfit function
 
-We provide a function `personfit` in the package. The detailed usage of the function is shown in the user manual. We demonstrate a sample here.
+We provide a function `personfit` in the package. The detailed usage of the function is shown in the user manual. We demonstrate an example here.
 
 ``` R
 personfitResult = personfit(result)
 summary(personfitResult)
 ```
 
-We called the function `FedIRT::fedirt()` to get the `result`. Then use `personfit` function to get the person score result from `result` by `personfit(result)`
+After getting the result, use `personfit` function to get the person score result from `result` by `personfit(result)`.
 
 ```
 Summary of FedIRT Person Fit Results:
 
 Fit Estimates:
 School 1:
-                 Lz            Zh      Infit     Outfit
-  [1,] -0.925209243 -1.6737819927 0.23991579 0.24675914
-  [2,] -0.443958144 -0.7745951619 0.29205337 0.29671611
+               Lz           Zh       Infit    Outfit
+4    0.7584470759  0.923163304 0.002323484 0.1482672
+16  -0.7562447025 -1.131668935 0.005457117 0.1799583
+27   0.3417488360  0.357870094 0.005966933 0.1734402
+33  -0.9244005411 -1.359789298 0.179834037 0.2266634
+...
+School 2:
+             Lz           Zh        Infit    Outfit
+5   -0.90114567 -1.175767350 0.0009824580 0.1535794
+8   -1.47957351 -1.888763364 0.1491518127 0.2255230
+18  -0.13292541 -0.228824721 0.1104556086 0.2007658
+19  -0.17257549 -0.277699184 0.0075031313 0.1350857
+...
 ```
 
-## Sample of the Shiny App
+## Example of the Shiny App
 
 To provide wider access for practitioners, we include the Shiny user interface in our package. A detailed manual was provided in the package. Taking the 2PL as an example, we illustrate how to use the Shiny app below.
 
-In the first step, the server end (e.g., test administer, school board) can be launched by running the Shiny app (`runserver()`) with the interface shown below:
+In the first step, the server end (e.g., test administer, school board) can be launched by running the Shiny app `runserver()` and the client-end Shiny app can be initialized with `runclient()` with the interface shown below:
 
-![The initial server interface. \label{server1}](server1.png)
-
-Then, the client-end Shiny app can be initialized (`runclient()`). 
+![The initial server and client interface. \label{combined1}](combined1.png)
 
 When the client first launches, it will automatically connect to the localhost port `8000` as default. 
 
 If the server is deployed on another computer, type the server's IP address and port (which will be displayed on the server's interface), then click "reconnect". The screenshots of the user interface are shown below. 
 
-![Server interface when one school is connected. \label{server2}](server2.png)
-
-![Client interface when connected to server. \label{client2}](client2.png)
+![Server and client interface when one school is connected. \label{combined2}](combined2.png)
 
 Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a `csv` file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
 
-![Server interface when one school uploaded dataset. \label{server3}](server3.png)
-
-![Client interface when a dataset is uploaded successfully. \label{client3}](client3.png)
+![Server interface when one school uploaded dataset and lient interface when a dataset is uploaded successfully. \label{combined3}](combined3.png)
 
 After all the clients upload their data, the server should click "start" to begin the federated estimates process and after the model converges, the client should click "receive result". The server will display all item parameters and the client will display all item parameters and individual ability estimates. 
 
-![Server interface when estimation is completed. \label{server4}](server4.png)
-
-![Client interface when the results received. \label{client4}](client4.png)
+![Server interface when estimation is completed and client interface when the results received. \label{combined4}](combined4.png)
 
 The clients will also display bar plots of the ability estimates. 
 
