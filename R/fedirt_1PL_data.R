@@ -3,7 +3,7 @@
 #' @description This function is used to test the accuracy and processing time of this algorithm. It inputs a list of responding matrices and return the federated 1PL parameters.
 #' @details Input is a List of responding matrices from each school, every responding matrix is one site's data.
 #' @param inputdata A List of all responding matrices.
-#' @return A list with the estimated global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik.
+#' @return A list with the estimated global difficulty b, person's abilities ability, sites' abilities site, log-likelihood value loglik, and standard error SE.
 #'
 #' @examples
 #' inputdata = list(as.matrix(example_data_2PL))
@@ -110,15 +110,23 @@ fedirt_1PL_data = function(inputdata) {
 
   fed_irt_entry = function(data) {
     get_new_ps = function(ps_old) {
-      # "Nelder-Mead", "BFGS", "CG", "L-BFGS-B", "SANN", "Brent"
-      optim(par = ps_old, fn = logL_entry, gr = g_logL_entry, method = "BFGS", control = list(fnscale=-1, trace = 0,  maxit = 10000))
+      optim_result = optim(par = ps_old, fn = logL_entry, gr = g_logL_entry, method = "BFGS",
+                           control = list(fnscale = -1, trace = 0, maxit = 10000))
+      hessian_matrix = optimHess(par = optim_result$par, fn = logL_entry)
+      hessian_inv = solve(hessian_matrix)
+      SE = sqrt(diag(hessian_inv))
+      list(result = optim_result, SE = SE)
     }
+
     ps_init = c(rep(0, .fedirtClusterEnv$J))
-    ps_next = get_new_ps(ps_init)
+    optim_result = get_new_ps(ps_init)
+    ps_next = optim_result$result
     ps_next$loglik = logL_entry(ps_next$par)
 
     ps_next$b = ps_next$par[1:.fedirtClusterEnv$J]
-    ps_next$a = rep(1,.fedirtClusterEnv$J)
+    ps_next$a = rep(1, .fedirtClusterEnv$J)
+
+    ps_next$SE = optim_result$SE
 
     ps_next$person = my_person(ps_next[["a"]], ps_next[["b"]])
     ps_next

@@ -4,7 +4,7 @@
 #' Note: To use federated 2PL in distributed datasets, please use fedirt_2PL().
 #' @details Input is a List of responding matrices from each school, every responding matrix is one site's data.
 #' @param inputdata A List of all responding matrices.
-#' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik. It also displays the school ability sc, which is considered as a fixed effect.
+#' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, log-likelihood value loglik, and the standard error SE. It also displays the school ability sc, which is considered as a fixed effect.
 #'
 #' @examples
 #' inputdata = list(as.matrix(example_data_2PL))
@@ -17,6 +17,7 @@
 #' @importFrom purrr map
 #' @importFrom pracma quadl
 #' @importFrom stats optim
+#' @importFrom stats optimHess
 
 fedirt_2PL_schooleffects = function(inputdata) {
   my_data <- inputdata
@@ -178,20 +179,29 @@ fedirt_2PL_schooleffects = function(inputdata) {
 
   fed_irt_entry = function(data) {
     get_new_ps = function(ps_old) {
-      # "Nelder-Mead", "BFGS", "CG", "L-BFGS-B", "SANN", "Brent"
-      optim(par = ps_old, fn = logL_entry, method = "BFGS", control = list(fnscale=-1, trace = 0,  maxit = 10000))
+      optim_result = optim(par = ps_old, fn = logL_entry, method = "BFGS",
+                           control = list(fnscale=-1, trace = 0, maxit = 10000))
+      hessian_matrix = optimHess(par = optim_result$par, fn = logL_entry)
+      hessian_inv = solve(hessian_matrix)
+      SE = sqrt(diag(hessian_inv))
+      list(result = optim_result, SE = SE)
     }
+
     ps_init = c(rep(1, J), rep(0, J), rep(0, K))
-    ps_next = get_new_ps(ps_init)
+    optim_result = get_new_ps(ps_init)
+    ps_next = optim_result$result
     ps_next$loglik = logL_entry(ps_next$par)
 
     ps_next$b = ps_next$par[(J+1):(J+J)]
     ps_next$a = ps_next$par[1:J]
     ps_next$sc = ps_next$par[(J+J+1):(J+J+K)]
 
+    ps_next$SE = optim_result$SE
+
     ps_next$person = my_personfit(ps_next[["a"]], ps_next[["b"]], ps_next$sc)
     ps_next
   }
+
 
 
   fed_irt_entry(inputdata)

@@ -4,7 +4,7 @@
 #' Note: To use federated 2PL in distributed datasets, please use fedirt_2PL().
 #' @details Input is a List of responding matrices from each school, every responding matrix is one site's data.
 #' @param inputdata A List of all responding matrix.
-#' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik.
+#' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, log-likelihood value loglik, and standard error array SE.
 #'
 #' @examples
 #' inputdata = list(as.matrix(example_data_2PL))
@@ -18,6 +18,7 @@
 #' @importFrom pracma quadl
 #' @importFrom stats optim
 #' @importFrom stats sd
+#' @importFrom stats optimHess
 
 fedirt_2PL_data = function(inputdata) {
   .fedirtClusterEnv$my_data <- inputdata
@@ -111,20 +112,28 @@ fedirt_2PL_data = function(inputdata) {
 
   fed_irt_entry = function(data) {
     get_new_ps = function(ps_old) {
-      # "Nelder-Mead", "BFGS", "CG", "L-BFGS-B", "SANN", "Brent"
-      optim(par = ps_old, fn = logL_entry, gr = g_logL_entry, method = "BFGS", control = list(fnscale=-1, trace = 0,  maxit = 10000))
+      optim_result = optim(par = ps_old, fn = logL_entry, gr = g_logL_entry, method = "BFGS",
+                           control = list(fnscale=-1, trace = 0, maxit = 10000), hessian = TRUE)
+
+      hessian_inv = solve(optim_result$hessian)
+      SE = sqrt(diag(hessian_inv))
+      list(result = optim_result, SE = SE)
     }
+
     ps_init = c(rep(1, .fedirtClusterEnv$J), rep(0, .fedirtClusterEnv$J))
-    ps_next = get_new_ps(ps_init)
+    optim_result = get_new_ps(ps_init)
+    ps_next = optim_result$result
     ps_next$loglik = logL_entry(ps_next$par)
 
     ps_next$b = ps_next$par[(.fedirtClusterEnv$J+1):(.fedirtClusterEnv$J+.fedirtClusterEnv$J)]
     ps_next$a = ps_next$par[1:.fedirtClusterEnv$J]
 
     ps_next$person = my_person(ps_next[["a"]], ps_next[["b"]])
+
+    ps_next$SE = optim_result$SE
+
     ps_next
   }
-
 
   fed_irt_entry(inputdata)
 }

@@ -37,5 +37,4 @@ Input is a dataframe from each school with a column indicating the school name.
 data <- read.csv("dataset.csv", header = TRUE)
 fedresult <- fedirt_file(data, model_name = "2PL")
 }
-
 }

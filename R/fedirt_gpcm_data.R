@@ -4,7 +4,7 @@
 #' Note: This function can only calculate one combined dataset. To use federated gpcm in distributed datasets, please use fedirt_gpcm().
 #' @details Input is a List of responding matrices from each school, every responding matrix is one site's data.
 #' @param inputdata A List of all responding matrix.
-#' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, and log-likelihood value loglik.
+#' @return A list with the estimated global discrimination a, global difficulty b, person's abilities ability, sites' abilities site, log-likelihood value loglik, and standard error SE.
 #'
 #' @examples
 #' \donttest{
@@ -18,6 +18,7 @@
 #' @importFrom purrr map
 #' @importFrom pracma quadl
 #' @importFrom stats optim
+#' @importFrom stats optimHess
 
 fedirt_gpcm_data = function(inputdata) {
 
@@ -254,23 +255,28 @@ fedirt_gpcm_data = function(inputdata) {
 
   fed_irt_entry = function(data) {
     get_new_ps = function(ps_old) {
-      # "Nelder-Mead", "BFGS", "CG", "L-BFGS-B", "SANN", "Brent"
-      optim(par = ps_old, fn = logL_entry, method = "BFGS", control = list(fnscale=-1, trace = 0,  maxit = 10000))
+      optim_result = optim(par = ps_old, fn = logL_entry, method = "BFGS",
+                           control = list(fnscale = -1, trace = 0, maxit = 10000))
+      hessian_matrix = optimHess(par = optim_result$par, fn = logL_entry)
+      hessian_inv = solve(hessian_matrix)
+      SE = sqrt(diag(hessian_inv))
+      list(result = optim_result, SE = SE)
     }
+
     ps_init = c(rep(1, J), rep(0, sum(M)))
-    # print("fedirt_gpcm 2::")
-    # print(M)
-    # print(J)
-    # print(sum(M))
-    # print(ps_init)
-    ps_next = get_new_ps(ps_init)
+
+    optim_result = get_new_ps(ps_init)
+    ps_next = optim_result$result
     ps_next$loglik = logL_entry(ps_next$par)
 
     ps_next$b = ps_next$par[(J+1):(J+sum(M))]
     ps_next$a = ps_next$par[1:J]
 
+    ps_next$SE = optim_result$SE
+
     ps_next
   }
+
 
   fed_irt_entry(inputdata)
 

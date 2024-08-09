@@ -14,12 +14,10 @@
 #' fedresult <- fedirt_file(data, model_name = "2PL")
 #' }
 
-
-#'
-
 #' @importFrom purrr map
 #' @importFrom pracma quadl
 #' @importFrom stats optim
+#' @importFrom stats optimHess
 
 #' @export
 #'
