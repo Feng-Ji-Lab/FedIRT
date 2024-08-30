@@ -50,9 +50,9 @@ University of Toronto, Toronto, Canada</institution>
 <author-notes>
 <corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
 </author-notes>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-07-22">
-<day>22</day>
-<month>7</month>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-08-30">
+<day>30</day>
+<month>8</month>
 <year>2024</year>
 </pub-date>
 <volume>¿VOL?</volume>
@@ -486,6 +486,24 @@ School 2:
 18  -0.13292541 -0.228824721 0.1104556086 0.2007658
 19  -0.17257549 -0.277699184 0.0075031313 0.1350857
 ...</preformat>
+  </sec>
+  <sec id="standard-error-se-calculation">
+    <title>Standard error (SE) calculation</title>
+    <p>We follow a typical process of calculating SE in MLE. After
+    obtaining the MLE estimates, the Hessian matrix, which is the matrix
+    of second-order partial derivatives of the log-likelihood function
+    with respect to the parameters, is computed at the estimated
+    parameters. The SEs are then derived from the square roots of the
+    diagonal elements of the inverse Hessian matrix.</p>
+    <p>In our package, call the <monospace>SE()</monospace> function and
+    input a <monospace>fedirt</monospace> object to display standard
+    errors of item parameters.</p>
+    <code language="r script">SE(result)</code>
+    <p>Below is the result of SE.</p>
+    <preformat>$a
+ [1] 0.0041815497 0.1638884452 0.1204696925 ...
+$b
+ [1] 272.43863961   0.20737386   1.25896302 ...</preformat>
   </sec>
   <sec id="example-of-the-shiny-app">
     <title>Example of the Shiny App</title>
