@@ -222,6 +222,25 @@ School 2:
 ...
 ```
 
+## Standard error (SE) calculation
+
+We follow a typical process of calculating SE in MLE. After obtaining the MLE estimates, the Hessian matrix, which is the matrix of second-order partial derivatives of the log-likelihood function with respect to the parameters, is computed at the estimated parameters. The SEs are then derived from the square roots of the diagonal elements of the inverse Hessian matrix.
+
+In our package, call the `SE()` function and input a `fedirt` object to display standard errors of item parameters. 
+
+``` r
+SE(result)
+```
+
+Below is the result of SE.
+
+```
+$a
+ [1] 0.0041815497 0.1638884452 0.1204696925 ...
+$b
+ [1] 272.43863961   0.20737386   1.25896302 ...
+```
+
 ## Example of the Shiny App
 
 To provide wider access for practitioners, we include the Shiny user interface in our package. A detailed manual was provided in the package. Taking the 2PL as an example, we illustrate how to use the Shiny app below.

@@ -116,8 +116,9 @@ fedirt_2PL_median_data = function(inputdata) {
     get_new_ps = function(ps_old) {
       optim_result = optim(par = ps_old, fn = logL_entry, gr = g_logL_entry, method = "BFGS",
                            control = list(fnscale=-1, trace = 0, maxit = 10000), hessian = TRUE)
+      hessian_adjusted <- -optim_result$hessian
+      hessian_inv = solve(hessian_adjusted)
 
-      hessian_inv = solve(optim_result$hessian)
       SE = sqrt(diag(hessian_inv))
       list(result = optim_result, SE = SE)
     }
@@ -132,11 +133,11 @@ fedirt_2PL_median_data = function(inputdata) {
 
     ps_next$person = my_person(ps_next[["a"]], ps_next[["b"]])
 
-    ps_next$SE = optim_result$SE
+    ps_next$SE$a = optim_result$SE[1:.fedirtClusterEnv$J]
+    ps_next$SE$b = optim_result$SE[(.fedirtClusterEnv$J+1):(.fedirtClusterEnv$J+.fedirtClusterEnv$J)]
 
     ps_next
   }
-
 
   fed_irt_entry(inputdata)
 }

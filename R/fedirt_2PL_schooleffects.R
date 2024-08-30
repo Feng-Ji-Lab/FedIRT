@@ -180,9 +180,10 @@ fedirt_2PL_schooleffects = function(inputdata) {
   fed_irt_entry = function(data) {
     get_new_ps = function(ps_old) {
       optim_result = optim(par = ps_old, fn = logL_entry, method = "BFGS",
-                           control = list(fnscale=-1, trace = 0, maxit = 10000))
-      hessian_matrix = optimHess(par = optim_result$par, fn = logL_entry)
-      hessian_inv = solve(hessian_matrix)
+                           control = list(fnscale=-1, trace = 0, maxit = 10000),hessian = TRUE)
+      hessian_adjusted <- -optim_result$hessian
+      hessian_inv = solve(hessian_adjusted)
+
       SE = sqrt(diag(hessian_inv))
       list(result = optim_result, SE = SE)
     }
@@ -196,7 +197,9 @@ fedirt_2PL_schooleffects = function(inputdata) {
     ps_next$a = ps_next$par[1:J]
     ps_next$sc = ps_next$par[(J+J+1):(J+J+K)]
 
-    ps_next$SE = optim_result$SE
+    ps_next$SE$a = optim_result$SE[1:J]
+    ps_next$SE$b = optim_result$SE[(J+1):(J+J)]
+    ps_next$SE$sc = optim_result$SE[(J+J+1):(J+J+K)]
 
     ps_next$person = my_personfit(ps_next[["a"]], ps_next[["b"]], ps_next$sc)
     ps_next

@@ -254,13 +254,14 @@ fedirt_gpcm_data = function(inputdata) {
 
 
   fed_irt_entry = function(data) {
-    get_new_ps = function(ps_old) {
-      optim_result = optim(par = ps_old, fn = logL_entry, method = "BFGS",
-                           control = list(fnscale = -1, trace = 0, maxit = 10000))
-      hessian_matrix = optimHess(par = optim_result$par, fn = logL_entry)
-      hessian_inv = solve(hessian_matrix)
-      SE = sqrt(diag(hessian_inv))
-      list(result = optim_result, SE = SE)
+      get_new_ps = function(ps_old) {
+        optim_result = optim(par = ps_old, fn = logL_entry, method = "BFGS",
+                             control = list(fnscale=-1, trace = 0, maxit = 10000), hessian = TRUE)
+        hessian_adjusted <- -optim_result$hessian
+        hessian_inv = solve(hessian_adjusted)
+
+        SE = sqrt(diag(hessian_inv))
+        list(result = optim_result, SE = SE)
     }
 
     ps_init = c(rep(1, J), rep(0, sum(M)))
@@ -272,7 +273,8 @@ fedirt_gpcm_data = function(inputdata) {
     ps_next$b = ps_next$par[(J+1):(J+sum(M))]
     ps_next$a = ps_next$par[1:J]
 
-    ps_next$SE = optim_result$SE
+    ps_next$SE$b = optim_result$SE[(J+1):(J+sum(M))]
+    ps_next$SE$a = optim_result$SE[1:J]
 
     ps_next
   }
