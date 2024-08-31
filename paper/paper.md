@@ -28,7 +28,7 @@ tags:
 
 # Summary
 
-We developed an `R` package `FedIRT`, to estimate traditional IRT models, including 2PL and the graded response models with additional privacy, allowing parameter estimation in a distributed manner without compromising estimation accuracy. Numerical experiments demonstrate that Federated IRT estimation achieves comparable statistical performance to mainstream IRT packages in R, with the benefits of privacy preservation and minimal communication costs. The R package also includes a user-friendly Shiny app that allows clients (e.g., individual schools) and servers (e.g., school boards) to apply our proposed method in a user-friendly manner. 
+We developed an `R` package, `FedIRT`, to estimate item response theory (IRT) models, including 1PL, 2PL, and graded response models, with additional privacy features. This package allows for parameter estimation in a distributed manner without compromising accuracy, drawing on recent advances in the federated learning literature. Numerical experiments demonstrate that federated IRT estimation achieves statistical performance comparable to mainstream IRT packages in R, with the added benefits of privacy preservation and minimal communication costs. The R package also includes a user-friendly Shiny app that allows clients (e.g., individual schools) and servers (e.g., school boards) to apply our proposed method easily.
 
 # Statement of Need
 
@@ -36,17 +36,17 @@ IRT [@embretson2013item] is a statistical modeling framework grounded in modern 
 
 Federated learning has emerged as a field addressing data privacy issues and techniques for parameter estimation in a decentralized, distributed manner. However, there is currently no package available in psychometrics, especially in the context of IRT, that integrates federated learning with IRT model estimation.
 
-Mainstream IRT packages in `R`, such as `mirt` [@chalmers2012mirt] and `ltm` [@rizopoulos2007ltm] require storing and computing all data in a single location, which can potentially lead to violations of privacy policies when dealing with highly sensitive data (e.g., high-stakes student assessments).
+Popular IRT packages in `R`, such as `mirt` [@chalmers2012mirt] and `ltm` [@rizopoulos2007ltm] require storing and computing all data in a single location, which can potentially lead to violations of privacy policies when dealing with highly sensitive data (e.g., high-stakes student assessment data).
 
-We have therefore developed a specialized R package, `FedIRT`, to integrate federated learning with IRT. We have also developed an accompanying Shiny app to recognize real-world challenges and aim to reduce the burden of learning R programming for applying this package. This app implements the method in a user-friendly and accessible manner.
+We have therefore developed a specialized R package, FedIRT, which integrates federated learning with IRT and includes an accompanying Shiny app designed to address real-world implementation challenges and reduce the burden of learning R programming for users. This app implements the method in a user-friendly and accessible manner.
 
 # Method
 
-Here we briefly introduce the key idea behind integrating federated learning with IRT. For details, please refer to our methodological discussions on Federated IRT [@FedIRT2023; @FederatedIRT2024_1; @FedIRT2024].
+Here we briefly introduce the key idea behind integrating federated learning with IRT. For technical details, please refer to our methodological discussions on Federated IRT [@FedIRT2023; @FederatedIRT2024_1; @FedIRT2024].
 
 ## Model formulation
 
-The two-parameter logistic (2PL) IRT model is often considered the most popular IRT model. In 2PL, the response by person $i$ for item $j$ is often binary: $X_{ij} \in \{0,1\}$, and the probability of person $i$ answering item $j$ with discrimination $\alpha_j$ and difficulty $\beta_j$ correctly:
+The two-parameter logistic (2PL) IRT model is often considered the most popular IRT model in practice. In 2PL, the response by person $i$ for item $j$ is often binary: $X_{ij} \in \{0,1\}$, and the probability of person $i$ answering item $j$ with discrimination $\alpha_j$ and difficulty $\beta_j$ correctly:
 
 $$P(X_{ij} = 1|\theta_i) = \frac{e^{\alpha_{j}(\theta_i-\beta_{j})}}{1+e^{\alpha_{j}(\theta_i-\beta_{j})}}$$
 
