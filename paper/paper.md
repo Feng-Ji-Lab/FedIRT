@@ -58,11 +58,11 @@ In this function, $\beta_{jh}$ is the difficulty of scoring level $h$ for item $
 
 ## Model estimation
 
-In both 2PL and GPCM, often we assume the ability follows a standard normal distribution, thus we can apply MMLE.
+In both the 2PL and GPCM models, we often assume that ability follows a standard normal distribution, allowing us to apply marginal maximum likelihood estimation (MMLE).
 
-We use a combination of traditional MMLE with federated average (FedAvg) and federated stochastic gradient descent (FedSGD) [@mcmahan2017communication]. In our case, the log-likelihood and partial gradients are sent from the clients to the server. Then, the server uses FedSGD to update the item parameters and send them back to clients. By iterations, the model converges and displays the estimates on the interface. 
+We use a combination of traditional MMLE with federated average (FedAvg) and federated stochastic gradient descent (FedSGD) [@mcmahan2017communication]. In our case, the log-likelihood and partial gradients are sent from the clients to the server. The server then uses FedSGD to update the item parameters and sends them back to the clients. 
 
-Taking the 2PL model as an example, which has a marginal log-likelihood function $l$ for each school $k$ that can be approximated using Gaussian-Hermite quadrature with $q$ (by default, $q = 21$) equally-spaced levels, and let $V(n)$ to be the ability value of level $n$, and $A(n)$ is the weight of level $n$.
+Taking the 2PL model as an example, which has a marginal log-likelihood function $l$ for each school $k$ that can be approximated using Gaussian-Hermite quadrature with $q$ equally-spaced levels, and let $V(n)$ to be the ability value of level $n$, and $A(n)$ is the weight of level $n$.
 
 $$ l_k \approx \sum \limits_{i=1}^{N_k} \sum \limits_{j=1}^{J} {X_{ijk}} \times \log [\sum\limits_{n=1}^{q} P_j ( V(n) ) A(n)] + (1-X_{ijk}) \times \log [\sum\limits_{n=1}^{q} Q_j ( V(n) ) A(n)] $$
 
@@ -70,13 +70,13 @@ By applying FedAvg, the server collects the log-likelihood values from all $k$ s
 
 The server collects a log-likelihood value $l_k$ and all derivatives $\frac{ l_k }{\partial \alpha_j}$ and $\frac{ l_k }{\partial \beta_j }$ from all clients, then observe that $\frac{\partial l}{\partial \alpha_j} = \sum\limits_{k=1}^{K}\frac{ l_k }{ \partial \alpha_j }$ and $\frac{\partial l}{\partial \beta_j} = \sum\limits_{k=1}^{K}\frac{l_k }{\partial \beta_j }$ by FedSGD, the server sums up all log-likelihood values and derivative values. 
 
-Also, we provided an alternative solution, Federated Median, which uses the median of the likelihood values to replace the sum of likelihood values in Fed-MLE [@liu2020systematic]. It is more robust when there are outliers in input data. 
+Also, we provided an alternative solution, Federated Median, which uses the median of the likelihood values to replace the sum of likelihood values in Fed-MLE [@liu2020systematic], with additional robustness to handle outliers in input data. 
 
-With estimates of $\alpha_j$ and $\beta_j$ in 2PL or $\beta_{jh}$ in GPCM, empirical Bayesian estimates of students' ability can be obtained [@bock1981marginal]. 
+With estimates of $\alpha_j$ and $\beta_j$ in 2PL or $\beta_{jh}$ in GPCM, we can obtain empirical Bayesian estimates of students' ability  [@bock1981marginal]. 
 
 # Comparison with existing packages
 
-We showcase that our package could generate the same result as traditional IRT packages, for example, `mirt` [@chalmers2012mirt]. Take 2PL as an example, we use a synthesized dataset with 160 students and 10 items. %For traditional packages, the whole dataset is used. For our package, the dataset was separated into two parts, which contain 81 and 79 students. 
+We demonstrate that our package can generate the same results as traditional IRT packages, such as mirt [@chalmers2012mirt]. 
 
 \autoref{acomparison} and \autoref{bcomparison} show the comparison of the discrimination and difficulty parameters between `mirt` and `FedIRT` based on `example_data_2PL` in our package.
 
