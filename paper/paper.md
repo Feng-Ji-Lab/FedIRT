@@ -28,17 +28,17 @@ tags:
 
 # Summary
 
-We developed an `R` package, `FedIRT`, to estimate item response theory (IRT) models, including 1PL, 2PL, and graded response models, with additional privacy features. This package allows for parameter estimation in a distributed manner without compromising accuracy, drawing on recent advances in the federated learning literature. Numerical experiments demonstrate that federated IRT estimation achieves statistical performance comparable to mainstream IRT packages in R, with the added benefits of privacy preservation and minimal communication costs. The R package also includes a user-friendly Shiny app that allows clients (e.g., individual schools) and servers (e.g., school boards) to apply our proposed method easily.
+We developed an `R` package, `FedIRT`, to estimate item response theory (IRT) models—including 1PL, 2PL, and graded response models—with additional privacy features. This package enables parameter estimation in a distributed manner without compromising accuracy, leveraging recent advances in federated learning. Numerical experiments demonstrate that federated IRT estimation achieves statistical performance comparable to mainstream IRT packages in R, with the added benefits of privacy preservation and minimal communication costs. The R package also includes a user-friendly Shiny app that allows clients (e.g., individual schools) and servers (e.g., school boards) to easily apply our proposed method.
 
 # Statement of Need
 
-IRT [@embretson2013item] is a statistical modeling framework grounded in modern test theory, frequently used in the educational, social, and behavioral sciences to measure latent constructs through multivariate human responses. Traditional IRT estimation mandates the centralization of all individual raw response data in one location, thereby potentially compromising the privacy of the data and participants [@lemons2014predictive]. 
+IRT [@embretson2013item] is a statistical modeling framework grounded in modern test theory, frequently used in the educational, social, and behavioral sciences to measure latent constructs through multivariate human responses. Traditional IRT estimation mandates the centralization of all individual raw response data in one location, which potentially compromises the privacy of the data and participants [@lemons2014predictive].
 
 Federated learning has emerged as a field addressing data privacy issues and techniques for parameter estimation in a decentralized, distributed manner. However, there is currently no package available in psychometrics, especially in the context of IRT, that integrates federated learning with IRT model estimation.
 
-Popular IRT packages in `R`, such as `mirt` [@chalmers2012mirt] and `ltm` [@rizopoulos2007ltm] require storing and computing all data in a single location, which can potentially lead to violations of privacy policies when dealing with highly sensitive data (e.g., high-stakes student assessment data).
+Popular IRT packages in `R`, such as `mirt` [@chalmers2012mirt] and `ltm` [@rizopoulos2007ltm], require storing and computing all data in a single location, which can potentially lead to violations of privacy policies when dealing with highly sensitive data (e.g., high-stakes student assessment data).
 
-We have therefore developed a specialized R package, FedIRT, which integrates federated learning with IRT and includes an accompanying Shiny app designed to address real-world implementation challenges and reduce the burden of learning R programming for users. This app implements the method in a user-friendly and accessible manner.
+Therefore, we have developed a specialized R package, FedIRT, which integrates federated learning with IRT and includes an accompanying Shiny app designed to address real-world implementation challenges and reduce the burden of learning R programming for users. This app implements the method in a user-friendly and accessible manner.
 
 # Method
 
@@ -46,7 +46,7 @@ Here we briefly introduce the key idea behind integrating federated learning wit
 
 ## Model formulation
 
-The two-parameter logistic (2PL) IRT model is often considered the most popular IRT model in practice. In 2PL, the response by person $i$ for item $j$ is often binary: $X_{ij} \in \{0,1\}$, and the probability of person $i$ answering item $j$ with discrimination $\alpha_j$ and difficulty $\beta_j$ correctly:
+The two-parameter logistic (2PL) IRT model is often considered the most popular IRT model in practice. In the 2PL model, the response of person $i$ to item $j$ is binary ($X_{ij} \in {0,1}$), and the probability that person $i$ answers item $j$ correctly, given discrimination parameter $\alpha_j$ and difficulty parameter $\beta_j$, is given by:
 
 $$P(X_{ij} = 1|\theta_i) = \frac{e^{\alpha_{j}(\theta_i-\beta_{j})}}{1+e^{\alpha_{j}(\theta_i-\beta_{j})}}$$
 
@@ -54,15 +54,15 @@ To make our package available for polytomous response, we also developed a feder
 
 $$P^{\text{GPCM}}(X_{ij} = x|\theta_i) = \frac{e^{\sum \limits_{h=1}^{x} \alpha_{j}(\theta_i-\beta_{jh})}}{\sum \limits_{c=0}^{m_j}e^{\sum \limits_{h=1}^{c} \alpha_{j}(\theta_i-\beta_{jh})}}$$
 
-In this function, $\beta_{jh}$ is the difficulty of scoring level $h$ for item $j$, and for each item $j$, all difficulty levels have the same discrimination $\alpha_j$. $m_j$ is the maximum score of item $j$. 
+In this function, $\beta_{jh}$ is the difficulty of scoring level $h$ for item $j$, and for each item $j$, all difficulty levels have the same discrimination $\alpha_j$. $m_j$ is the maximum score of item $j$.
 
 ## Model estimation
 
 In both the 2PL and GPCM models, we often assume that ability follows a standard normal distribution, allowing us to apply marginal maximum likelihood estimation (MMLE).
 
-We use a combination of traditional MMLE with federated average (FedAvg) and federated stochastic gradient descent (FedSGD) [@mcmahan2017communication]. In our case, the log-likelihood and partial gradients are sent from the clients to the server. The server then uses FedSGD to update the item parameters and sends them back to the clients. 
+We use a combination of traditional MMLE with federated average (FedAvg) and federated stochastic gradient descent (FedSGD) [@mcmahan2017communication]. In our case, the log-likelihood and partial gradients are sent from the clients to the server. The server then uses FedSGD to update the item parameters and sends them back to the clients.
 
-Taking the 2PL model as an example, which has a marginal log-likelihood function $l$ for each school $k$ that can be approximated using Gaussian-Hermite quadrature with $q$ equally-spaced levels, and let $V(n)$ to be the ability value of level $n$, and $A(n)$ is the weight of level $n$.
+Taking the 2PL model as an example, the marginal log-likelihood function $l$ for each school $k$ can be approximated using Gaussian-Hermite quadrature with $q$ equally-spaced levels. Let $V(n)$ be the ability value at level $n$, and $A(n)$ be the weight at level $n$.
 
 $$ l_k \approx \sum \limits_{i=1}^{N_k} \sum \limits_{j=1}^{J} {X_{ijk}} \times \log [\sum\limits_{n=1}^{q} P_j ( V(n) ) A(n)] + (1-X_{ijk}) \times \log [\sum\limits_{n=1}^{q} Q_j ( V(n) ) A(n)] $$
 
@@ -76,7 +76,7 @@ With estimates of $\alpha_j$ and $\beta_j$ in 2PL or $\beta_{jh}$ in GPCM, we ca
 
 # Comparison with existing packages
 
-We demonstrate that our package can generate the same results as traditional IRT packages, such as mirt [@chalmers2012mirt]. 
+We demonstrate that our package generates comparable results to established IRT packages, such as mirt [@chalmers2012mirt].
 
 \autoref{acomparison} and \autoref{bcomparison} show the comparison of the discrimination and difficulty parameters between `mirt` and `FedIRT` based on `example_data_2PL` in our package.
 
@@ -115,14 +115,15 @@ First, we need to read the dataset.
 data <- read.csv("dataset.csv", header = TRUE)
 ```
 
-Then, we call the function `FedIRT::fedirt_file()` to get the result. It returns a list of item discriminations, item difficulties, and each sites' effect and each students' abilities. 
+Then, we call the function `FedIRT::fedirt_file()` to obtain the result. It returns a list of parameter estimates for item discriminations, item difficulties, and each sites' effect and each students' abilities. 
 
 ``` r
 # call the fedirt_file function 
 result <- fedirt_file(data, model_name = "2PL")
 ```
 
-At last, extract the results or use the parameters for further analysis. 
+Finally, we can extract the results or use the parameter estimates for further analysis.
+
 
 ``` r
 result$a
@@ -169,7 +170,7 @@ End of Summary
 
 ## Example of the personscore function
 
-We provide a function `personscore` in the package. The detailed usage of the function is shown in the user manual. We demonstrate an example here.
+We provide a function `personscore` in the package to obtain ability estimates. The detailed usage of the function is shown in the user manual. We demonstrate an example here.
 
 ``` R
 personscoreResult = personscore(result)
@@ -224,9 +225,7 @@ School 2:
 
 ## Standard error (SE) calculation
 
-We follow a typical process of calculating SE in MLE. After obtaining the MLE estimates, the Hessian matrix, which is the matrix of second-order partial derivatives of the log-likelihood function with respect to the parameters, is computed at the estimated parameters. The SEs are then derived from the square roots of the diagonal elements of the inverse Hessian matrix.
-
-In our package, call the `SE()` function and input a `fedirt` object to display standard errors of item parameters. 
+To obtain SE, we can call the `SE()` function and input a `fedirt` object to display standard errors of item parameter estimates. 
 
 ``` r
 SE(result)
@@ -243,23 +242,26 @@ $b
 
 ## Example of the Shiny App
 
-To provide wider access for practitioners, we include the Shiny user interface in our package. A detailed manual was provided in the package. Taking the 2PL as an example, we illustrate how to use the Shiny app below.
+To provide wider access for practitioners in real-world applications, we include the Shiny user interface in our package. A detailed manual was provided in the package. Taking the 2PL as an example, we illustrate how to use the Shiny app below.
 
 In the first step, the server end (e.g., test administer, school board) can be launched by running the Shiny app `runserver()` and the client-end Shiny app can be initialized with `runclient()` with the interface shown below:
 
 ![The initial server and client interface. \label{combined1}](combined1.png)
 
-When the client first launches, it will automatically connect to the localhost port `8000` as default. 
+When the client first launches, it will automatically connect to the localhost port `8000` by default. 
 
-If the server is deployed on another computer, type the server's IP address and port (which will be displayed on the server's interface), then click "reconnect". The screenshots of the user interface are shown below. 
+If the server is deployed on another computer, type the server's IP address and port (which will be displayed on the server's interface), then click "Reconnect". The screenshots of the user interface are shown below.
 
 ![Server and client interface when one school is connected. \label{combined2}](combined2.png)
 
-Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a `csv` file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
+Then, the client should choose a file to upload to the local Shiny app to perform local calculations, without sending it to the server. The file should be a `CSV` file with either binary or graded responses. All clients should share the same number of items and the same maximum score for each item (if the responses are polytomous); otherwise, an error message will suggest checking the datasets of all clients.
 
-![Server interface when one school uploaded dataset and lient interface when a dataset is uploaded successfully. \label{combined3}](combined3.png)
 
-After all the clients upload their data, the server should click "start" to begin the federated estimates process and after the model converges, the client should click "receive result". The server will display all item parameters and the client will display all item parameters and individual ability estimates. 
+
+![Server interface when one school uploaded dataset and client interface when a dataset is uploaded successfully. \label{combined3}](combined3.png)
+
+After all the clients upload their data, the server should click "Start" to begin the federated estimation process. After the model converges, the clients should click "Receive Result". The server will display all item parameters, and the clients will display all item parameters and individual ability estimates.
+
 
 ![Server interface when estimation is completed and client interface when the results received. \label{combined4}](combined4.png)
 
