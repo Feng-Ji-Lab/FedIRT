@@ -50,9 +50,9 @@ University of Toronto, Toronto, Canada</institution>
 <author-notes>
 <corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
 </author-notes>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-08-30">
-<day>30</day>
-<month>8</month>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-09-19">
+<day>19</day>
+<month>9</month>
 <year>2024</year>
 </pub-date>
 <volume>¿VOL?</volume>
@@ -82,17 +82,18 @@ a Creative Commons Attribution 4.0 International License (CC BY
 <body>
 <sec id="summary">
   <title>Summary</title>
-  <p>We developed an <monospace>R</monospace> package
-  <monospace>FedIRT</monospace>, to estimate traditional IRT models,
-  including 2PL and the graded response models with additional privacy,
-  allowing parameter estimation in a distributed manner without
-  compromising estimation accuracy. Numerical experiments demonstrate
-  that Federated IRT estimation achieves comparable statistical
-  performance to mainstream IRT packages in R, with the benefits of
-  privacy preservation and minimal communication costs. The R package
-  also includes a user-friendly Shiny app that allows clients (e.g.,
-  individual schools) and servers (e.g., school boards) to apply our
-  proposed method in a user-friendly manner.</p>
+  <p>We developed an <monospace>R</monospace> package,
+  <monospace>FedIRT</monospace>, to estimate item response theory (IRT)
+  models—including 1PL, 2PL, and graded response models—with additional
+  privacy features. This package enables parameter estimation in a
+  distributed manner without compromising accuracy, leveraging recent
+  advances in federated learning. Numerical experiments demonstrate that
+  federated IRT estimation achieves statistical performance comparable
+  to mainstream IRT packages in R, with the added benefits of privacy
+  preservation and minimal communication costs. The R package also
+  includes a user-friendly Shiny app that allows clients (e.g.,
+  individual schools) and servers (e.g., school boards) to easily apply
+  our proposed method.</p>
 </sec>
 <sec id="statement-of-need">
   <title>Statement of Need</title>
@@ -103,8 +104,7 @@ a Creative Commons Attribution 4.0 International License (CC BY
   behavioral sciences to measure latent constructs through multivariate
   human responses. Traditional IRT estimation mandates the
   centralization of all individual raw response data in one location,
-  thereby potentially compromising the privacy of the data and
-  participants
+  which potentially compromises the privacy of the data and participants
   (<xref alt="Lemons, 2014" rid="ref-lemons2014predictive" ref-type="bibr">Lemons,
   2014</xref>).</p>
   <p>Federated learning has emerged as a field addressing data privacy
@@ -112,27 +112,26 @@ a Creative Commons Attribution 4.0 International License (CC BY
   distributed manner. However, there is currently no package available
   in psychometrics, especially in the context of IRT, that integrates
   federated learning with IRT model estimation.</p>
-  <p>Mainstream IRT packages in <monospace>R</monospace>, such as
+  <p>Popular IRT packages in <monospace>R</monospace>, such as
   <monospace>mirt</monospace>
   (<xref alt="Chalmers, 2012" rid="ref-chalmers2012mirt" ref-type="bibr">Chalmers,
   2012</xref>) and <monospace>ltm</monospace>
   (<xref alt="Rizopoulos, 2007" rid="ref-rizopoulos2007ltm" ref-type="bibr">Rizopoulos,
-  2007</xref>) require storing and computing all data in a single
+  2007</xref>), require storing and computing all data in a single
   location, which can potentially lead to violations of privacy policies
   when dealing with highly sensitive data (e.g., high-stakes student
-  assessments).</p>
-  <p>We have therefore developed a specialized R package,
-  <monospace>FedIRT</monospace>, to integrate federated learning with
-  IRT. We have also developed an accompanying Shiny app to recognize
-  real-world challenges and aim to reduce the burden of learning R
-  programming for applying this package. This app implements the method
-  in a user-friendly and accessible manner.</p>
+  assessment data).</p>
+  <p>Therefore, we have developed a specialized R package, FedIRT, which
+  integrates federated learning with IRT and includes an accompanying
+  Shiny app designed to address real-world implementation challenges and
+  reduce the burden of learning R programming for users. This app
+  implements the method in a user-friendly and accessible manner.</p>
 </sec>
 <sec id="method">
   <title>Method</title>
   <p>Here we briefly introduce the key idea behind integrating federated
-  learning with IRT. For details, please refer to our methodological
-  discussions on Federated IRT
+  learning with IRT. For technical details, please refer to our
+  methodological discussions on Federated IRT
   (<xref alt="Zhou &amp; Ji, 2023" rid="ref-FedIRT2023" ref-type="bibr">Zhou
   &amp; Ji, 2023</xref>,
   <xref alt="2024" rid="ref-FedIRT2024" ref-type="bibr">2024</xref>,
@@ -141,29 +140,30 @@ a Creative Commons Attribution 4.0 International License (CC BY
   <sec id="model-formulation">
     <title>Model formulation</title>
     <p>The two-parameter logistic (2PL) IRT model is often considered
-    the most popular IRT model. In 2PL, the response by person
+    the most popular IRT model in practice. In the 2PL model, the
+    response of person <inline-formula><alternatives>
+    <tex-math><![CDATA[i]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>i</mml:mi></mml:math></alternatives></inline-formula>
+    to item <inline-formula><alternatives>
+    <tex-math><![CDATA[j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>
+    is binary (<inline-formula><alternatives>
+    <tex-math><![CDATA[X_{ij} \in {0,1}]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:msub><mml:mi>X</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>∈</mml:mo><mml:mrow><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>),
+    and the probability that person <inline-formula><alternatives>
+    <tex-math><![CDATA[i]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>i</mml:mi></mml:math></alternatives></inline-formula>
+    answers item <inline-formula><alternatives>
+    <tex-math><![CDATA[j]]></tex-math>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>
+    correctly, given discrimination parameter
     <inline-formula><alternatives>
-    <tex-math><![CDATA[i]]></tex-math>
-    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>i</mml:mi></mml:math></alternatives></inline-formula>
-    for item <inline-formula><alternatives>
-    <tex-math><![CDATA[j]]></tex-math>
-    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>
-    is often binary: <inline-formula><alternatives>
-    <tex-math><![CDATA[X_{ij} \in \{0,1\}]]></tex-math>
-    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:msub><mml:mi>X</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>∈</mml:mo><mml:mo stretchy="false" form="prefix">{</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="false" form="postfix">}</mml:mo></mml:mrow></mml:math></alternatives></inline-formula>,
-    and the probability of person <inline-formula><alternatives>
-    <tex-math><![CDATA[i]]></tex-math>
-    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>i</mml:mi></mml:math></alternatives></inline-formula>
-    answering item <inline-formula><alternatives>
-    <tex-math><![CDATA[j]]></tex-math>
-    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>
-    with discrimination <inline-formula><alternatives>
     <tex-math><![CDATA[\alpha_j]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-    and difficulty <inline-formula><alternatives>
+    and difficulty parameter <inline-formula><alternatives>
     <tex-math><![CDATA[\beta_j]]></tex-math>
-    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-    correctly:</p>
+    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>,
+    is given by:</p>
     <p><disp-formula><alternatives>
     <tex-math><![CDATA[P(X_{ij} = 1|\theta_i) = \frac{e^{\alpha_{j}(\theta_i-\beta_{j})}}{1+e^{\alpha_{j}(\theta_i-\beta_{j})}}]]></tex-math>
     <mml:math display="block" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mi>P</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="false" form="prefix">|</mml:mo><mml:msub><mml:mi>θ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mfrac><mml:msup><mml:mi>e</mml:mi><mml:mrow><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>θ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:msup><mml:mrow><mml:mn>1</mml:mn><mml:mo>+</mml:mo><mml:msup><mml:mi>e</mml:mi><mml:mrow><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>θ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mi>β</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:msup></mml:mrow></mml:mfrac></mml:mrow></mml:math></alternatives></disp-formula></p>
@@ -208,40 +208,37 @@ a Creative Commons Attribution 4.0 International License (CC BY
   </sec>
   <sec id="model-estimation">
     <title>Model estimation</title>
-    <p>In both 2PL and GPCM, often we assume the ability follows a
-    standard normal distribution, thus we can apply MMLE.</p>
+    <p>In both the 2PL and GPCM models, we often assume that ability
+    follows a standard normal distribution, allowing us to apply
+    marginal maximum likelihood estimation (MMLE).</p>
     <p>We use a combination of traditional MMLE with federated average
     (FedAvg) and federated stochastic gradient descent (FedSGD)
     (<xref alt="McMahan et al., 2017" rid="ref-mcmahan2017communication" ref-type="bibr">McMahan
     et al., 2017</xref>). In our case, the log-likelihood and partial
-    gradients are sent from the clients to the server. Then, the server
-    uses FedSGD to update the item parameters and send them back to
-    clients. By iterations, the model converges and displays the
-    estimates on the interface.</p>
-    <p>Taking the 2PL model as an example, which has a marginal
-    log-likelihood function <inline-formula><alternatives>
+    gradients are sent from the clients to the server. The server then
+    uses FedSGD to update the item parameters and sends them back to the
+    clients.</p>
+    <p>Taking the 2PL model as an example, the marginal log-likelihood
+    function <inline-formula><alternatives>
     <tex-math><![CDATA[l]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>l</mml:mi></mml:math></alternatives></inline-formula>
     for each school <inline-formula><alternatives>
     <tex-math><![CDATA[k]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>k</mml:mi></mml:math></alternatives></inline-formula>
-    that can be approximated using Gaussian-Hermite quadrature with
+    can be approximated using Gaussian-Hermite quadrature with
     <inline-formula><alternatives>
     <tex-math><![CDATA[q]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>q</mml:mi></mml:math></alternatives></inline-formula>
-    (by default, <inline-formula><alternatives>
-    <tex-math><![CDATA[q = 21]]></tex-math>
-    <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mi>q</mml:mi><mml:mo>=</mml:mo><mml:mn>21</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>)
-    equally-spaced levels, and let <inline-formula><alternatives>
+    equally-spaced levels. Let <inline-formula><alternatives>
     <tex-math><![CDATA[V(n)]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mi>V</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>n</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
-    to be the ability value of level <inline-formula><alternatives>
+    be the ability value at level <inline-formula><alternatives>
     <tex-math><![CDATA[n]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>n</mml:mi></mml:math></alternatives></inline-formula>,
     and <inline-formula><alternatives>
     <tex-math><![CDATA[A(n)]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mrow><mml:mi>A</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>n</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
-    is the weight of level <inline-formula><alternatives>
+    be the weight at level <inline-formula><alternatives>
     <tex-math><![CDATA[n]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>n</mml:mi></mml:math></alternatives></inline-formula>.</p>
     <p><disp-formula><alternatives>
@@ -277,8 +274,8 @@ a Creative Commons Attribution 4.0 International License (CC BY
     which uses the median of the likelihood values to replace the sum of
     likelihood values in Fed-MLE
     (<xref alt="Liu et al., 2020" rid="ref-liu2020systematic" ref-type="bibr">Liu
-    et al., 2020</xref>). It is more robust when there are outliers in
-    input data.</p>
+    et al., 2020</xref>), with additional robustness to handle outliers
+    in input data.</p>
     <p>With estimates of <inline-formula><alternatives>
     <tex-math><![CDATA[\alpha_j]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>α</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
@@ -288,21 +285,18 @@ a Creative Commons Attribution 4.0 International License (CC BY
     in 2PL or <inline-formula><alternatives>
     <tex-math><![CDATA[\beta_{jh}]]></tex-math>
     <mml:math display="inline" xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:msub><mml:mi>β</mml:mi><mml:mrow><mml:mi>j</mml:mi><mml:mi>h</mml:mi></mml:mrow></mml:msub></mml:math></alternatives></inline-formula>
-    in GPCM, empirical Bayesian estimates of students’ ability can be
-    obtained
+    in GPCM, we can obtain empirical Bayesian estimates of students’
+    ability
     (<xref alt="Bock &amp; Aitkin, 1981" rid="ref-bock1981marginal" ref-type="bibr">Bock
     &amp; Aitkin, 1981</xref>).</p>
   </sec>
 </sec>
 <sec id="comparison-with-existing-packages">
   <title>Comparison with existing packages</title>
-  <p>We showcase that our package could generate the same result as
-  traditional IRT packages, for example, <monospace>mirt</monospace>
+  <p>We demonstrate that our package generates comparable results to
+  established IRT packages, such as mirt
   (<xref alt="Chalmers, 2012" rid="ref-chalmers2012mirt" ref-type="bibr">Chalmers,
-  2012</xref>). Take 2PL as an example, we use a synthesized dataset
-  with 160 students and 10 items. %For traditional packages, the whole
-  dataset is used. For our package, the dataset was separated into two
-  parts, which contain 81 and 79 students.</p>
+  2012</xref>).</p>
   <p><xref alt="[acomparison]" rid="acomparison">[acomparison]</xref>
   and <xref alt="[bcomparison]" rid="bcomparison">[bcomparison]</xref>
   show the comparison of the discrimination and difficulty parameters
@@ -397,13 +391,14 @@ library(FedIRT)</code>
     <code language="r script"># read dataset
 data &lt;- read.csv(&quot;dataset.csv&quot;, header = TRUE)</code>
     <p>Then, we call the function
-    <monospace>FedIRT::fedirt_file()</monospace> to get the result. It
-    returns a list of item discriminations, item difficulties, and each
-    sites’ effect and each students’ abilities.</p>
+    <monospace>FedIRT::fedirt_file()</monospace> to obtain the result.
+    It returns a list of parameter estimates for item discriminations,
+    item difficulties, and each sites’ effect and each students’
+    abilities.</p>
     <code language="r script"># call the fedirt_file function 
 result &lt;- fedirt_file(data, model_name = &quot;2PL&quot;)</code>
-    <p>At last, extract the results or use the parameters for further
-    analysis.</p>
+    <p>Finally, we can extract the results or use the parameter
+    estimates for further analysis.</p>
     <code language="r script">result$a
 result$b</code>
     <p>Apart from using the results for further analysis, we can also
@@ -442,8 +437,9 @@ End of Summary</preformat>
   <sec id="example-of-the-personscore-function">
     <title>Example of the personscore function</title>
     <p>We provide a function <monospace>personscore</monospace> in the
-    package. The detailed usage of the function is shown in the user
-    manual. We demonstrate an example here.</p>
+    package to obtain ability estimates. The detailed usage of the
+    function is shown in the user manual. We demonstrate an example
+    here.</p>
     <code language="r script">personscoreResult = personscore(result)
 summary(personscoreResult)</code>
     <p>Summary of the person score is shown below.</p>
@@ -489,15 +485,9 @@ School 2:
   </sec>
   <sec id="standard-error-se-calculation">
     <title>Standard error (SE) calculation</title>
-    <p>We follow a typical process of calculating SE in MLE. After
-    obtaining the MLE estimates, the Hessian matrix, which is the matrix
-    of second-order partial derivatives of the log-likelihood function
-    with respect to the parameters, is computed at the estimated
-    parameters. The SEs are then derived from the square roots of the
-    diagonal elements of the inverse Hessian matrix.</p>
-    <p>In our package, call the <monospace>SE()</monospace> function and
-    input a <monospace>fedirt</monospace> object to display standard
-    errors of item parameters.</p>
+    <p>To obtain SE, we can call the <monospace>SE()</monospace>
+    function and input a <monospace>fedirt</monospace> object to display
+    standard errors of item parameter estimates.</p>
     <code language="r script">SE(result)</code>
     <p>Below is the result of SE.</p>
     <preformat>$a
@@ -507,10 +497,10 @@ $b
   </sec>
   <sec id="example-of-the-shiny-app">
     <title>Example of the Shiny App</title>
-    <p>To provide wider access for practitioners, we include the Shiny
-    user interface in our package. A detailed manual was provided in the
-    package. Taking the 2PL as an example, we illustrate how to use the
-    Shiny app below.</p>
+    <p>To provide wider access for practitioners in real-world
+    applications, we include the Shiny user interface in our package. A
+    detailed manual was provided in the package. Taking the 2PL as an
+    example, we illustrate how to use the Shiny app below.</p>
     <p>In the first step, the server end (e.g., test administer, school
     board) can be launched by running the Shiny app
     <monospace>runserver()</monospace> and the client-end Shiny app can
@@ -522,10 +512,10 @@ $b
       <graphic mimetype="image" mime-subtype="png" xlink:href="combined1.png" />
     </fig>
     <p>When the client first launches, it will automatically connect to
-    the localhost port <monospace>8000</monospace> as default.</p>
+    the localhost port <monospace>8000</monospace> by default.</p>
     <p>If the server is deployed on another computer, type the server’s
     IP address and port (which will be displayed on the server’s
-    interface), then click “reconnect”. The screenshots of the user
+    interface), then click “Reconnect”. The screenshots of the user
     interface are shown below.</p>
     <fig>
       <caption><p>Server and client interface when one school is
@@ -534,23 +524,23 @@ $b
       <graphic mimetype="image" mime-subtype="png" xlink:href="combined2.png" />
     </fig>
     <p>Then, the client should choose a file to upload to the local
-    Shiny app to do local calculations, without sending it to the
-    server. The file should be a <monospace>csv</monospace> file, with
-    either binary or graded response, and all clients should share the
-    same number of items, and the same maximum score in each item (if
-    the answers are polytomous), otherwise, there will be an error
-    message suggesting to check the datasets of all clients.</p>
+    Shiny app to perform local calculations, without sending it to the
+    server. The file should be a <monospace>CSV</monospace> file with
+    either binary or graded responses. All clients should share the same
+    number of items and the same maximum score for each item (if the
+    responses are polytomous); otherwise, an error message will suggest
+    checking the datasets of all clients.</p>
     <fig>
       <caption><p>Server interface when one school uploaded dataset and
-      lient interface when a dataset is uploaded successfully.
+      client interface when a dataset is uploaded successfully.
       <styled-content id="combined3"></styled-content></p></caption>
       <graphic mimetype="image" mime-subtype="png" xlink:href="combined3.png" />
     </fig>
     <p>After all the clients upload their data, the server should click
-    “start” to begin the federated estimates process and after the model
-    converges, the client should click “receive result”. The server will
-    display all item parameters and the client will display all item
-    parameters and individual ability estimates.</p>
+    “Start” to begin the federated estimation process. After the model
+    converges, the clients should click “Receive Result”. The server
+    will display all item parameters, and the clients will display all
+    item parameters and individual ability estimates.</p>
     <fig>
       <caption><p>Server interface when estimation is completed and
       client interface when the results received.
