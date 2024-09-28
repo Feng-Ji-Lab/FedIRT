@@ -8,6 +8,7 @@
 #' @return Corresponding model result as a list.
 #'
 #' @examples
+#' \dontrun{
 #' # turn input data to a list
 #' inputdata = list(as.matrix(example_data_2PL))
 #' # Call fedirt() function, and use 2PL model with school effect as a fixed effect
@@ -17,7 +18,7 @@
 #' inputdata = list(as.matrix(example_data_2PL_1), as.matrix(example_data_2PL_2))
 #' # Call fedirt() function, and use graded model
 #' fedresult = fedirt(inputdata, model_name = "graded")
-#'
+#' }
 
 #' @importFrom purrr map
 #' @importFrom pracma quadl

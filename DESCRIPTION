@@ -1,7 +1,7 @@
 Type: Package
 Package: FedIRT
 Title: Federated Item Response Theory Models
-Version: 0.1.0
+Version: 1.1.0
 Authors@R: c(
     person("Biying", "Zhou", email = "zby.zhou@mail.utoronto.ca", role = "cre"),
     person("Feng", "Ji", email = "f.ji@utoronto.ca", role = "aut"))

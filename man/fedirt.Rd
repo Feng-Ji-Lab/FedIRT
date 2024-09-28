@@ -25,6 +25,7 @@ This function combines all types of algorithm of federated IRT models. It inputs
 Input is a list of responding matrices from each school, every responding matrix is one site's data.
 }
 \examples{
+\dontrun{
 # turn input data to a list
 inputdata = list(as.matrix(example_data_2PL))
 # Call fedirt() function, and use 2PL model with school effect as a fixed effect
@@ -34,5 +35,5 @@ fedresult = fedirt(inputdata, model_name = "2PL",school_effect = TRUE)
 inputdata = list(as.matrix(example_data_2PL_1), as.matrix(example_data_2PL_2))
 # Call fedirt() function, and use graded model
 fedresult = fedirt(inputdata, model_name = "graded")
-
+}
 }
