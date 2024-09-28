@@ -11,3 +11,5 @@
 ^tests/test72.R$
 ^tests/test829.R$
 ^tests/test_personscore.R$
+^.*\.pdf$
+^.*\.tar\.gz$
