@@ -1,10 +1,21 @@
+# FedIRT
+``FedIRT`` is an ``R`` package that enables federated estimation of Item Response Theory (IRT) models, including 1PL, 2PL, and Generalized Partial Credit Models (GPCM). By integrating federated learning, this package allows decentralized data analysis without compromising data privacy. Unlike traditional IRT packages that require centralized data storage (e.g., mirt, ltm), FedIRT ensures that raw response data remains on local devices while still achieving accurate parameter estimation.
 
 # Availability
 
-The R package ``FedIRT`` is publicly available on [Github](https://github.com/Feng-Ji-Lab/FedIRT). It could be installed and run by using the following commands:
+## Installation
 
+You can install `FedIRT` from [CRAN](https://cran.r-project.org/package=FedIRT) (stable release) or [Github](https://github.com/Feng-Ji-Lab/FedIRT) (latest development version):
+
+### Github
 ``` r
 devtools::install_github("Feng-Ji-Lab/FedIRT")
+library(FedIRT)
+```
+
+### CRAN
+``` r
+install.packages("FedIRT")
 library(FedIRT)
 ```
 
@@ -202,3 +213,19 @@ After all the clients upload their data, the server should click "start" to begi
 The clients will also display bar plots of the ability estimates. 
 
 ![Client interface for displaying results. \label{client5}](paper/client5.png)
+
+
+# Community Guidelines
+
+We welcome contributions and feedback! 
+
+## Contributing
+To contribute, fork the repository, create a new branch, make your changes, and submit a pull request. Ensure your code is well-documented and passes all checks.
+
+## Reporting Issues
+Found a bug or have a feature request? Open an issue on our [GitHub Issues page](https://github.com/Feng-Ji-Lab/FedIRT/issues) with a clear description and steps to reproduce.
+
+## Seeking Support
+Check the documentation, search existing issues, or post a question on GitHub. For urgent matters, contact ``f.ji@utoronto.ca``.
+
+Thank you for helping improve `FedIRT`!
