@@ -1,0 +1,8 @@
+pandoc: '3.3'
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles: {}
+last_built: 2025-03-13T17:46Z
+urls:
+  reference: https://feng-ji-lab.github.io/FedIRT/reference
+  article: https://feng-ji-lab.github.io/FedIRT/articles
