@@ -19,6 +19,35 @@ install.packages("FedIRT")
 library(FedIRT)
 ```
 
+
+
+## Example of the Shiny App
+
+To provide wider access for practitioners, we include the Shiny user interface in our package. A detailed manual was provided in the package. Taking the 2PL as an example, we illustrate how to use the Shiny app below.
+
+In the first step, the server end (e.g., test administer, school board) can be launched by running the Shiny app `runserver()` and the client-end Shiny app can be initialized with `runclient()` with the interface shown below:
+
+![The initial server and client interface. \label{combined1}](man/figures/combined1.png)
+
+When the client first launches, it will automatically connect to the localhost port `8000` as default. 
+
+If the server is deployed on another computer, type the server's IP address and port (which will be displayed on the server's interface), then click "reconnect". The screenshots of the user interface are shown below. 
+
+![Server and client interface when one school is connected. \label{combined2}](man/figures/combined2.png)
+
+Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a `csv` file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
+
+![Server interface when one school uploaded dataset and lient interface when a dataset is uploaded successfully. \label{combined3}](man/figures/combined3.png)
+
+After all the clients upload their data, the server should click "start" to begin the federated estimates process and after the model converges, the client should click "receive result". The server will display all item parameters and the client will display all item parameters and individual ability estimates. 
+
+![Server interface when estimation is completed and client interface when the results received. \label{combined4}](man/figures/combined4.png)
+
+The clients will also display bar plots of the ability estimates. 
+
+![Client interface for displaying results. \label{client5}](man/figures/client5.png)
+
+
 ## Example of the integrated function
 
 We provide a function `fedirt_file()` in the package, and the detailed usage of the function is shown in the user manual. We demonstrate an example here. 
@@ -187,33 +216,6 @@ $a
 $b
  [1] 272.43863961   0.20737386   1.25896302 ...
 ```
-
-## Example of the Shiny App
-
-To provide wider access for practitioners, we include the Shiny user interface in our package. A detailed manual was provided in the package. Taking the 2PL as an example, we illustrate how to use the Shiny app below.
-
-In the first step, the server end (e.g., test administer, school board) can be launched by running the Shiny app `runserver()` and the client-end Shiny app can be initialized with `runclient()` with the interface shown below:
-
-![The initial server and client interface. \label{combined1}](man/figures/combined1.png)
-
-When the client first launches, it will automatically connect to the localhost port `8000` as default. 
-
-If the server is deployed on another computer, type the server's IP address and port (which will be displayed on the server's interface), then click "reconnect". The screenshots of the user interface are shown below. 
-
-![Server and client interface when one school is connected. \label{combined2}](man/figures/combined2.png)
-
-Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a `csv` file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
-
-![Server interface when one school uploaded dataset and lient interface when a dataset is uploaded successfully. \label{combined3}](man/figures/combined3.png)
-
-After all the clients upload their data, the server should click "start" to begin the federated estimates process and after the model converges, the client should click "receive result". The server will display all item parameters and the client will display all item parameters and individual ability estimates. 
-
-![Server interface when estimation is completed and client interface when the results received. \label{combined4}](man/figures/combined4.png)
-
-The clients will also display bar plots of the ability estimates. 
-
-![Client interface for displaying results. \label{client5}](man/figures/client5.png)
-
 
 # Community Guidelines
 
