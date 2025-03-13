@@ -13,3 +13,6 @@
 ^tests/test_personscore.R$
 ^.*\.pdf$
 ^.*\.tar\.gz$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
