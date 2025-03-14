@@ -1,12 +1,52 @@
+# FedIRT
+``FedIRT`` is an ``R`` package that enables federated estimation of Item Response Theory (IRT) models, including 1PL, 2PL, and Generalized Partial Credit Models (GPCM). By integrating federated learning, this package allows decentralized data analysis without compromising data privacy. Unlike traditional IRT packages that require centralized data storage (e.g., mirt, ltm), FedIRT ensures that raw response data remains on local devices while still achieving accurate parameter estimation.
 
 # Availability
 
-The R package ``FedIRT`` is publicly available on [Github](https://github.com/Feng-Ji-Lab/FedIRT). It could be installed and run by using the following commands:
+## Installation
 
+You can install `FedIRT` from [CRAN](https://cran.r-project.org/package=FedIRT) (stable release) or [Github](https://github.com/Feng-Ji-Lab/FedIRT) (latest development version):
+
+### Github
 ``` r
 devtools::install_github("Feng-Ji-Lab/FedIRT")
 library(FedIRT)
 ```
+
+### CRAN
+``` r
+install.packages("FedIRT")
+library(FedIRT)
+```
+
+
+
+## Example of the Shiny App
+
+To provide wider access for practitioners, we include the Shiny user interface in our package. A detailed manual was provided in the package. Taking the 2PL as an example, we illustrate how to use the Shiny app below.
+
+In the first step, the server end (e.g., test administer, school board) can be launched by running the Shiny app `runserver()` and the client-end Shiny app can be initialized with `runclient()` with the interface shown below:
+
+![The initial server and client interface. \label{combined1}](man/figures/combined1.png)
+
+When the client first launches, it will automatically connect to the localhost port `8000` as default. 
+
+If the server is deployed on another computer, type the server's IP address and port (which will be displayed on the server's interface), then click "reconnect". The screenshots of the user interface are shown below. 
+
+![Server and client interface when one school is connected. \label{combined2}](man/figures/combined2.png)
+
+Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a `csv` file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
+
+![Server interface when one school uploaded dataset and lient interface when a dataset is uploaded successfully. \label{combined3}](man/figures/combined3.png)
+
+After all the clients upload their data, the server should click "start" to begin the federated estimates process and after the model converges, the client should click "receive result". The server will display all item parameters and the client will display all item parameters and individual ability estimates. 
+
+![Server interface when estimation is completed and client interface when the results received. \label{combined4}](man/figures/combined4.png)
+
+The clients will also display bar plots of the ability estimates. 
+
+![Client interface for displaying results. \label{client5}](man/figures/client5.png)
+
 
 ## Example of the integrated function
 
@@ -177,28 +217,17 @@ $b
  [1] 272.43863961   0.20737386   1.25896302 ...
 ```
 
-## Example of the Shiny App
+# Community Guidelines
 
-To provide wider access for practitioners, we include the Shiny user interface in our package. A detailed manual was provided in the package. Taking the 2PL as an example, we illustrate how to use the Shiny app below.
+We welcome contributions and feedback! 
 
-In the first step, the server end (e.g., test administer, school board) can be launched by running the Shiny app `runserver()` and the client-end Shiny app can be initialized with `runclient()` with the interface shown below:
+## Contributing
+To contribute, fork the repository, create a new branch, make your changes, and submit a pull request. Ensure your code is well-documented and passes all checks.
 
-![The initial server and client interface. \label{combined1}](paper/combined1.png)
+## Reporting Issues
+Found a bug or have a feature request? Open an issue on our [GitHub Issues page](https://github.com/Feng-Ji-Lab/FedIRT/issues) with a clear description and steps to reproduce.
 
-When the client first launches, it will automatically connect to the localhost port `8000` as default. 
+## Seeking Support
+Check the documentation, search existing issues, or post a question on GitHub. For urgent matters, contact ``f.ji@utoronto.ca``.
 
-If the server is deployed on another computer, type the server's IP address and port (which will be displayed on the server's interface), then click "reconnect". The screenshots of the user interface are shown below. 
-
-![Server and client interface when one school is connected. \label{combined2}](paper/combined2.png)
-
-Then, the client should choose a file to upload to the local Shiny app to do local calculations, without sending it to the server. The file should be a `csv` file, with either binary or graded response, and all clients should share the same number of items, and the same maximum score in each item (if the answers are polytomous), otherwise, there will be an error message suggesting to check the datasets of all clients.
-
-![Server interface when one school uploaded dataset and lient interface when a dataset is uploaded successfully. \label{combined3}](paper/combined3.png)
-
-After all the clients upload their data, the server should click "start" to begin the federated estimates process and after the model converges, the client should click "receive result". The server will display all item parameters and the client will display all item parameters and individual ability estimates. 
-
-![Server interface when estimation is completed and client interface when the results received. \label{combined4}](paper/combined4.png)
-
-The clients will also display bar plots of the ability estimates. 
-
-![Client interface for displaying results. \label{client5}](paper/client5.png)
+Thank you for helping improve `FedIRT`!

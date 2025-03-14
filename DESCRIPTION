@@ -3,7 +3,7 @@ Package: FedIRT
 Title: Federated Item Response Theory Models
 Version: 1.1.0
 Authors@R: c(
-    person("Biying", "Zhou", email = "zby.zhou@mail.utoronto.ca", role = "cre"),
+    person("Biying", "Zhou", email = "zby.zhou@mail.utoronto.ca", role = c("cre","aut")),
     person("Feng", "Ji", email = "f.ji@utoronto.ca", role = "aut"))
 Description: Integrate Item Response Theory (IRT) and Federated Learning to estimate traditional IRT models, including the 2-Parameter Logistic (2PL) and the Graded Response Models, with enhanced privacy. It allows for the estimation in a distributed manner without compromising accuracy. A user-friendly 'shiny' application is included. 
 License: MIT + file LICENSE
@@ -20,8 +20,10 @@ Imports:
     shinyjs,
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 LazyData: true
+URL: https://feng-ji-lab.github.io/FedIRT
+BugReports: https://github.com/Feng-Ji-Lab/FedIRT/issues

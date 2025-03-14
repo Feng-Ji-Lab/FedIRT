@@ -28,51 +28,19 @@ tags:
 
 # Summary
 
-We developed an `R` package, `FedIRT`, to estimate item response theory (IRT) models—including 1PL, 2PL, and graded response models—with additional privacy features. This package enables parameter estimation in a distributed manner without compromising accuracy, leveraging recent advances in federated learning. Numerical experiments demonstrate that federated IRT estimation achieves statistical performance comparable to mainstream IRT packages in R, with the added benefits of privacy preservation and minimal communication costs. The R package also includes a user-friendly Shiny app that allows clients (e.g., individual schools) and servers (e.g., school boards) to easily apply our proposed method.
+Educational and psychological testing data are often sensitive, making centralized analysis challenging due to privacy concerns. To address this, we developed `FedIRT`, an `R` package that estimates Item Response Theory (IRT) models—including 1PL, 2PL, and graded response models, using federated learning. This approach enables multiple institutions (e.g., schools, districts) to collaboratively estimate model parameters without sharing raw data. `FedIRT` ensures privacy preservation while maintaining estimation accuracy comparable to mainstream IRT packages. Additionally, the package includes a user-friendly Shiny app, making federated IRT analysis accessible to researchers and practitioners without requiring advanced programming skills.
 
 # Statement of Need
 
-IRT [@embretson2013item] is a statistical modeling framework grounded in modern test theory, frequently used in the educational, social, and behavioral sciences to measure latent constructs through multivariate human responses. Traditional IRT estimation mandates the centralization of all individual raw response data in one location, which potentially compromises the privacy of the data and participants [@lemons2014predictive].
+IRT [@embretson2013item] is widely used in educational, social, and behavioral sciences to assess abilities, attitudes, and other latent traits from test or survey responses. For example, IRT is used in standardized testing (e.g., SAT, GRE) to measure student proficiency, in psychological assessments to evaluate mental health indicators, and in large-scale surveys to estimate public opinion trends.
 
-Federated learning has emerged as a field addressing data privacy issues and techniques for parameter estimation in a decentralized, distributed manner. However, there is currently no package available in psychometrics, especially in the context of IRT, that integrates federated learning with IRT model estimation.
+However, traditional IRT estimation requires all individual response data to be collected and processed in a centralized location. This poses significant privacy concerns, particularly when handling sensitive data from schools, educational institutions, and research studies [@lemons2014predictive]. Many school districts and organizations have strict data-sharing policies that prevent researchers from accessing raw student response data, limiting their ability to conduct large-scale educational assessments.
 
-Popular IRT packages in `R`, such as `mirt` [@chalmers2012mirt] and `ltm` [@rizopoulos2007ltm], require storing and computing all data in a single location, which can potentially lead to violations of privacy policies when dealing with highly sensitive data (e.g., high-stakes student assessment data).
+Federated learning offers a promising solution by enabling parameter estimation in a decentralized manner, ensuring privacy while still allowing researchers to analyze large-scale assessment data. Despite its potential, no existing R package in psychometrics supports federated learning for IRT estimation. Popular packages such as `mirt` [@chalmers2012mirt] and `ltm` [@rizopoulos2007ltm] require centralized data storage, making them unsuitable for privacy-sensitive applications.
 
-Therefore, we have developed a specialized R package, FedIRT, which integrates federated learning with IRT and includes an accompanying Shiny app designed to address real-world implementation challenges and reduce the burden of learning R programming for users. This app implements the method in a user-friendly and accessible manner.
+To address this gap, we developed `FedIRT`, the first open-source R package that integrates federated learning with IRT estimation in a fully distributed manner. Unlike most theoretical research on federated learning, which often lacks practical implementations, `FedIRT` provides a working solution that enables multiple institutions (e.g., school districts, research organizations) to collaboratively estimate IRT parameters without sharing raw data. The package also includes a user-friendly Shiny app, making it accessible to education researchers, social scientists, and policymakers who may not have extensive programming experience. By bridging the gap between federated learning research and real-world applications, `FedIRT` provides a practical tool for privacy-preserving IRT analysis.
 
-# Method
-
-Here we briefly introduce the key idea behind integrating federated learning with IRT. For technical details, please refer to our methodological discussions on Federated IRT [@FedIRT2023; @FederatedIRT2024_1; @FedIRT2024].
-
-## Model formulation
-
-The two-parameter logistic (2PL) IRT model is often considered the most popular IRT model in practice. In the 2PL model, the response of person $i$ to item $j$ is binary ($X_{ij} \in {0,1}$), and the probability that person $i$ answers item $j$ correctly, given discrimination parameter $\alpha_j$ and difficulty parameter $\beta_j$, is given by:
-
-$$P(X_{ij} = 1|\theta_i) = \frac{e^{\alpha_{j}(\theta_i-\beta_{j})}}{1+e^{\alpha_{j}(\theta_i-\beta_{j})}}$$
-
-To make our package available for polytomous response, we also developed a federated learning estimation algorithm for the Generalized Partial Credit Model (GPCM) in which the probability of a person with the ability $\theta_i$ obtaining $x$ scores in item $j$ is: 
-
-$$P^{\text{GPCM}}(X_{ij} = x|\theta_i) = \frac{e^{\sum \limits_{h=1}^{x} \alpha_{j}(\theta_i-\beta_{jh})}}{\sum \limits_{c=0}^{m_j}e^{\sum \limits_{h=1}^{c} \alpha_{j}(\theta_i-\beta_{jh})}}$$
-
-In this function, $\beta_{jh}$ is the difficulty of scoring level $h$ for item $j$, and for each item $j$, all difficulty levels have the same discrimination $\alpha_j$. $m_j$ is the maximum score of item $j$.
-
-## Model estimation
-
-In both the 2PL and GPCM models, we often assume that ability follows a standard normal distribution, allowing us to apply marginal maximum likelihood estimation (MMLE).
-
-We use a combination of traditional MMLE with federated average (FedAvg) and federated stochastic gradient descent (FedSGD) [@mcmahan2017communication]. In our case, the log-likelihood and partial gradients are sent from the clients to the server. The server then uses FedSGD to update the item parameters and sends them back to the clients.
-
-Taking the 2PL model as an example, the marginal log-likelihood function $l$ for each school $k$ can be approximated using Gaussian-Hermite quadrature with $q$ equally-spaced levels. Let $V(n)$ be the ability value at level $n$, and $A(n)$ be the weight at level $n$.
-
-$$ l_k \approx \sum \limits_{i=1}^{N_k} \sum \limits_{j=1}^{J} {X_{ijk}} \times \log [\sum\limits_{n=1}^{q} P_j ( V(n) ) A(n)] + (1-X_{ijk}) \times \log [\sum\limits_{n=1}^{q} Q_j ( V(n) ) A(n)] $$
-
-By applying FedAvg, the server collects the log-likelihood values from all $k$ schools and then sums up all the likelihood values to get the overall log-likelihood value: $l = \sum\limits_{k=1}^{K} l_k$.
-
-The server collects a log-likelihood value $l_k$ and all derivatives $\frac{ l_k }{\partial \alpha_j}$ and $\frac{ l_k }{\partial \beta_j }$ from all clients, then observe that $\frac{\partial l}{\partial \alpha_j} = \sum\limits_{k=1}^{K}\frac{ l_k }{ \partial \alpha_j }$ and $\frac{\partial l}{\partial \beta_j} = \sum\limits_{k=1}^{K}\frac{l_k }{\partial \beta_j }$ by FedSGD, the server sums up all log-likelihood values and derivative values. 
-
-Also, we provided an alternative solution, Federated Median, which uses the median of the likelihood values to replace the sum of likelihood values in Fed-MLE [@liu2020systematic], with additional robustness to handle outliers in input data. 
-
-With estimates of $\alpha_j$ and $\beta_j$ in 2PL or $\beta_{jh}$ in GPCM, we can obtain empirical Bayesian estimates of students' ability  [@bock1981marginal]. 
+We estimate IRT models using federated stochastic gradient descent (FedSGD) and federated averaging (FedAvg). This enables decentralized model estimation without sharing raw data, ensuring privacy while maintaining accuracy. For technical details, refer to our methodological discussions on Federated IRT [@FedIRT2023; @FederatedIRT2024_1; @FedIRT2024]. We support 1PL, 2PL, and graded models.
 
 # Comparison with existing packages
 
@@ -87,157 +55,18 @@ We demonstrate that our package generates comparable results to established IRT 
 
 # Availability
 
-The R package ``FedIRT`` is publicly available on [Github](https://github.com/Feng-Ji-Lab/FedIRT). It could be installed and run by using the following commands:
+The R package ``FedIRT`` is publicly available on [CRAN](https://cran.r-project.org/package=FedIRT) (stable release) and [Github](https://github.com/Feng-Ji-Lab/FedIRT) (latest development version):
 
+## Github
 ``` r
 devtools::install_github("Feng-Ji-Lab/FedIRT")
 library(FedIRT)
 ```
 
-## Example of the integrated function
-
-We provide a function `fedirt_file()` in the package, and the detailed usage of the function is shown in the user manual. We demonstrate an example here. 
-
-Suppose we have a dataset called `dataset.csv`, and the head of this dataset is shown below. There should be one column indicating the school, for example, "site" here. Each other column indicates an item, and each row represents an answering status. 
-
-| site | X1 | X2 | X3 | X4 | X5 |
-|------|----|----|----|----|----|
-| 10   | 1  | 0  | 0  | 0  | 0  |
-| 7    | 0  | 0  | 1  | 0  | 0  |
-| 9    | 0  | 0  | 1  | 1  | 1  |
-| 1    | 1  | 0  | 1  | 1  | 1  |
-| 2    | 1  | 0  | 0  | 0  | 0  |
-
-First, we need to read the dataset.
-
+## CRAN
 ``` r
-# read dataset
-data <- read.csv("dataset.csv", header = TRUE)
-```
-
-Then, we call the function `FedIRT::fedirt_file()` to obtain the result. It returns a list of parameter estimates for item discriminations, item difficulties, and each sites' effect and each students' abilities. 
-
-``` r
-# call the fedirt_file function 
-result <- fedirt_file(data, model_name = "2PL")
-```
-
-Finally, we can extract the results or use the parameter estimates for further analysis.
-
-
-``` r
-result$a
-result$b
-```
-
-Apart from using the results for further analysis, we can also use `summary()` to generate a snapshot of the result. Here is an example below. 
-
-``` r
-summary(result)
-```
-
-Then, the result will be printed in the console as follows:
-
-```
-Summary of FedIRT Results:
-
-
-Counts:
-function gradient 
-     735      249 
-
-Convergence Status (convergence):
-Converged
-
-Log Likelihood (loglik):
-[1] -7068.258
-
-Difficulty Parameters (b):
- [1] -185.88151839    0.99524035    0.92927254   ...
-
-Discrimination Parameters (a):
- [1]  0.0028497700  0.8440140746 -0.1190176844 ...
-
-Ability Estimates:
-School 1:
- [1] -1.127097195 -0.922572829 -0.993953038  ...
-School 2:
- [1] -1.41454573  1.78068772  1.87469389 ...
-...
-
-End of Summary
-```
-
-## Example of the personscore function
-
-We provide a function `personscore` in the package to obtain ability estimates. The detailed usage of the function is shown in the user manual. We demonstrate an example here.
-
-``` R
-personscoreResult = personscore(result)
-summary(personscoreResult)
-```
-
-Summary of the person score is shown below.
-
-```
-Summary of FedIRT Person Score Results:
-
-Ability Estimates:
-School 1:
- [1] -1.127097195 -0.922572829 -0.993953038  ...
-School 2:
- [1] -1.41454573  1.78068772  1.87469389 ...
-...
-
-End of Summary
-```
-
-## Example of the personfit function
-
-We provide a function `personfit` in the package. The detailed usage of the function is shown in the user manual. We demonstrate an example here.
-
-``` R
-personfitResult = personfit(result)
-summary(personfitResult)
-```
-
-After getting the result, use `personfit` function to get the person score result from `result` by `personfit(result)`.
-
-```
-Summary of FedIRT Person Fit Results:
-
-Fit Estimates:
-School 1:
-               Lz           Zh       Infit    Outfit
-4    0.7584470759  0.923163304 0.002323484 0.1482672
-16  -0.7562447025 -1.131668935 0.005457117 0.1799583
-27   0.3417488360  0.357870094 0.005966933 0.1734402
-33  -0.9244005411 -1.359789298 0.179834037 0.2266634
-...
-School 2:
-             Lz           Zh        Infit    Outfit
-5   -0.90114567 -1.175767350 0.0009824580 0.1535794
-8   -1.47957351 -1.888763364 0.1491518127 0.2255230
-18  -0.13292541 -0.228824721 0.1104556086 0.2007658
-19  -0.17257549 -0.277699184 0.0075031313 0.1350857
-...
-```
-
-## Standard error (SE) calculation
-
-To obtain SE, we can call the `SE()` function and input a `fedirt` object to display standard errors of item parameter estimates. 
-
-``` r
-SE(result)
-```
-
-Below is the result of SE.
-
-```
-$a
- [1] 0.0041815497 0.1638884452 0.1204696925 ...
-$b
- [1] 272.43863961   0.20737386   1.25896302 ...
+install.packages("FedIRT")
+library(FedIRT)
 ```
 
 ## Example of the Shiny App
