@@ -23,7 +23,10 @@
 #'
 fedirt_file = function(inputdata, model_name = "2PL", school_effect = FALSE, federated = "Avg", colname = "site") {
 
-  data_list <- split(inputdata[, -1], inputdata[[colname]])
+  group_var <- inputdata[[colname]]
+
+  data_list <- split(inputdata[, setdiff(names(inputdata), colname)], group_var)
   inputdata <- lapply(data_list, as.matrix)
-  fedirt(inputdata,model_name,school_effect,federated)
+
+  fedirt(inputdata, model_name, school_effect, federated)
 }
