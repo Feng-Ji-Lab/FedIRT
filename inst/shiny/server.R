@@ -552,17 +552,22 @@ ui <- function(req) {
 }
 attr(ui, "http_methods_supported") <- c("GET", "POST")
 getLocalIP <- function() {
-  if (Sys.info()['sysname'] == 'Windows') {
-    cmd <- "for /f \"tokens=2 delims=:\" %a in ('ipconfig ^| findstr /C:\"IPv4\"') do @echo %a"
+  sys_name <- Sys.info()[["sysname"]]
+
+  if (sys_name == "Windows") {
+    cmd <- 'for /f "tokens=2 delims=:" %a in (\'ipconfig ^| findstr /C:"IPv4"\') do @echo %a'
+    result <- shell(cmd, intern = TRUE)
   } else {
-    cmd <- "ifconfig -a | grep inet | awk '{print $2}' | cut -d/ -f1"
+    cmd <- "ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d/ -f1"
+    result <- system(cmd, intern = TRUE)
   }
-  result <- shell(cmd, intern = TRUE)
-  ip_addresses <- gsub(" ", "", result)
+
+  ip_addresses <- trimws(result)
   ip_addresses <- ip_addresses[ip_addresses != ""]
   print(ip_addresses[[1]])
   ip_addresses[[1]]
 }
+
 list_to_string <- function(l) {
   out <- c()
   for (name in names(l)) {
