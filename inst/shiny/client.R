@@ -560,12 +560,13 @@ doOnceConnect <-function(session) {
 }
 
 getLocalIP <- function() {
-  if (Sys.info()['sysname'] == 'Windows') {
-    cmd <- "for /f \"tokens=2 delims=:\" %a in ('ipconfig ^| findstr /C:\"IPv4\"') do @echo %a"
+  if (sys_name == "Windows") {
+    cmd <- 'for /f "tokens=2 delims=:" %a in (\'ipconfig ^| findstr /C:"IPv4"\') do @echo %a'
+    result <- shell(cmd, intern = TRUE)
   } else {
-    cmd <- "ifconfig -a | grep inet | awk '{print $2}' | cut -d/ -f1"
+    cmd <- "ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d/ -f1"
+    result <- system(cmd, intern = TRUE)
   }
-  result <- shell(cmd, intern = TRUE)
   ip_addresses <- gsub(" ", "", result)
   ip_addresses <- ip_addresses[ip_addresses != ""]
   print(ip_addresses[[1]])
