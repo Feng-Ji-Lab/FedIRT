@@ -311,5 +311,6 @@ my_personfit = function(a, b, data, q = 21, lower_bound = -3, upper_bound = 3) {
   result[["site"]] = mean(result[["ability"]])
 
   result[["person"]] = result[["ability"]] - result[["site"]]
+  class(result) <- "fedirt"
   return(result)
 }

@@ -132,7 +132,9 @@ fedirt_gpcm_data = function(inputdata) {
   }
 
 
-  fed_irt_entry(inputdata)
+  result = fed_irt_entry(inputdata)
+  class(result) <- "fedirt"
+  return(result)
 
 }
 

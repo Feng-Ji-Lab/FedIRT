@@ -270,6 +270,7 @@ my_personfit_gpcm = function(a, b, data, q = 21, lower_bound = -3, upper_bound =
   result[["site"]] = mean(result[["ability"]])
 
   result[["person"]] = result[["ability"]] - result[["site"]]
+  class(result) <- "fedirt"
   return(result)
 }
 

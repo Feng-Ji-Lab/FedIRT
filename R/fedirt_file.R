@@ -28,5 +28,7 @@ fedirt_file = function(inputdata, model_name = "2PL", school_effect = FALSE, fed
   data_list <- split(inputdata[, setdiff(names(inputdata), colname)], group_var)
   inputdata <- lapply(data_list, as.matrix)
 
-  fedirt(inputdata, model_name, school_effect, federated)
+  result = fedirt(inputdata, model_name, school_effect, federated)
+  class(result) <- "fedirt"
+  return(result)
 }
