@@ -522,7 +522,7 @@ ui <- function(req) {
         )
       } else{
         httpResponse(
-          status = 400L,
+          status = 404L,
           content_type = "application/json",
           content = '{"status": "not find ip"}'
         )

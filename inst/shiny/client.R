@@ -273,21 +273,13 @@ logL_gpcm = function(a, b, data, q = 21, lower_bound = -3, upper_bound = 3) {
   })
 
   Pjx = mem(function(a, b, j) {
-    # 提供所有答案的概率:  4:21
     px_sum = Px_sum(a,b)
     sum_px_sum = matrix(colSums(px_sum), nrow = 1)
-    # if(j==1) {
-    #   ans = broadcast.divide(px_sum, sum_px_sum)
-    #   # print(ans)
-    # }
     return(broadcast.divide(px_sum, sum_px_sum))
   })
   log_Lik_j = mem(function(a, b, j) {
-    # 根据答案 data 选对应的概率
-    # 原来： N : 21 = N:10 * 10:21
-    # 现在： N : 21 = 10 * (N:1 select 3:21)
     answerP = log(Pjx(a[j], b[[j]]))
-    # 初始化一个全0的矩阵，矩阵尺寸为N行和M[j]列
+
     result_matrix <- matrix(0, nrow = N, ncol = M[j] + 1)
     result_matrix[cbind(seq_len(N), data[,j] + 1)] = 1
     selected = result_matrix %*% answerP
@@ -342,11 +334,9 @@ g_logL_gpcm = function(a, b, data, q = 21, lower_bound = -3, upper_bound = 3) {
     return(broadcast.divide(px_sum, sum_px_sum))
   })
   log_Lik_j = mem(function(a, b, j) {
-    # 根据答案 data 选对应的概率
-    # 原来： N : 21 = N:10 * 10:21
-    # 现在： N : 21 = 10 * (N:1 select 3:21)
+
     answerP = log(Pjx(a[j], b[[j]]))
-    # 初始化一个全0的矩阵，矩阵尺寸为N行和M[j]列
+
     result_matrix <- matrix(0, nrow = N, ncol = M[j] + 1)
     result_matrix[cbind(seq_len(N), data[,j] + 1)] = 1
     selected = result_matrix %*% answerP
@@ -356,7 +346,6 @@ g_logL_gpcm = function(a, b, data, q = 21, lower_bound = -3, upper_bound = 3) {
   Lik_j = mem(function(a, b, j) {
     exp(log_Lik_j(a,b,j))
   })
-  # zby 标注尺寸
   LA = mem(function(a, b) {
     broadcast.multiplication(Lik(a,b), t(A))
     # 79 * 21
