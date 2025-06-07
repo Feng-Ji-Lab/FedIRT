@@ -1,4 +1,3 @@
-
 broadcast.fortmat <- function(mat1, mat2) {
   row1 <- nrow(mat1)
   col1 <- ncol(mat1)

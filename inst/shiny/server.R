@@ -248,9 +248,9 @@ server <- function(input, output, session) {
     # print("start:: use_graded_mode")
     print(use_graded_mode)
     if(!use_graded_mode) {
-      fedresult <<- fedirt_server(J, logL_entry,g_logL_entry)
+      fedresult <<- FedIRT:::fedirt_server(J, logL_entry,g_logL_entry)
     } else {
-      fedresult <<- fedirt_gpcm_server(J,M, logL_entry,g_logL_entry)
+      fedresult <<- FedIRT:::fedirt_gpcm_server(J,M, logL_entry,g_logL_entry)
     }
     print("fed finish")
     for(index in 1:K){

@@ -196,17 +196,15 @@ server <- function(input, output, session) {
     # print(fedresult)
     discrimination = fedresult$a
     difficulty = fedresult$b
-    fedresult[['person']] <<- my_personfit(fedresult[["a"]], fedresult[["b"]], localdata)[['ability']]
+    fedresult[['person']] <<- FedIRT:::my_personfit(fedresult[["a"]], fedresult[["b"]], localdata)[['ability']]
     # print(discrimination)
     # print(difficulty)
 
     df <- data.frame(discrimination)
 
-    # 最大M值决定了我们将拥有多少列
     max_M <- max(M)
     difficulty_cols <- vector("list", max_M)
 
-    # 对difficulty数组进行分割
     start_index <- 1
     for(j in 1:length(M)) {
       for (i in 1:max_M) {
@@ -221,13 +219,10 @@ server <- function(input, output, session) {
     }
     print(difficulty_cols)
 
-    # 转换临时列表为数据框的列
     for (i in 1:max_M) {
-      # 将列表元素加入到数据框中，并给予适当的列名
       df[[paste0("Difficulty_", i)]] <- difficulty_cols[[i]]
     }
 
-    # 查看data.frame结果
     print(df)
 
     output$result <- DT::renderDataTable({
