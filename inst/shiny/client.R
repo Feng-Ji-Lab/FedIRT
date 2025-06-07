@@ -151,7 +151,7 @@ server <- function(input, output, session) {
   observe({
     file <- input$file
     if(!is.null(file)){
-      data <- read.csv(file$datapath, header = FALSE)
+      data <- read.csv(file$datapath, header = TRUE)
       data = as.matrix(data)
       localdata <<- data
       J <<- dim(data)[2]
