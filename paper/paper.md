@@ -5,11 +5,27 @@ authors:
 - name: Biying Zhou
   orcid: 0000-0002-3590-3408
   affiliation: 1
+  email: zby.zhou@mail.utoronto.ca
+
+- name: Yuhao Yuan
+  affiliation: 1
+  email: yuhao.yuan@mail.utoronto.ca
+
+- name: Nanyu Luo
+  affiliation: 1
+  email: n.luo@mail.utoronto.ca
+
+- name: Jia Qi
+  affiliation: 1
+  email: jiajia.qi@mail.utoronto.ca
+
 - name: Feng Ji
   orcid: 0000-0002-2051-5453
   affiliation: 1
   corresponding: true
   email: f.ji@utoronto.ca
+
+
 affiliations:
 - name: Department of Applied Psychology & Human Development, University of Toronto, Toronto, Canada
   index: 1

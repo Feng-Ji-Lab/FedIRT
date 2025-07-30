@@ -28,6 +28,31 @@ for estimating federated item response theory models</article-title>
 <surname>Zhou</surname>
 <given-names>Biying</given-names>
 </name>
+<email>zby.zhou@mail.utoronto.ca</email>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<name>
+<surname>Yuan</surname>
+<given-names>Yuhao</given-names>
+</name>
+<email>yuhao.yuan@mail.utoronto.ca</email>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<name>
+<surname>Luo</surname>
+<given-names>Nanyu</given-names>
+</name>
+<email>n.luo@mail.utoronto.ca</email>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<name>
+<surname>Qi</surname>
+<given-names>Jia</given-names>
+</name>
+<email>jiajia.qi@mail.utoronto.ca</email>
 <xref ref-type="aff" rid="aff-1"/>
 </contrib>
 <contrib contrib-type="author" corresp="yes">
@@ -50,9 +75,9 @@ University of Toronto, Toronto, Canada</institution>
 <author-notes>
 <corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
 </author-notes>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2025-03-13">
-<day>13</day>
-<month>3</month>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2025-07-30">
+<day>30</day>
+<month>7</month>
 <year>2025</year>
 </pub-date>
 <volume>¿VOL?</volume>
