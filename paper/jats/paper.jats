@@ -32,6 +32,7 @@ for estimating federated item response theory models</article-title>
 <xref ref-type="aff" rid="aff-1"/>
 </contrib>
 <contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0009-0006-3940-5795</contrib-id>
 <name>
 <surname>Yuan</surname>
 <given-names>Yuhao</given-names>
@@ -40,6 +41,7 @@ for estimating federated item response theory models</article-title>
 <xref ref-type="aff" rid="aff-1"/>
 </contrib>
 <contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0009-0002-6930-6182</contrib-id>
 <name>
 <surname>Luo</surname>
 <given-names>Nanyu</given-names>
@@ -48,11 +50,12 @@ for estimating federated item response theory models</article-title>
 <xref ref-type="aff" rid="aff-1"/>
 </contrib>
 <contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0009-0009-3275-6762</contrib-id>
 <name>
 <surname>Qi</surname>
 <given-names>Jia</given-names>
 </name>
-<email>jiajia.qi@mail.utoronto.ca</email>
+<email>b201711030508@163.com</email>
 <xref ref-type="aff" rid="aff-1"/>
 </contrib>
 <contrib contrib-type="author" corresp="yes">
@@ -75,9 +78,9 @@ University of Toronto, Toronto, Canada</institution>
 <author-notes>
 <corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
 </author-notes>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2025-07-30">
-<day>30</day>
-<month>7</month>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2025-08-01">
+<day>1</day>
+<month>8</month>
 <year>2025</year>
 </pub-date>
 <volume>¿VOL?</volume>

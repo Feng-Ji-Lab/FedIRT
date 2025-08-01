@@ -8,16 +8,19 @@ authors:
   email: zby.zhou@mail.utoronto.ca
 
 - name: Yuhao Yuan
+  orcid: 0009-0006-3940-5795
   affiliation: 1
   email: yuhao.yuan@mail.utoronto.ca
 
 - name: Nanyu Luo
+  orcid: 0009-0002-6930-6182
   affiliation: 1
   email: n.luo@mail.utoronto.ca
 
 - name: Jia Qi
+  orcid: 0009-0009-3275-6762
   affiliation: 1
-  email: jiajia.qi@mail.utoronto.ca
+  email: b201711030508@163.com
 
 - name: Feng Ji
   orcid: 0000-0002-2051-5453
