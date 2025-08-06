@@ -78,8 +78,8 @@ University of Toronto, Toronto, Canada</institution>
 <author-notes>
 <corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
 </author-notes>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2025-08-01">
-<day>1</day>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2025-08-06">
+<day>6</day>
 <month>8</month>
 <year>2025</year>
 </pub-date>
@@ -174,11 +174,12 @@ a Creative Commons Attribution 4.0 International License (CC BY
   model estimation without sharing raw data, ensuring privacy while
   maintaining accuracy. For technical details, refer to our
   methodological discussions on Federated IRT
-  (<xref alt="Zhou &amp; Ji, 2023" rid="ref-FedIRT2023" ref-type="bibr">Zhou
+  (<xref alt="Zhou et al., 2025" rid="ref-zhou2025federateditemresponsetheory" ref-type="bibr">Zhou
+  et al., 2025</xref>;
+  <xref alt="Zhou &amp; Ji, 2023" rid="ref-FedIRT2023" ref-type="bibr">Zhou
   &amp; Ji, 2023</xref>,
-  <xref alt="2024" rid="ref-FedIRT2024" ref-type="bibr">2024</xref>,
-  <xref alt="In submission" rid="ref-FederatedIRT2024_1" ref-type="bibr">In
-  submission</xref>). We support 1PL, 2PL, and graded models.</p>
+  <xref alt="2024" rid="ref-FedIRT2024" ref-type="bibr">2024</xref>). We
+  support 1PL, 2PL, and graded models.</p>
 </sec>
 <sec id="comparison-with-existing-packages">
   <title>Comparison with existing packages</title>
@@ -322,13 +323,16 @@ library(FedIRT)</code>
       <year iso-8601-date="2024">2024</year>
     </element-citation>
   </ref>
-  <ref id="ref-FederatedIRT2024_1">
-    <element-citation publication-type="manuscript">
+  <ref id="ref-zhou2025federateditemresponsetheory">
+    <element-citation>
       <person-group person-group-type="author">
         <name><surname>Zhou</surname><given-names>Biying</given-names></name>
+        <name><surname>Luo</surname><given-names>Nanyu</given-names></name>
         <name><surname>Ji</surname><given-names>Feng</given-names></name>
       </person-group>
-      <article-title>Federated item response models</article-title>
+      <article-title>Federated item response theory models</article-title>
+      <year iso-8601-date="2025">2025</year>
+      <uri>https://arxiv.org/abs/2506.21744</uri>
     </element-citation>
   </ref>
   <ref id="ref-chalmers2012mirt">

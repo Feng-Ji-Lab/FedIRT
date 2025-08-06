@@ -59,7 +59,7 @@ Federated learning offers a promising solution by enabling parameter estimation 
 
 To address this gap, we developed `FedIRT`, the first open-source R package that integrates federated learning with IRT estimation in a fully distributed manner. Unlike most theoretical research on federated learning, which often lacks practical implementations, `FedIRT` provides a working solution that enables multiple institutions (e.g., school districts, research organizations) to collaboratively estimate IRT parameters without sharing raw data. The package also includes a user-friendly Shiny app, making it accessible to education researchers, social scientists, and policymakers who may not have extensive programming experience. By bridging the gap between federated learning research and real-world applications, `FedIRT` provides a practical tool for privacy-preserving IRT analysis.
 
-We estimate IRT models using federated stochastic gradient descent (FedSGD) and federated averaging (FedAvg). This enables decentralized model estimation without sharing raw data, ensuring privacy while maintaining accuracy. For technical details, refer to our methodological discussions on Federated IRT [@FedIRT2023; @FederatedIRT2024_1; @FedIRT2024]. We support 1PL, 2PL, and graded models.
+We estimate IRT models using federated stochastic gradient descent (FedSGD) and federated averaging (FedAvg). This enables decentralized model estimation without sharing raw data, ensuring privacy while maintaining accuracy. For technical details, refer to our methodological discussions on Federated IRT [@FedIRT2023; @zhou2025federateditemresponsetheory; @FedIRT2024]. We support 1PL, 2PL, and graded models.
 
 # Comparison with existing packages
 
