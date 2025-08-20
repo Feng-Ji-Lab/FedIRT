@@ -78,8 +78,8 @@ University of Toronto, Toronto, Canada</institution>
 <author-notes>
 <corresp id="cor-1">* E-mail: <email>f.ji@utoronto.ca</email></corresp>
 </author-notes>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2025-08-06">
-<day>6</day>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2025-08-20">
+<day>20</day>
 <month>8</month>
 <year>2025</year>
 </pub-date>
@@ -340,7 +340,7 @@ library(FedIRT)</code>
       <person-group person-group-type="author">
         <name><surname>Chalmers</surname><given-names>R Philip</given-names></name>
       </person-group>
-      <article-title>Mirt: A multidimensional item response theory package for the r environment</article-title>
+      <article-title>mirt: A multidimensional item response theory package for the R environment</article-title>
       <source>Journal of Statistical Software</source>
       <year iso-8601-date="2012">2012</year>
       <volume>48</volume>
@@ -354,7 +354,7 @@ library(FedIRT)</code>
       <person-group person-group-type="author">
         <name><surname>Rizopoulos</surname><given-names>Dimitris</given-names></name>
       </person-group>
-      <article-title>Ltm: An r package for latent variable modeling and item response analysis</article-title>
+      <article-title>ltm: An R package for latent variable modeling and item response analysis</article-title>
       <source>Journal of Statistical Software</source>
       <year iso-8601-date="2007">2007</year>
       <volume>17</volume>
